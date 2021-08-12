@@ -40,7 +40,7 @@ public:
 	double single_run(){
 		double reward_curr;
 		double reward_acc = 0.0;
-		bool change_button = true;
+		bool change_button = false;
 
 		btn->new_button();
 		pol->reset();

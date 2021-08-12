@@ -6,6 +6,9 @@
 
 class Coefficient{
 	private:
+		double alpha_prior;
+		double beta_prior;
+
 		int win_max;
 		int fail_max;
 		int time_max;
@@ -15,11 +18,11 @@ class Coefficient{
 		double *iter_table;
 
 		double mean_step_reward(int win, int fail){
-			return 1.0*(win+1)/(1.0*(win+fail+2));
+			return 1.0*(win+alpha_prior)/(1.0*(win+fail+alpha_prior+beta_prior));
 		}
 
 		double success_transition_p(int win, int fail){
-			return 1.0*(win+1)/(1.0*(win+fail+2));
+			return 1.0*(win+alpha_prior)/(1.0*(win+fail+alpha_prior+beta_prior));
 		}
 
 		void iter_table_prefill(){
@@ -31,14 +34,14 @@ class Coefficient{
 			}
 		}
 
-		void iteration(int scope_alpha, int scope_beta){
+		void iteration(int scope_win, int scope_fail){
 			int row_space = fail_max+time_max;
 			double success_p = success_transition_p(0, 0);
 			double next_button_val = mean_step_reward(0, 0) + success_p*iter_table[row_space] + (1.0 - success_p)*iter_table[1];
 			double stay_val;
 
-			for(int i = 0; i < scope_alpha; i++){
-				for(int j = 0; j < scope_beta; j++){
+			for(int i = 0; i < scope_win; i++){
+				for(int j = 0; j < scope_fail; j++){
 					success_p = success_transition_p(i, j);
 					stay_val = mean_step_reward(i, j) + success_p*iter_table[(i+1)*row_space+j] + (1.0 - success_p)*iter_table[i*row_space+j+1];
 					iter_table[i*row_space+j] = (stay_val > next_button_val ? stay_val : next_button_val);
@@ -57,8 +60,8 @@ class Coefficient{
 		}
 
 	public:
-		Coefficient(int win_init, int fail_init, int time_init): 
-			win_max(win_init), fail_max(fail_init), time_max(time_init), extern_reward_table(false)
+		Coefficient(int win_init, int fail_init, int time_init, double alpha_0 = 1.0, double beta_0 = 1.0): 
+			win_max(win_init), fail_max(fail_init), time_max(time_init), extern_reward_table(false), alpha_prior(alpha_0), beta_prior(beta_0)
 		{
 			reward_table = new double[time_max*win_max*fail_max];
 			iter_table = new double[(win_max+time_max)*(fail_max+time_max)];
@@ -71,8 +74,8 @@ class Coefficient{
 			}
 		};
 
-		Coefficient(double *reward_table_init, int win_init, int fail_init, int time_init): 
-			win_max(win_init), fail_max(fail_init), time_max(time_init), 
+		Coefficient(double *reward_table_init, int win_init, int fail_init, int time_init, double alpha_0 = 1.0, double beta_0 = 1.0): 
+			win_max(win_init), fail_max(fail_init), time_max(time_init), alpha_prior(alpha_0), beta_prior(beta_0),
 			reward_table(reward_table_init), extern_reward_table(true)
 		{
 			iter_table = new double[(win_max+time_max)*(fail_max+time_max)];
