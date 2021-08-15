@@ -1,3 +1,8 @@
 .ipynb_checkpoints/
 RewardCalc/obj/
 RewardCalc/run
+Supplement/*
+!Supplement/supplement.tex
+!Supplement/supplement.pdf
+__pycache__/
+RewardCalc/routines_lib.so

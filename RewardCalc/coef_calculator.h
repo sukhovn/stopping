@@ -13,7 +13,7 @@ class Coefficient{
 		int fail_max;
 		int time_max;
 
-		bool extern_reward_table;
+		const bool extern_reward_table;
 		double *reward_table;
 		double *iter_table;
 
@@ -26,10 +26,15 @@ class Coefficient{
 		}
 
 		void iter_table_prefill(){
+			double next_button_val = mean_step_reward(0, 0);
+			double stay_val;
+
 			int row_space = fail_max+time_max;
 			for(int i = 0; i < (win_max+time_max); i++){
 				for(int j = 0; j < row_space; j++){
-					iter_table[i*row_space+j] = mean_step_reward(i, j);
+					stay_val = mean_step_reward(i, j);
+					
+					iter_table[i*row_space+j] =(stay_val > next_button_val ? stay_val : next_button_val);
 				}
 			}
 		}

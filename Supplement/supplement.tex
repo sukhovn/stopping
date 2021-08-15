@@ -1,0 +1,70 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amsfonts,amsthm,amssymb}
+\usepackage{graphicx} 
+\usepackage{hyperref}
+\usepackage{amssymb,graphicx,float,epstopdf,amsmath,amsfonts,amsthm,cases,cite,epsfig,subfigure}
+\usepackage{mathtools}
+\usepackage[symbol*]{footmisc}
+\usepackage{tensor}
+\setcounter{MaxMatrixCols}{11}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\topmargin -30pt \advance \topmargin by -\headheight \advance
+\topmargin by -\headsep \textheight 9.6in \oddsidemargin -25pt
+\evensidemargin \oddsidemargin \marginparwidth 0.5in \textwidth
+7.3in
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheorem{proposition}{Proposition}
+
+\begin{document}
+\section{Supplement}
+In this note we investigate properties of the function $V(w, f, T)$ defined by the following recurrence relation
+\begin{equation}
+V(w, f, T) = \\
+\max \left\{
+\begin{matrix}
+	\frac{\alpha}{\alpha + \beta} + \frac{\alpha}{\alpha + \beta} V(w+1, f, T-1) + \frac{\beta}{\alpha + \beta} V(w, f+1, T-1)\\
+	\frac{\alpha_0}{\alpha_0 + \beta_0} + \frac{\alpha_0}{\alpha_0 + \beta_0} V(1, 0, T-1) + \frac{\beta_0}{\alpha_0 + \beta_0} V(0, 1, T-1)
+\end{matrix}\right.,
+\end{equation}
+where $\alpha(w) = \alpha_0 + w$, $\beta(f) = \beta_0 + f$ and $V(w, f, 0) = 0$.
+
+\begin{proposition}
+For any $w$ and $f$ we have $V(w+1, f, T) \geq V(w, f, T)$ and $V(w, f, T) \geq V(w, f+1, T)$.
+\end{proposition}
+Let us consider the case $T = 1$. If one or both $V(w+1, f, 1)$ and $V(w, f, 1)$ equal $\alpha_0/(\alpha_0 + \beta_0)$ the inequality becomes trivial. The same can be said about about $V(w, f, T)$ and $V(w, f+1, T)$. Alternatively
+\begin{equation}
+\begin{split}
+V(w+1, f, T) - V(w, f, T) = \frac{\alpha(w) + 1}{\alpha(w) + \beta(f) + 1} - \frac{\alpha(w)}{\alpha(w) + \beta(f)} = \\ \frac{\beta(f)}{(\alpha(w) + \beta(f))(\alpha(w) + \beta(f) + 1)} \geq 0,
+\end{split}
+\end{equation}
+and
+\begin{equation}
+\begin{split}
+V(w, f, T) - V(w, f+1, T) = \frac{\alpha(w)}{\alpha(w) + \beta(f)} - \frac{\alpha(w)}{\alpha(w) + \beta(f)+1} = \\ \frac{\alpha(f)}{(\alpha(w) + \beta(f))(\alpha(w) + \beta(f) + 1)} \geq 0.
+\end{split}
+\end{equation}
+
+Let us now assume that $V(w+1, f, T) \geq V(w, f, T)$ and $V(w, f, T) \geq V(w, f+1, T)$. Then, again skipping trivial cases when one or both of the values $V(w+1, f, T+1)$ and $V(w, f, T+1)$ (or $V(w, f, T+1)$ and $V(w, f+1, T+1)$) are equal to $V(0, 0, T+1)$, we have 
+\begin{equation}
+\begin{split}
+\frac{\alpha(w) + 1}{\alpha(w) + \beta(f) + 1} V(w + 2, f, T) + \frac{\beta(f)}{\alpha(w) + \beta(f) + 1} V(w+1, f+1, T) - \\ \frac{\alpha(w)}{\alpha(w) + \beta(f)} V(w+1, f, T) - \frac{\beta(f)}{\alpha(w) + \beta(f)} V(w, f+1, T) \geq \\
+\frac{\beta(f)}{(\alpha(w) + \beta(f))(\alpha(w) + \beta(f) + 1)} V(w+1, f. T) - \\
+\frac{\beta(f)}{(\alpha(w) + \beta(f))(\alpha(w) + \beta(f) + 1)} V(w+1, f+1. T) \geq 0.
+\end{split}
+\end{equation}
+and
+\begin{equation}
+\begin{split}
+\frac{\alpha(w)}{\alpha(w) + \beta(f) + 1} V(w + 1, f, T) + \frac{\beta(f)}{\alpha(w) + \beta(f)} V(w, f+1, T) - \\ \frac{\alpha(w)}{\alpha(w) + \beta(f) + 1} V(w + 1, f + 1, T) - \frac{\beta(f) + 1}{\alpha(w) + \beta(f) + 1} V(w, f+2, T) \geq \\
+\frac{\alpha(w)}{(\alpha(w) + \beta(f))(\alpha(w) + \beta(f) + 1)} V(w+1, f+1. T) - \\
+\frac{\alpha(w)}{(\alpha(w) + \beta(f))(\alpha(w) + \beta(f) + 1)} V(w, f+1. T) \geq 0.
+\end{split}
+\end{equation}
+That immediately leads to $V(w+1, f, T+1) \geq V(w, f, T+1)$ and $V(w, f, T+1) \geq V(w, f+1, T+1)$. Then, by induction, $V(w+1, f, T) \geq V(w, f, T)$ and $V(w, f, T) \geq V(w, f+1, T)$ hold for any $T$.
+\end{document}

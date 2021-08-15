@@ -156,4 +156,48 @@ public:
 	}
 };
 
+class Single_Bernoulli_Run{
+private:
+	int time;
+
+public:
+	Button *btn;
+	Policy *pol;
+
+	Single_Bernoulli_Run(Button *btn_init, Policy *pol_init, int time_init):
+		btn(btn_init), pol(pol_init), time(time_init) {};
+
+	double single_run(double *results){
+		int indx = 0;
+		int button_no = 0, wins = 0, fails = 0;
+		double reward_curr;
+		double reward_acc = 0.0;
+		bool change_button = false;
+
+		btn->new_button();
+		pol->reset();
+		for(int i = 0; i < time; i++){
+			if(change_button){
+				wins = 0;
+				fails = 0;
+				button_no++;
+				reward_curr = btn->press_next_button();
+			}
+			else reward_curr = btn->press_current_button();
+
+			if(reward_curr > 0.0) wins++;
+			else fails++;
+
+			change_button = pol->change_button(reward_curr);
+			reward_acc += reward_curr;
+			results[indx++] = (double) button_no;
+			results[indx++] = (double) wins;
+			results[indx++] = (double) fails;
+			results[indx++] = reward_curr;
+		}
+
+		return reward_acc;
+	}
+};
+
 #endif

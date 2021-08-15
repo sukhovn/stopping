@@ -117,10 +117,10 @@ void run_biased_bernoulli_trials(int argc, char const *argv[]){
 		}
 	}
 
-	Biased_Bernoulli_Button bb(alpha_prior, beta_prior);
+	Biased_Bernoulli_Button bbb(alpha_prior, beta_prior);
 
 	Bernoulli_Policy plc(time, alpha_prior, beta_prior);
-	Policy_Test plc_test(&bb, &plc, time, num_tries);
+	Policy_Test plc_test(&bbb, &plc, time, num_tries);
 
 	plc_test.run();
 	std::cout << "Theoretical expected reward: " << plc.table(time-1, 0, 0) << std::endl;

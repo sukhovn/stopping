@@ -32,10 +32,15 @@ private:
 public:
 	Button *btn;
 	Policy *pol;
-	std::vector<double> rewards;
+	double *rewards;
 
 	Policy_Test(Button *btn_init, Policy *pol_init, int time_init, int run_times_init):
-		btn(btn_init), pol(pol_init), time(time_init), run_times(run_times_init), rewards() {};
+		btn(btn_init), pol(pol_init), time(time_init), run_times(run_times_init){
+			rewards = new double[run_times];
+		};
+	~Policy_Test(){
+		delete [] rewards;
+	}
 
 	double single_run(){
 		double reward_curr;
@@ -51,25 +56,24 @@ public:
 			reward_acc += reward_curr;
 		}
 
-		rewards.push_back(reward_acc);
 		return reward_acc;
 	}
 
 	void run(){
-		for(int i = 0; i < run_times; i++) single_run();
+		for(int i = 0; i < run_times; i++) rewards[i] = single_run();
 	}
 
 	double rewards_mean(){
 		double tmp = 0.0;
-		for(int i = 0; i < rewards.size(); i++) tmp += rewards[i]; 
-		return tmp/(1.0*rewards.size());
+		for(int i = 0; i < run_times; i++) tmp += rewards[i]; 
+		return tmp/(1.0*run_times);
 	}
 
 	double rewards_std(){
 		double tmp = 0;
 		double mean = rewards_mean();
-		for(int i = 0; i < rewards.size(); i++) tmp += std::pow(rewards[i] - mean, 2.0); 
-		double nminus = (double) rewards.size()-1;
+		for(int i = 0; i < run_times; i++) tmp += std::pow(rewards[i] - mean, 2.0); 
+		double nminus = (double) run_times-1;
 
 		return std::sqrt(tmp/nminus);
 	}
