@@ -21,7 +21,7 @@ reward_table_cpp.argtypes = [ctl.ndpointer(np.float64,
 def expected_reward_table(win_max, fail_max, time_max, **kwargs):
 	prior = (1.0, 1.0)
 	if 'prior' in kwargs:
-		alpha_prior = kwargs['prior']
+		prior = kwargs['prior']
 
 	val = np.zeros(win_max*fail_max*time_max, dtype=np.float64)
 	reward_table_cpp(val, win_max, fail_max, time_max, prior[0], prior[1])
