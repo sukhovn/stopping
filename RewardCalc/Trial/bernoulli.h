@@ -1,5 +1,6 @@
 #include <trial.h>
 #include <coef_calculator.h>
+#include <transition_calculator.h>
 
 #ifndef BERNOULLI_H
 #define BERNOULLI_H
@@ -85,7 +86,41 @@ public:
 	}
 };
 
-class Bernoulli_Policy: public Policy{
+class Bernoulli_Policy_Direct: public Policy{
+private:
+	double alpha_prior;
+	double beta_prior;
+	int wins;
+	int fails;
+	int time;
+	int time_left;
+
+	Transition trans;
+
+public:
+	Bernoulli_Policy_Direct(int time_init, double alpha_0 = 1.0, double beta_0 = 1.0): wins(0), fails(0), alpha_prior(alpha_0), beta_prior(beta_0), 
+		time(time_init), time_left(time_init), trans(time, time, time, alpha_0, beta_0) {};
+	
+	void reset(){time_left = time; wins = 0; fails = 0;}
+
+	bool change_button(double reward){
+		if(reward > 0.0) wins++;
+		else fails++;
+		time_left--;
+
+		if(time_left == 0) return false;
+		
+		int trans_time = trans(wins, fails);
+
+		if(trans_time > 0 && time_left >= trans_time){
+			wins = fails = 0;
+			return true;
+		}
+		else return false;
+	}
+};
+
+class Bernoulli_Policy_Reward: public Policy{
 private:
 	double alpha_prior;
 	double beta_prior;
@@ -101,7 +136,7 @@ private:
 public:
 	const Coefficient &table;
 
-	Bernoulli_Policy(int time_init, double alpha_0 = 1.0, double beta_0 = 1.0): wins(0), fails(0), alpha_prior(alpha_0), beta_prior(beta_0), 
+	Bernoulli_Policy_Reward(int time_init, double alpha_0 = 1.0, double beta_0 = 1.0): wins(0), fails(0), alpha_prior(alpha_0), beta_prior(beta_0), 
 		time(time_init), time_left(time_init), expect_coeff(time, time, time, alpha_0, beta_0), table(expect_coeff), comments(false) {};
 	
 	void reset(){time_left = time; wins = 0; fails = 0;}

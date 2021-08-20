@@ -1,4 +1,5 @@
 #include <coef_calculator.h>
+#include <transition_calculator.h>
 #include <iostream>
 #include <cstring>
 #include <timer.h>
@@ -7,7 +8,7 @@
 #include <trial.h>
 #include <bernoulli.h>
 
-void run_table_generator(int argc, char const *argv[]){
+void run_coefficient_table_generator(int argc, char const *argv[]){
 	int win_max = 10, fail_max = 10, time_max = 100;
 	double alpha_prior = 1.0, beta_prior = 1.0;
 
@@ -50,6 +51,49 @@ void run_table_generator(int argc, char const *argv[]){
 	return;
 }
 
+void run_transition_table_generator(int argc, char const *argv[]){
+	int win_max = 10, fail_max = 10, time_max = 100;
+	double alpha_prior = 1.0, beta_prior = 1.0;
+
+	for(int i = 1; i < argc; i++){
+		if(strcmp(argv[i], "-wins") == 0){
+			win_max = atoi(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-fails") == 0){
+			fail_max = atoi(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-time") == 0){
+			time_max = atoi(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-alpha") == 0){
+			alpha_prior = atof(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-beta") == 0){
+			beta_prior = atof(argv[i+1]);
+			i++;
+		}
+	}
+
+	Timer timer;
+	Transition trans(win_max, fail_max, time_max, alpha_prior, beta_prior);
+	timer.record();
+	std::cout << "The calculation took " << timer.total << std::endl;
+	std::cout << std::fixed;
+	
+	for(int i = 0; i < win_max; i++){
+		for(int j = 0; j < fail_max; j++){
+			std::cout << trans(i, j) << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	return;
+}
+
 void run_bernoulli_trials(int argc, char const *argv[]){
 	int time = 100, num_tries = 100;
 
@@ -78,11 +122,13 @@ void run_bernoulli_trials(int argc, char const *argv[]){
 	// 	std::cout << "True probability " << true_p << "\n\n";
 	// }
 
-	Bernoulli_Policy plc(time);
+	Bernoulli_Policy_Direct plc(time);
 	Policy_Test plc_test(&bb, &plc, time, num_tries);
+	Coefficient coef(1, 1, time);
 
 	plc_test.run();
-	std::cout << "Theoretical expected reward: " << plc.table(time-1, 0, 0) << std::endl;
+	// std::cout << "Theoretical expected reward: " << plc.table(time-1, 0, 0) << std::endl;
+	std::cout << "Theoretical expected reward: " << coef(time-1, 0, 0) << std::endl;
 	std::cout << "Experimental mean reward: " << plc_test.rewards_mean() << std::endl;
 	std::cout << "Experimental reward deviation: " << plc_test.rewards_std() << std::endl;
 	std::cout << "Experimental reward mean deviation: " << plc_test.rewards_std()/std::sqrt(1.0*num_tries) << std::endl;
@@ -119,11 +165,13 @@ void run_biased_bernoulli_trials(int argc, char const *argv[]){
 
 	Biased_Bernoulli_Button bbb(alpha_prior, beta_prior);
 
-	Bernoulli_Policy plc(time, alpha_prior, beta_prior);
+	Bernoulli_Policy_Direct plc(time, alpha_prior, beta_prior);
 	Policy_Test plc_test(&bbb, &plc, time, num_tries);
+	Coefficient coef(1, 1, time);
 
 	plc_test.run();
-	std::cout << "Theoretical expected reward: " << plc.table(time-1, 0, 0) << std::endl;
+	// std::cout << "Theoretical expected reward: " << plc.table(time-1, 0, 0) << std::endl;
+	std::cout << "Theoretical expected reward: " << coef(time-1, 0, 0) << std::endl;
 	std::cout << "Experimental mean reward: " << plc_test.rewards_mean() << std::endl;
 	std::cout << "Experimental reward deviation: " << plc_test.rewards_std() << std::endl;
 	std::cout << "Experimental reward mean deviation: " << plc_test.rewards_std()/std::sqrt(1.0*num_tries) << std::endl;
@@ -132,9 +180,10 @@ void run_biased_bernoulli_trials(int argc, char const *argv[]){
 }
 
 int main(int argc, char const *argv[]){
-	// run_table_generator(argc, argv);
+	// run_coefficient_table_generator(argc, argv);
 	// run_bernoulli_trials(argc, argv);
 	run_biased_bernoulli_trials(argc, argv);
+	// run_transition_table_generator(argc, argv);
 
 	return 0.0;
 }

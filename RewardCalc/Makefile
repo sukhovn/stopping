@@ -4,7 +4,7 @@ TRIAL_DIR = Trial
 TRIAL_SRC := $(wildcard $(TRIAL_DIR)/*.cpp)
 TRIAL_BINS := $(patsubst $(TRIAL_DIR)/%.cpp, obj/trial/%.o, $(TRIAL_SRC))
 
-HEAD_FOLDERS = $(TRIAL_DIR) 
+HEAD_FOLDERS = TableCalc $(TRIAL_DIR) 
 HEAD_LINK = $(patsubst %, -I%, $(HEAD_FOLDERS))
 
 CC = g++ # compiler to use
