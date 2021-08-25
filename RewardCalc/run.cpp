@@ -7,6 +7,7 @@
 
 #include <trial.h>
 #include <bernoulli.h>
+#include <meta_bernoulli.h>
 
 void run_coefficient_table_generator(int argc, char const *argv[]){
 	int win_max = 10, fail_max = 10, time_max = 100;
@@ -179,11 +180,61 @@ void run_biased_bernoulli_trials(int argc, char const *argv[]){
 	return;
 }
 
+void run_meta_bernoulli_trials(int argc, char const *argv[]){
+	int time = 100, num_tries = 100;
+	double alpha_prior = 1.0, beta_prior = 1.0;
+
+	for(int i = 1; i < argc; i++){
+		if(strcmp(argv[i], "-time") == 0){
+			time = atoi(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-tries") == 0){
+			num_tries = atoi(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-alpha") == 0){
+			alpha_prior = atof(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-beta") == 0){
+			beta_prior = atof(argv[i+1]);
+			i++;
+		}
+	}
+
+	Biased_Bernoulli_Button bbb(alpha_prior, beta_prior);
+
+	Bernoulli_Policy_Direct plc_ub(time);
+	Meta_Bernoulli_Policy plc_meta(time);
+
+	Policy_Test plc_test_ub(&bbb, &plc_ub, time, num_tries);
+	Policy_Test plc_test_meta(&bbb, &plc_meta, time, num_tries);
+
+	Coefficient coef(1, 1, time, alpha_prior, beta_prior);
+
+	plc_test_ub.run();
+	plc_test_meta.run();
+	// std::cout << "Theoretical expected reward: " << plc.table(time-1, 0, 0) << std::endl;
+	std::cout << "Theoretical expected reward: " << coef(time-1, 0, 0) << std::endl;
+	std::cout << "\nUnbiased run\n\n";
+	std::cout << "Experimental mean reward: " << plc_test_ub.rewards_mean() << std::endl;
+	std::cout << "Experimental reward deviation: " << plc_test_ub.rewards_std() << std::endl;
+	std::cout << "Experimental reward mean deviation: " << plc_test_ub.rewards_std()/std::sqrt(1.0*num_tries) << std::endl;
+	std::cout << "\nDistribution learning run\n\n";
+	std::cout << "Experimental mean reward: " << plc_test_meta.rewards_mean() << std::endl;
+	std::cout << "Experimental reward deviation: " << plc_test_meta.rewards_std() << std::endl;
+	std::cout << "Experimental reward mean deviation: " << plc_test_meta.rewards_std()/std::sqrt(1.0*num_tries) << std::endl;
+
+	return;
+}
+
 int main(int argc, char const *argv[]){
 	// run_coefficient_table_generator(argc, argv);
 	// run_bernoulli_trials(argc, argv);
-	run_biased_bernoulli_trials(argc, argv);
+	// run_biased_bernoulli_trials(argc, argv);
 	// run_transition_table_generator(argc, argv);
+	run_meta_bernoulli_trials(argc, argv);
 
 	return 0.0;
 }

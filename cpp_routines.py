@@ -88,3 +88,35 @@ def record_full_bernoulli_trials(time, num_tries, **kwargs):
 	val[::,0:2] = np.rint(val[::,0:2])
 	# return (val, theoretical_reward)
 	return val
+
+#Bernoulli with learning trials function
+run_meta_bernoulli_trials_cpp = lib.run_meta_bernoulli_trials
+run_meta_bernoulli_trials_cpp.argtypes = [ctl.ndpointer(np.float64, 
+                                         flags='aligned, c_contiguous'), 
+                           ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double]
+
+def run_meta_bernoulli_trials(time, num_tries, **kwargs):
+	button_prior = (1.0, 1.0)
+	if 'button_prior' in kwargs:
+		button_prior = kwargs['button_prior']
+
+	val = np.zeros(num_tries, dtype=np.float64)
+	run_meta_bernoulli_trials_cpp(val, time, num_tries, button_prior[0], button_prior[1])
+	return val
+
+#Fully recorded Bernoulli with learning trial function
+record_full_meta_bernoulli_trials_cpp = lib.record_full_meta_bernoulli_trials
+record_full_meta_bernoulli_trials_cpp.argtypes = [ctl.ndpointer(np.float64, 
+                                         flags='aligned, c_contiguous'), 
+                           ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double]
+
+def record_full_meta_bernoulli_trials(time, num_tries, **kwargs):
+	button_prior = (1.0, 1.0)
+	if 'button_prior' in kwargs:
+		button_prior = kwargs['button_prior']
+
+	val = np.zeros(num_tries*time*4, dtype=np.float64)
+	record_full_meta_bernoulli_trials_cpp(val, time, num_tries, button_prior[0], button_prior[1])
+	val = val.reshape((num_tries, time, 4))
+	val[::,0:2] = np.rint(val[::,0:2])
+	return val
