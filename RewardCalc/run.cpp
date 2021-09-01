@@ -183,6 +183,7 @@ void run_biased_bernoulli_trials(int argc, char const *argv[]){
 void run_meta_bernoulli_trials(int argc, char const *argv[]){
 	int time = 100, num_tries = 100;
 	double alpha_prior = 1.0, beta_prior = 1.0;
+	double prior_k = 1.0;
 
 	for(int i = 1; i < argc; i++){
 		if(strcmp(argv[i], "-time") == 0){
@@ -201,12 +202,16 @@ void run_meta_bernoulli_trials(int argc, char const *argv[]){
 			beta_prior = atof(argv[i+1]);
 			i++;
 		}
+		if(strcmp(argv[i], "-k") == 0){
+			prior_k = atof(argv[i+1]);
+			i++;
+		}
 	}
 
 	Biased_Bernoulli_Button bbb(alpha_prior, beta_prior);
 
 	Bernoulli_Policy_Direct plc_ub(time);
-	Meta_Bernoulli_Policy plc_meta(time);
+	Meta_Bernoulli_Policy plc_meta(time, prior_k);
 
 	Policy_Test plc_test_ub(&bbb, &plc_ub, time, num_tries);
 	Policy_Test plc_test_meta(&bbb, &plc_meta, time, num_tries);
@@ -229,12 +234,57 @@ void run_meta_bernoulli_trials(int argc, char const *argv[]){
 	return;
 }
 
+#include <print_latex.h>
+
+void print_transition_table(int argc, char const *argv[]){
+	int win_max = 10, fail_max = 10, time_max = 1500;
+	double alpha_prior = 1.0, beta_prior = 1.0;
+
+	for(int i = 1; i < argc; i++){
+		if(strcmp(argv[i], "-wins") == 0){
+			win_max = atoi(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-fails") == 0){
+			fail_max = atoi(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-time") == 0){
+			time_max = atoi(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-alpha") == 0){
+			alpha_prior = atof(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-beta") == 0){
+			beta_prior = atof(argv[i+1]);
+			i++;
+		}
+	}
+
+	int *transition_table = new int[win_max*fail_max];
+
+	Timer timer;
+	Transition trans(transition_table, win_max, fail_max, time_max, alpha_prior, beta_prior);
+	timer.record();
+	std::cout << "The calculation took " << timer.total << std::endl;
+	std::cout << std::fixed;
+
+	Print_Table<int> tbl_print(transition_table, win_max, fail_max, " \\\\\\hline");
+	
+	std::cout << tbl_print;
+
+	return;
+}
+
 int main(int argc, char const *argv[]){
 	// run_coefficient_table_generator(argc, argv);
 	// run_bernoulli_trials(argc, argv);
 	// run_biased_bernoulli_trials(argc, argv);
 	// run_transition_table_generator(argc, argv);
 	run_meta_bernoulli_trials(argc, argv);
+	// print_transition_table(argc, argv);
 
 	return 0.0;
 }

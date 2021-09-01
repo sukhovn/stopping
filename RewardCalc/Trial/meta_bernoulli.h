@@ -17,7 +17,7 @@ private:
 	Transition_Check tc;
 
 public:
-	Meta_Bernoulli_Policy(int time_init): wins(0), fails(0), time(time_init), time_left(time_init), bh(), tc() {};
+	Meta_Bernoulli_Policy(int time_init, double prior_k = 1.0): wins(0), fails(0), time(time_init), time_left(time_init), bh(prior_k), tc() {};
 	
 	void reset(){time_left = time; wins = 0; fails = 0; bh.clear();}
 

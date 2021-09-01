@@ -17,8 +17,8 @@ class Bernoulli_Hierarchy: private Nelder_Mead{
 private:
 	std::vector<std::vector<int>> buttons;
 
-	int prior_k;
-	int prior_theta;
+	double prior_k;
+	double prior_theta;
 
 	double log_prior(double alpha, double beta){
 		return (prior_k-1)*std::log(alpha*beta) - (alpha+beta)/prior_theta;
@@ -41,7 +41,7 @@ public:
 		return tmp;
 	}
 
-	Bernoulli_Hierarchy(): Nelder_Mead(2), prior_k(2), prior_theta(1.0), alpha_map(1.0), beta_map(1.0) {};
+	Bernoulli_Hierarchy(double prior_ki = 1.0): Nelder_Mead(2), prior_k(prior_ki), prior_theta(1.0), alpha_map(1.0), beta_map(1.0) {};
 
 	void clear(void){prior_theta = 1.0; alpha_map = beta_map = 1.0; buttons.clear();}
 
@@ -52,7 +52,7 @@ public:
 		}
 		std::vector<int> btn = {n, k};
 		buttons.push_back(btn);
-		prior_theta = buttons.size();
+		prior_theta = buttons.size()/(2.0*prior_k);
 	}
 
 	void add_win(void){
