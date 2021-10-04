@@ -4,16 +4,29 @@
 
 var number_of_presses = 20;
 var number_of_after_press_messages = 5; //Number of times after press message is flashed out
+var subjectID = Math.round(Math.random()*100000000); //Random subject ID
 
-var loading_screen_description = "This is some loading screen description, press enter to continue";
-var experimental_prompt = "This is experimental description";
-var finishing_screen_description = "Thank you for the experiment!";
+var instruction_screen_description = '<p style="text-align: left;">&emsp; Welcome to the experiment about decision making. In the beginning of this experiment you will be given a series of buttons.\
+                                       When you press a button you either receive a reward or you receive nothing. Each button has a fixed chance of giving a reward,\
+                                       for example, one button may give a reward in 9 out of 10 presses on average, another may only give one reward per 10 presses.\
+                                       Every button has its own unique chance of giving a reward.\
+                                       You know that the buttons are distributed uniformly, which means you are equally likely to get a good or a bad button.<br>\
+                                       &emsp; You start with a given button and a fixed number of ' + number_of_presses + ' presses. At each point in time you can either press a button\
+                                       you currently have or request another one. You can request as many buttons as you like, however, you move to the next button you can no longer return\
+                                       to any of the previous ones. Your goal is to get as many rewards as you can get given the number of presses. Good luck!</p>' 
+                                    + '<p>Now press ENTER key to begin with the experiment.</p>';
 
-var button_folder_path = "pictures/square_buttons/"
-var after_press_win_message = "Congratulations, after pressing the button you got 1 point!"
-var after_press_fail_message = "Unfortunately, after pressing the button you get nothing."
-var after_press_message_instruction = "Now you have a choice, you can either continue pressing the same button and observe the outcome,<br>\
-                        alternatively you can make the decision to move to the next button. Press enter to continue."
+var experimental_prompt = 'Click with a mouse to choose an option. Once you move to the next button you cannot return to the previous one.';
+var debrief_screen_description = '<p>That\'s it. Thank you for your participation!<br>Please save or write down the following number: ' + 
+                                    subjectID + '</p>';
+
+var button_folder_path = 'pictures/square_buttons/'
+var after_press_win_message = 'Congratulations, after pressing the button you got 1 point!'
+var after_press_fail_message = 'Unfortunately, after pressing the button you get nothing.'
+var after_press_message_instruction = 'Now you have a choice: you can either continue pressing this button and observe the outcome.\
+                        Alternatively, you can make the decision to move to the next button. Press enter to continue.'
+
+var initial_screen_time; //Records the time the test subject looked at the initial screen
 
 /*
 *  Here goes the main experimental code
@@ -25,6 +38,7 @@ var after_press_message_instruction = "Now you have a choice, you can either con
 var button = (function(){
    core = {};
 
+   core.button_number = 0;
    core.current_p = Math.random();
    core.presses = 0;
    core.wins = 0;
@@ -42,11 +56,13 @@ var button = (function(){
       }
       while(random_number == this.current_button);
       this.current_button = random_number;
+
+      this.button_number++;
    };
 
    core.update_button = function(){
-      $("#current_presses_info").html("<div>Current button presses: " + this.presses + "</div>");
-      $("#current_wins_info").html("<div>Current button wins: " + this.wins + "</div>");
+      $('#current_presses_info').html('Current button presses: ' + this.presses);
+      $('#current_wins_info').html('Current button wins: ' + this.wins);
       $('#button').attr("src", button_folder_path + 'button_' + this.current_button + '.jpg');
    };
 
@@ -65,13 +81,14 @@ var button = (function(){
 })();
 
 //This object handles overall counter
+
 var counter = {
    remaining_presses: number_of_presses,
    wins: 0,
 
    update_counter: function(){
-      $("#presses_info").html("<div>Remaining presses: " + this.remaining_presses + "</div>");
-      $("#wins_info").html("<div>Total win: " + this.wins + "</div>");
+      $('#presses_info').html('Remaining presses: ' + this.remaining_presses);
+      $('#wins_info').html('Total win: ' + this.wins);
    },
 
    count_win: function(){
@@ -84,15 +101,61 @@ var counter = {
    }
 };
 
+//This object collects and handles experimental data
+
+var experimental_data = {
+   data: [],
+   time: 0,
+   press_number: 0,
+
+   start_timer: function(){
+      this.time = (new Date()).getTime();
+   },
+
+   record_press: function(outcome){
+      let time_curr = (new Date()).getTime();
+      var press_data = [];
+      press_data[0] = this.press_number;
+      press_data[1] = button.button_number;
+      press_data[2] = button.current_p;
+      press_data[3] = outcome;
+      press_data[4] = time_curr - this.time;
+      this.data.push(press_data);
+      this.press_number++;
+      this.time = time_curr;
+   },
+
+   return_csv: function(){
+      var outcome = [];
+      outcome.push('press_number,button_number,current_p,outcome,time');
+      let dLen = this.data.length;
+      let pLen = this.data[0].length-1;
+      for(let i = 0; i < dLen; i++){
+         let str_tmp = "";
+         for(let j = 0; j < pLen; j++)
+            str_tmp += this.data[i][j].toString() + ',';
+         str_tmp += this.data[i][pLen].toString();
+         outcome.push(str_tmp);
+      }
+      return outcome;
+   }
+};
+
 /*
-*  Here goes the loading screen code
+*  Here goes the instruction screen code
 */ 
 
-function loading_screen(){
-   $('body').html('<p>' + loading_screen_description + '</p>');
+function instruction_screen(){
+   initial_screen_time = (new Date()).getTime();
+   $('body').html($('<div>', {
+      'html': instruction_screen_description,
+      'id': 'instruction_screen'
+   }));
 
    $(document).keyup(function(event) {
       if(event.which === 13) {
+         initial_screen_time = (new Date()).getTime() - initial_screen_time;
+         $(document).off('keyup');
          experimental_screen();
       }
    });
@@ -102,63 +165,69 @@ function loading_screen(){
 *  Here goes the testing screen code
 */
 
+//This function constructs button section with a single button which is displayed initially
+
 function single_button_frame(){
    // appending button info section
    $('#button_section').html($('<div>', {
-      "id": 'current_button_info'
+      'id': 'current_button_info'
    }));
 
-   $("#current_button_info").append($('<div>', {
-      "html": '<div>Current button presses:</div>',
-      "id": 'current_presses_info'
+   $('#current_button_info').attr('style', 'border-bottom: 1px solid #eaeaea');
+   $('#current_button_info').append($('<div>', {
+      'html': 'Current button presses:',
+      'id': 'current_presses_info'
    }));
-   $("#current_button_info").append($('<div>', {
-      "html": '<div>Current button wins:</div>',
-      "id": 'current_wins_info'
+   $('#current_button_info').append($('<div>', {
+      'html': 'Current button wins:',
+      'id': 'current_wins_info'
    }));
 
    // appending button area
    $('#button_section').append($('<div>', {
-      "id": 'button_area'
+      'id': 'button_area'
    }));
 
    // intialize buttons
    $('#button_area').html('<div id="button_frame"></div>');
 
    $('#button_frame').append($('<div>', {
-      "html": "This is button",
+      "html": "The current button",
       "class": "arm_labels"
    }));
    $('#button_frame').append($('<img>', {
-      "src": button_folder_path + "button_0.jpg",
-      "id": "button",
-      "class": "arm_img" 
+      'src': button_folder_path + 'button_0.jpg',
+      'id': 'button',
+      'class': 'arm_img' 
    }));
 
    // animating arms when mouse is hovering over them
    $('.arm_img').hover( function() {
-      $(this).toggleClass("highlighted_arm_img");
+      $(this).toggleClass('highlighted_arm_img');
    });
 }
+
+//This function construct button section with an option to move to the next button
 
 function two_button_frame(){
    // appending button info section
    $('#button_section').html($('<div>', {
-      "id": 'current_button_info'
+      'id': 'current_button_info'
    }));
 
-   $("#current_button_info").append($('<div>', {
-      "html": '<div>Current button presses:</div>',
-      "id": 'current_presses_info'
+   $('#current_button_info').attr('style', 'border-bottom: 1px solid #eaeaea');
+   $('#current_button_info').append($('<div>', {
+      'html': 'Current button presses:',
+      'id': 'current_presses_info'
    }));
-   $("#current_button_info").append($('<div>', {
-      "html": '<div>Current button wins:</div>',
-      "id": 'current_wins_info'
+   $('#current_button_info').append($('<div>', {
+      'html': 'Current button wins:',
+      'id': 'current_wins_info'
    }));
 
    // appending button area
    $('#button_section').append($('<div>', {
-      "id": 'button_area'
+      'id': 'button_area'
    }));
 
    // intialize grid
@@ -172,63 +241,65 @@ function two_button_frame(){
    $('#button_area').html(gridHTML);
 
    $('#button_frame').append($('<div>', {
-      "html": "This is button",
+      "html": "The current button",
       "class": "arm_labels"
    }));
    $('#button_frame').append($('<img>', {
-      "src": button_folder_path + "button_0.jpg",
-      "id": "button",
-      "class": "arm_img" 
+      'src': button_folder_path + 'button_0.jpg',
+      'id': 'button',
+      'class': 'arm_img'
    }));
 
    $('#arrow_frame').append($('<div>', {
-      "html": "Next button",
-      "class": "arm_labels"
+      'html': 'Go to next button',
+      'class': 'arm_labels'
    }));
    $('#arrow_frame').append($('<img>', {
-      "src": "pictures/white_arrow.jpeg",
-      "id": "arrow",
-      "class": "arm_img" 
+      'src': "pictures/white_arrow.jpeg",
+      'id': 'arrow',
+      'class': 'arm_img' 
    }));
 
    // animating arms when mouse is hovering over them
    $('.arm_img').hover( function() {
-      $(this).toggleClass("highlighted_arm_img");
+      $(this).toggleClass('highlighted_arm_img');
    });
 }
 
+//This function constructs after press message that provides extra instruction
+
 function after_press_message(outcome){
    // appending button info section
-   $('#button_section').html($('<div>', {
-      "id": 'after_press_message'
-   }));
+   $('#button_section').html('');
 
    if(outcome){
-      $('#after_press_message').append($('<div>', {
-         "html": '<div>' + after_press_win_message + '<br>\
-                        Your total result after using this button is:</div>',
-         "height": "80px"
+      $('#button_section').append($('<div>', {
+         'html': after_press_win_message + '<br>\
+                        Your total result after using this button is:',
+         'id': 'after_press_description'
       }));
    }
    else{
-      $('#after_press_message').append($('<div>', {
-         "html": '<div>' + after_press_fail_message + '<br>\
-                        Your total result after using this button is:</div>',
-         "height": "80px"
+      $('#button_section').append($('<div>', {
+         'html': after_press_fail_message + '<br>\
+                        Your total result after using this button is:',
+         'id': 'after_press_description'
       }));
    }
-   $("#after_press_message").append($('<div>', {
-      "html": '<div>Current button presses:</div>',
-      "id": 'current_presses_info',
-      "height": '50px'
+   $('#button_section').append($('<div>', {
+      "id": 'current_button_info'
    }));
-   $("#after_press_message").append($('<div>', {
-      "html": '<div>Current button wins:</div>',
-      "id": 'current_wins_info',
-      "height": "50px"
+   $('#current_button_info').append($('<div>', {
+      'html': 'Current button presses:',
+      'id': 'current_presses_info'
    }));
-   $('#after_press_message').append($('<div>', {
-         "html": '<div>' + after_press_message_instruction + '</div>',
+   $('#current_button_info').append($('<div>', {
+      'html': 'Current button wins:',
+      'id': 'current_wins_info'
+   }));
+   $('#button_section').append($('<div>', {
+         'html': after_press_message_instruction,
+         'id': "after_press_instruction"
    }));
 
    button.update_button();
@@ -237,86 +308,101 @@ function after_press_message(outcome){
       if(event.which === 13) {
          two_button_frame();
          button.update_button();
+         $(document).off('keyup');
          driver();
       }
    });
 }
 
+//This function constructs the general experimental frame outlay
+
 function experiment_frame(){
    $('body').html('');
    // header part
    $('body').append($('<div>', {
-      "id": 'header'
+      'id': 'header'
    }));
 
-   $("#header").append($('<div>', {
-      "html": '<div>Remaining presses:</div>',
-      "id": 'presses_info'
+   $('#header').append($('<div>', {
+      'html': 'Remaining presses:',
+      'id': 'presses_info'
    }));
-   $("#header").append($('<div>', {
-      "html": '<div>Total win:</div>',
-      "id": 'wins_info'
+   $('#header').append($('<div>', {
+      'html': 'Total win:',
+      'id': 'wins_info'
    }));
 
    // current button info part
    $('body').append($('<div>', {
-      "id": 'button_section'
+      'id': 'button_section'
    }))
     
    single_button_frame();
    
    // appending footer, below the screen part with the bandits
    $('body').append($('<div>', {
-      "id": 'footer'
+      'id': 'footer'
    }));
 
    // prompt
 
-   $("#footer").append($('<div>', {
-      "html": experimental_prompt,
-      "id": 'prompt'
+   $('#footer').append($('<div>', {
+      'html': experimental_prompt,
+      'id': 'prompt'
    }));
 };
 
+//This function waits for current button or next button clicks and does all the related procedures 
+
 function driver(){
    // choice is made when an arm is clicked on
-   $(document).off('keyup');
    $('.arm_img').click(function() {
       var armID = this.getAttribute('id');
-      if(armID == "button"){
+      if(armID == 'button'){
          var button_outcome = button.press_button();
+         experimental_data.record_press(button_outcome);
          if(button_outcome) counter.count_win();
          else counter.count_fail();
       }
-      if(armID == "arrow"){
+      if(armID == 'arrow'){
          button.new_button();
       }
       counter.update_counter();
       button.update_button();
-      if(counter.remaining_presses == 0) finishing_screen();
-      if(armID == "button" && number_of_after_press_messages > 0){
+      if(counter.remaining_presses == 0) debrief_screen();
+      if(armID == 'button' && number_of_after_press_messages > 0){
          number_of_after_press_messages--;
          after_press_message(button_outcome);
       }
    })
 }
 
+//This function starts experimental screen
 
 function experimental_screen(){
    experiment_frame();
    counter.update_counter();
    button.update_button();
 
+   experimental_data.start_timer();
    driver();
 };
 
 /*
-*  Here goes the finishing screen code
+*  Here goes the debrief screen code
 */
 
-function finishing_screen(){
-   $(document).off('keyup');
-   $('body').html('<p>' + finishing_screen_description + '</p>');
+function debrief_screen(){
+   $('body').html(debrief_screen_description);
+
+   //Temporary section that outputs the collected experimental data
+   $('body').append('<p>Time spent on the instruction screen: ' + initial_screen_time + '</p>');
+   var outcome = experimental_data.return_csv();
+   $('body').append('<p>');
+   for(let i = 0; i < outcome.length; i++){
+      $('body').append(outcome[i] + '<br>');
+   }
+   $('body').append('</p>');
 };
 
 /*
@@ -324,5 +410,5 @@ function finishing_screen(){
 */
 
 function run_experiment(){
-   loading_screen();
+   instruction_screen();
 }
