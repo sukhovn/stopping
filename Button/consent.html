@@ -69,7 +69,8 @@
         form.addEventListener("submit", function(event) {
             var data = new FormData(form);
             if(data.get('consent-choice') == " I consent to participate"){
-                window.location.href = "button.html";
+                // window.location.href = "button.html";
+                window.location.href = "/experiment";
             }
             if(data.get('consent-choice') == " I do not consent to participate"){
                 // document.body.innerHTML = "<p>It seems we won't be working together, Dr. Freeman</p>";
