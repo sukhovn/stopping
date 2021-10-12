@@ -1,0 +1,156 @@
+/*
+ *
+ * This css is mostly borrowed from jsPsych package
+ *
+ */
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+
+body {
+    padding:10% 10% 10%;
+    background-color: #ffffff;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    line-height: 1.5;
+    color: #24292e;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 16px;
+    word-wrap: break-word;
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 24px;
+  font-weight: normal;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 20px;
+    font-weight: normal;
+    text-align: center;
+}
+
+h4 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+h5 {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+h6 {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 12px;
+}
+
+code {
+    padding: 0;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    margin: 0;
+    font-size: 85%;
+    background-color: rgba(27,31,35,0.05);
+    border-radius: 3px;
+}
+
+blockquote {
+    padding: 0 0 2em;
+    text-align: center;
+    font-size: 18px;
+    /*color: #6a737d;*/
+    /*border-left: 0.25em solid #dfe2e5;*/
+}
+
+p {
+    clear: both;
+}
+
+.display-element {
+   display: flex;
+   flex-direction: column;
+   overflow-y: auto;
+ }
+
+.display-element:focus {
+   outline: none;
+ }
+
+.display-element {
+    width: 60%;
+    margin: 50px auto 50px auto;
+}
+
+.display-element {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-width: 80%;
+}
+
+/* fonts and type */
+
+.display-element {
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-size: 18px;
+  line-height: 1.6em;
+}
+
+/* Form elements like input fields and buttons */
+
+.display-element input[type="text"] {
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-size: 14px;
+}
+
+/*
+ *
+ * PLUGIN: survey-multi-choice
+ *
+ */
+
+.multi-choice-question {
+    margin-top: 2em;
+    margin-bottom: 2em;
+ }
+
+.multi-choice-text span.required {
+    color: darkred;
+}
+
+.multi-choice-horizontal .multi-choice-text {
+    text-align: center;
+}
+
+.multi-choice-option {
+    line-height: 1.1em;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 12px;
+}
+.choice-horizontal .multi-choice-option {
+    display: inline-block;
+    margin-left: 1em;
+    margin-right: 1em;
+    vertical-align: top;
+}
+
+label.multi-choice-text input[type="radio"] {
+    margin-right: 1em;
+}
+
+#multi-choice-next {
+    display: block;
+    margin: auto;
+}

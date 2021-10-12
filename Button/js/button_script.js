@@ -21,10 +21,11 @@ var debrief_screen_description = '<p>That\'s it. Thank you for your participatio
                                     subjectID + '</p>';
 
 var button_folder_path = 'pictures/square_buttons/'
+var next_button_arrow_path = 'pictures/white_arrow.jpeg'
 var after_press_win_message = 'Congratulations, after pressing the button you got 1 point!'
 var after_press_fail_message = 'Unfortunately, after pressing the button you get nothing.'
 var after_press_message_instruction = 'Now you have a choice: you can either continue pressing this button and observe the outcome.\
-                        Alternatively, you can make the decision to move to the next button. Press enter to continue.'
+                        Alternatively, you can make the decision to move to the next button. Press ENTER key to continue.'
 
 var initial_screen_time; //Records the time the test subject looked at the initial screen
 
@@ -48,8 +49,6 @@ var button = (function(){
 
    core.new_button = function(){
       this.current_p = Math.random();      
-      this.presses = 0;
-      this.wins = 0;
 
       do{
          var random_number = Math.floor(this.number_of_buttons*Math.random());
@@ -57,13 +56,15 @@ var button = (function(){
       while(random_number == this.current_button);
       this.current_button = random_number;
 
-      this.button_number++;
+      if(this.presses > 0) this.button_number++;
+      this.presses = 0;
+      this.wins = 0;
    };
 
    core.update_button = function(){
       $('#current_presses_info').html('Current button presses: ' + this.presses);
       $('#current_wins_info').html('Current button wins: ' + this.wins);
-      $('#button').attr("src", button_folder_path + 'button_' + this.current_button + '.jpg');
+      $('#button').attr('src', button_folder_path + 'button_' + this.current_button + '.jpg');
    };
 
    core.press_button = function(){
@@ -114,12 +115,13 @@ var experimental_data = {
 
    record_press: function(outcome){
       let time_curr = (new Date()).getTime();
-      var press_data = [];
-      press_data[0] = this.press_number;
-      press_data[1] = button.button_number;
-      press_data[2] = button.current_p;
-      press_data[3] = outcome;
-      press_data[4] = time_curr - this.time;
+      var press_data = {
+         "press_number": this.press_number,
+         "button_number": button.button_number,
+         "current_p": button.current_p,
+         "outcome": outcome,
+         "press_time": time_curr - this.time
+      }
       this.data.push(press_data);
       this.press_number++;
       this.time = time_curr;
@@ -132,11 +134,17 @@ var experimental_data = {
       let pLen = this.data[0].length-1;
       for(let i = 0; i < dLen; i++){
          let str_tmp = "";
-         for(let j = 0; j < pLen; j++)
-            str_tmp += this.data[i][j].toString() + ',';
-         str_tmp += this.data[i][pLen].toString();
+         Object.values(this.data[i]).forEach(val => str_tmp = str_tmp + val + ',');
+         str_tmp = str_tmp.substring(0, str_tmp.length - 1);
          outcome.push(str_tmp);
       }
+      return outcome;
+   },
+
+   getData: function(){
+      var outcome = this.data;
+      outcome.unshift({"subjectID": subjectID, "is_time": initial_screen_time});
+      let dLen = this.data.length;
       return outcome;
    }
 };
@@ -192,8 +200,8 @@ function single_button_frame(){
    $('#button_area').html('<div id="button_frame"></div>');
 
    $('#button_frame').append($('<div>', {
-      "html": "The current button",
-      "class": "arm_labels"
+      'html': 'The current button',
+      'class': 'arm_labels'
    }));
    $('#button_frame').append($('<img>', {
       'src': button_folder_path + 'button_0.jpg',
@@ -241,8 +249,8 @@ function two_button_frame(){
    $('#button_area').html(gridHTML);
 
    $('#button_frame').append($('<div>', {
-      "html": "The current button",
-      "class": "arm_labels"
+      'html': 'The current button',
+      'class': 'arm_labels'
    }));
    $('#button_frame').append($('<img>', {
       'src': button_folder_path + 'button_0.jpg',
@@ -255,7 +263,7 @@ function two_button_frame(){
       'class': 'arm_labels'
    }));
    $('#arrow_frame').append($('<img>', {
-      'src': "pictures/white_arrow.jpeg",
+      'src': next_button_arrow_path,
       'id': 'arrow',
       'class': 'arm_img' 
    }));
@@ -287,7 +295,7 @@ function after_press_message(outcome){
       }));
    }
    $('#button_section').append($('<div>', {
-      "id": 'current_button_info'
+      'id': 'current_button_info'
    }));
    $('#current_button_info').append($('<div>', {
       'html': 'Current button presses:',
@@ -299,7 +307,7 @@ function after_press_message(outcome){
    }));
    $('#button_section').append($('<div>', {
          'html': after_press_message_instruction,
-         'id': "after_press_instruction"
+         'id': 'after_press_instruction'
    }));
 
    button.update_button();
@@ -403,6 +411,8 @@ function debrief_screen(){
       $('body').append(outcome[i] + '<br>');
    }
    $('body').append('</p>');
+
+   // console.log(JSON.stringify(experimental_data.getData()));
 };
 
 /*
