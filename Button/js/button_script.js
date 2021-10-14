@@ -2,15 +2,16 @@
 *  Here we define main experiment parameters
 */
 
+var number_of_practice_presses = 10;
 var number_of_presses = 20;
-var number_of_after_press_messages = 5; //Number of times after press message is flashed out
+var number_of_after_press_messages = 15; //Number of times after press message is flashed out
 var subjectID = Math.round(Math.random()*100000000); //Random subject ID
 
 /*
 * Here we define attention screen frequency
 */
 
-var attention_check_interval = 5;
+var attention_check_interval = 10;
 var attention_check_results = []; //Tracks the results of attention checks, if the check is passed, the result is 1, else 0
 
 var instruction_screen_description = '<p style="text-align: left;">&emsp; Welcome to the experiment about decision making. In the beginning of this experiment you will be given a series of buttons.\
@@ -20,8 +21,11 @@ var instruction_screen_description = '<p style="text-align: left;">&emsp; Welcom
                                        You know that the buttons are distributed uniformly, which means you are equally likely to get a good or a bad button.<br>\
                                        &emsp; You start with a given button and a fixed number of ' + number_of_presses + ' presses. At each point in time you can either press a button\
                                        you currently have or request another one. You can request as many buttons as you like, however, you move to the next button you can no longer return\
-                                       to any of the previous ones. Your goal is to get as many rewards as you can get given the number of presses. Good luck!</p>' 
-                                    + '<p>Now press ENTER key to begin with the experiment.</p>';
+                                       to any of the previous ones. Your goal is to get as many rewards as you can get given the number of presses. Good luck!</p>'
+                                    + '<p>Before the main experiment you will be given a practice round with just ' + number_of_practice_presses + ' presses.</p>'
+                                    + '<p>Now press ENTER key to begin with the practice round.</p>';
+
+var after_practice_screen_description = '<p>This was the practice round.</p><p>Now press ENTER key to begin with the experiment.</p>'
 
 var experimental_prompt = 'Click with a mouse to choose an option. Once you move to the next button you cannot return to the previous one.';
 var debrief_screen_description = '<p>That\'s it. Thank you for your participation!<br>Please save or write down the following number: ' + 
@@ -79,11 +83,11 @@ var button = (function(){
       this.presses++;
       if(Math.random() < this.current_p){
          core.wins++;
-         last_button_outcome = 1;
+         this.last_button_outcome = 1;
          return 1;
       }
       else{
-         last_button_outcome = 0;
+         this.last_button_outcome = 0;
          return 0;
       }
    };
@@ -94,11 +98,11 @@ var button = (function(){
 //This object handles overall counter
 
 var counter = {
-   remaining_presses: number_of_presses,
+   remaining_presses: 0,
    wins: 0,
 
    new_counter: function(npress){
-      this.number_of_presses = npress;
+      this.remaining_presses = npress;
       this.wins = 0;
    },
 
@@ -130,6 +134,9 @@ var experimental_data = {
    },
 
    new_round: function(){
+      button.new_button();
+      button.button_number = 0;
+      button.last_button_outcome = 0;
       this.press_number = 0;
       this.round_number++;
    },
@@ -174,32 +181,12 @@ var experimental_data = {
 };
 
 /*
-*  Here goes the instruction screen code
-*/ 
-
-function instruction_screen(){
-   initial_screen_time = (new Date()).getTime();
-   $('body').html($('<div>', {
-      'html': instruction_screen_description,
-      'id': 'instruction_screen'
-   }));
-
-   $(document).keyup(function(event) {
-      if(event.which === 13) {
-         initial_screen_time = (new Date()).getTime() - initial_screen_time;
-         $(document).off('keyup');
-         experimental_screen();
-      }
-   });
-};
-
-/*
 *  Here goes the testing screen code
 */
 
 //This function constructs button section with a single button which is displayed initially
 
-function single_button_frame(){
+function single_button_frame(driver){
    // appending button info section
    $('#button_section').html($('<div>', {
       'id': 'current_button_info'
@@ -207,11 +194,11 @@ function single_button_frame(){
 
    $('#current_button_info').attr('style', 'border-bottom: 1px solid #eaeaea');
    $('#current_button_info').append($('<div>', {
-      'html': 'Current button presses:',
+      'html': 'Current button presses: ' + button.presses,
       'id': 'current_presses_info'
    }));
    $('#current_button_info').append($('<div>', {
-      'html': 'Current button wins:',
+      'html': 'Current button wins: ' + button.wins,
       'id': 'current_wins_info'
    }));
 
@@ -228,7 +215,7 @@ function single_button_frame(){
       'class': 'arm_labels'
    }));
    $('#button_frame').append($('<img>', {
-      'src': button_folder_path + 'button_0.jpg',
+      'src': button_folder_path + 'button_' + button.current_button + '.jpg',
       'id': 'button',
       'class': 'arm_img' 
    }));
@@ -238,13 +225,12 @@ function single_button_frame(){
       $(this).toggleClass('highlighted_arm_img');
    });
 
-   button.update_button();
    driver();
 };
 
 //This function construct button section with an option to move to the next button
 
-function two_button_frame(){
+function two_button_frame(driver){
    // appending button info section
    $('#button_section').html($('<div>', {
       'id': 'current_button_info'
@@ -252,11 +238,11 @@ function two_button_frame(){
 
    $('#current_button_info').attr('style', 'border-bottom: 1px solid #eaeaea');
    $('#current_button_info').append($('<div>', {
-      'html': 'Current button presses:',
+      'html': 'Current button presses: ' + button.presses,
       'id': 'current_presses_info'
    }));
    $('#current_button_info').append($('<div>', {
-      'html': 'Current button wins:',
+      'html': 'Current button wins: ' + button.wins,
       'id': 'current_wins_info'
    }));
 
@@ -280,7 +266,7 @@ function two_button_frame(){
       'class': 'arm_labels'
    }));
    $('#button_frame').append($('<img>', {
-      'src': button_folder_path + 'button_0.jpg',
+      'src': button_folder_path + 'button_' + button.current_button + '.jpg',
       'id': 'button',
       'class': 'arm_img'
    }));
@@ -300,13 +286,12 @@ function two_button_frame(){
       $(this).toggleClass('highlighted_arm_img');
    });
 
-   button.update_button();
    driver();
 };
 
 //This function constructs after press message that provides extra instruction
 
-function after_press_message(){
+function after_press_message(driver){
    // appending button info section
    $('#button_section').html('');
 
@@ -328,11 +313,11 @@ function after_press_message(){
       'id': 'current_button_info'
    }));
    $('#current_button_info').append($('<div>', {
-      'html': 'Current button presses:',
+      'html': 'Current button presses: ' + button.presses,
       'id': 'current_presses_info'
    }));
    $('#current_button_info').append($('<div>', {
-      'html': 'Current button wins:',
+      'html': 'Current button wins: ' + button.wins,
       'id': 'current_wins_info'
    }));
    $('#button_section').append($('<div>', {
@@ -340,19 +325,17 @@ function after_press_message(){
          'id': 'after_press_instruction'
    }));
 
-   button.update_button();
-
    $(document).keyup(function(event) {
       if(event.which === 13) {
-         two_button_frame();
          $(document).off('keyup');
+         two_button_frame(driver);
       }
    });
 };
 
 //This function constructs attention check frame
 
-function attention_check_frame(){
+function attention_check_frame(driver){
    let num_choices = 5;
    let choice_num = Math.floor(num_choices*Math.random());
 
@@ -386,15 +369,15 @@ function attention_check_frame(){
 
    //Checking choice option
    $('#attention_check_form input').on('change', function() {
+      $('#attention_check_form input').off();
       let correct_choice = ($('input[name=attention_choice]:checked', '#attention_check_form').val() == choice_num);
       // if(correct_choice) alert("Correct choice!");
       // else alert("Incorrect choice!");
       if(correct_choice) attention_check_results.push(1);
       else attention_check_results.push(0);
-      $('#attention_check_form input').off();
-      if(number_of_after_press_messages>0) after_press_message();
+      if(number_of_after_press_messages >= 0) after_press_message(driver);
       else{
-         two_button_frame();
+         two_button_frame(driver);
       }
    });
 
@@ -403,7 +386,7 @@ function attention_check_frame(){
 
 //This function constructs the general experimental frame outlay
 
-function experiment_frame(){
+function experiment_frame(driver){
    $('body').html('');
    // header part
    $('body').append($('<div>', {
@@ -424,8 +407,8 @@ function experiment_frame(){
       'id': 'button_section'
    }))
     
-   single_button_frame();
-   
+   single_button_frame(driver);
+
    // appending footer, below the screen part with the bandits
    $('body').append($('<div>', {
       'id': 'footer'
@@ -439,9 +422,40 @@ function experiment_frame(){
    }));
 };
 
-//This function waits for current button or next button clicks and does all the related procedures 
+//These functions wait for current button or next button clicks and does all the related procedures 
 
-function driver(){
+//This is the practice part driver
+var practice_driver = function(){
+   if(button.button_number == 0 && button.presses == 0) button.current_p = 0.0; //The first always gives fails
+   // choice is made when an arm is clicked on
+   $('.arm_img').click(function() {
+      var armID = this.getAttribute('id');
+      if(armID == 'button'){
+         var button_outcome = button.press_button();
+         experimental_data.record_press(button_outcome);
+         if(button_outcome) counter.count_win();
+         else counter.count_fail();
+         if(button.button_number == 1 && button.presses == 1) button.current_p = 0.0; //After the first win the second button always gives fails
+      }
+      if(armID == 'arrow'){
+         button.new_button();
+         if(button.button_number == 1) button.current_p = 1.0; //The second button always gives one first win
+      }
+      counter.update_counter();
+      button.update_button();
+
+      if(counter.remaining_presses == 0) experimental_screen();
+      else if(armID == 'button'){
+         if(number_of_after_press_messages >= 0) number_of_after_press_messages--;
+         if((counter.remaining_presses-1) % attention_check_interval == 0) attention_check_frame(practice_driver);
+         else if(number_of_after_press_messages >= 0) after_press_message(practice_driver);
+         else if(button.button_number == 0 && button.presses == 1) two_button_frame(practice_driver);
+      }
+   })
+};
+
+//This is the main driver that handles the main part of the experiment
+var main_driver = function(){
    // choice is made when an arm is clicked on
    $('.arm_img').click(function() {
       var armID = this.getAttribute('id');
@@ -456,22 +470,61 @@ function driver(){
       }
       counter.update_counter();
       button.update_button();
+      
       if(counter.remaining_presses == 0) debrief_screen();
-
-      if(armID == 'button'){
+      else if(armID == 'button'){
          if(number_of_after_press_messages >= 0) number_of_after_press_messages--;
-         if((counter.remaining_presses-1) % attention_check_interval == 0) attention_check_frame();
-         else if(number_of_after_press_messages >= 0) after_press_message();
+         if((counter.remaining_presses-1) % attention_check_interval == 0) attention_check_frame(main_driver);
+         else if(number_of_after_press_messages >= 0) after_press_message(main_driver);
+         else if(button.button_number == 0 && button.presses == 1) two_button_frame(main_driver);
       }
    })
+};
+
+/*
+*  Here goes the instruction screen code
+*/ 
+
+function instruction_screen(){
+   initial_screen_time = (new Date()).getTime();
+   $('body').html($('<div>', {
+      'html': instruction_screen_description,
+      'id': 'instruction_screen'
+   }));
+
+   $(document).keyup(function(event) {
+      if(event.which === 13) {
+         $(document).off('keyup');
+         initial_screen_time = (new Date()).getTime() - initial_screen_time;
+         
+         counter.new_counter(number_of_practice_presses);
+         experiment_frame(practice_driver);
+         counter.update_counter();
+         experimental_data.start_timer();
+      }
+   });
 };
 
 //This function starts experimental screen
 
 function experimental_screen(){
-   experiment_frame();
-   counter.update_counter();
-   experimental_data.start_timer();
+   $('body').html($('<div>', {
+      'html': '<p>In the practice round you scored ' + counter.wins + ' wins out of ' + number_of_practice_presses + ' presses.</p>',
+      'id': 'instruction_screen'
+   }));
+   $('#instruction_screen').append(after_practice_screen_description);
+
+   $(document).keyup(function(event) {
+      if(event.which === 13) {
+         $(document).off('keyup');
+         
+         experimental_data.new_round();
+         counter.new_counter(number_of_presses);
+         experiment_frame(main_driver);
+         counter.update_counter();
+         experimental_data.start_timer();
+      }
+   });
 };
 
 /*
@@ -481,7 +534,7 @@ function experimental_screen(){
 function debrief_screen(){
    // $('body').html(debrief_screen_description);
 
-   //Temporary section that outputs the collected experimental data
+   // //Temporary section that outputs the collected experimental data
    // $('body').append('<p>Time spent on the instruction screen: ' + initial_screen_time + '</p>');
    // var outcome = experimental_data.return_csv();
    // $('body').append('<p>');
@@ -489,6 +542,8 @@ function debrief_screen(){
    //    $('body').append(outcome[i] + '<br>');
    // }
    // $('body').append('</p>');
+
+   // console.log(JSON.stringify(experimental_data.getData()));
 
    $.ajax({
       type: "POST",
@@ -504,8 +559,6 @@ function debrief_screen(){
       alert("A problem occurred while writing to the database. Please contact the researcher for more information.")
       window.location.href = "/";
    })
-
-   // console.log(JSON.stringify(experimental_data.getData()));
 };
 
 /*
