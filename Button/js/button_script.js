@@ -6,6 +6,13 @@ var number_of_presses = 20;
 var number_of_after_press_messages = 5; //Number of times after press message is flashed out
 var subjectID = Math.round(Math.random()*100000000); //Random subject ID
 
+/*
+* Here we define attention screen frequency
+*/
+
+var attention_check_interval = 5;
+var attention_check_results = []; //Tracks the results of attention checks, if the check is passed, the result is 1, else 0
+
 var instruction_screen_description = '<p style="text-align: left;">&emsp; Welcome to the experiment about decision making. In the beginning of this experiment you will be given a series of buttons.\
                                        When you press a button you either receive a reward or you receive nothing. Each button has a fixed chance of giving a reward,\
                                        for example, one button may give a reward in 9 out of 10 presses on average, another may only give one reward per 10 presses.\
@@ -20,12 +27,12 @@ var experimental_prompt = 'Click with a mouse to choose an option. Once you move
 var debrief_screen_description = '<p>That\'s it. Thank you for your participation!<br>Please save or write down the following number: ' + 
                                     subjectID + '</p>';
 
-var button_folder_path = 'pictures/square_buttons/'
-var next_button_arrow_path = 'pictures/white_arrow.jpeg'
-var after_press_win_message = 'Congratulations, after pressing the button you got 1 point!'
-var after_press_fail_message = 'Unfortunately, after pressing the button you get nothing.'
+var button_folder_path = 'pictures/square_buttons/';
+var next_button_arrow_path = 'pictures/white_arrow.jpeg';
+var after_press_win_message = 'Congratulations, after pressing the button you got 1 point!';
+var after_press_fail_message = 'Unfortunately, after pressing the button you get nothing.';
 var after_press_message_instruction = 'Now you have a choice: you can either continue pressing this button and observe the outcome.\
-                        Alternatively, you can make the decision to move to the next button. Press ENTER key to continue.'
+                        Alternatively, you can make the decision to move to the next button. Press ENTER key to continue.';
 
 var initial_screen_time; //Records the time the test subject looked at the initial screen
 
@@ -43,6 +50,7 @@ var button = (function(){
    core.current_p = Math.random();
    core.presses = 0;
    core.wins = 0;
+   core.last_button_outcome = 0;
 
    core.number_of_buttons = 10;
    core.current_button = 0;
@@ -71,9 +79,11 @@ var button = (function(){
       this.presses++;
       if(Math.random() < this.current_p){
          core.wins++;
+         last_button_outcome = 1;
          return 1;
       }
       else{
+         last_button_outcome = 0;
          return 0;
       }
    };
@@ -86,6 +96,11 @@ var button = (function(){
 var counter = {
    remaining_presses: number_of_presses,
    wins: 0,
+
+   new_counter: function(npress){
+      this.number_of_presses = npress;
+      this.wins = 0;
+   },
 
    update_counter: function(){
       $('#presses_info').html('Remaining presses: ' + this.remaining_presses);
@@ -107,15 +122,22 @@ var counter = {
 var experimental_data = {
    data: [],
    time: 0,
+   round_number: 0,
    press_number: 0,
 
    start_timer: function(){
       this.time = (new Date()).getTime();
    },
 
+   new_round: function(){
+      this.press_number = 0;
+      this.round_number++;
+   },
+
    record_press: function(outcome){
       let time_curr = (new Date()).getTime();
-      var press_data = {
+      let press_data = {
+         "round_number": this.round_number,
          "press_number": this.press_number,
          "button_number": button.button_number,
          "current_p": button.current_p,
@@ -128,8 +150,8 @@ var experimental_data = {
    },
 
    return_csv: function(){
-      var outcome = [];
-      outcome.push('press_number,button_number,current_p,outcome,time');
+      let outcome = [];
+      outcome.push('round_number,press_number,button_number,current_p,outcome,time');
       let dLen = this.data.length;
       let pLen = this.data[0].length-1;
       for(let i = 0; i < dLen; i++){
@@ -142,8 +164,10 @@ var experimental_data = {
    },
 
    getData: function(){
-      var outcome = this.data;
-      outcome.unshift({"subjectID": subjectID, "is_time": initial_screen_time, "date": Date()});
+      let outcome = this.data;
+      let head_data = {"subjectID": subjectID, "is_time": initial_screen_time, "date": Date()};
+      if(attention_check_results.length > 0) head_data = $.extend({}, head_data, {"attention_checks": attention_check_results});
+      outcome.unshift(head_data);
       let dLen = this.data.length;
       return outcome;
    }
@@ -213,7 +237,10 @@ function single_button_frame(){
    $('.arm_img').hover( function() {
       $(this).toggleClass('highlighted_arm_img');
    });
-}
+
+   button.update_button();
+   driver();
+};
 
 //This function construct button section with an option to move to the next button
 
@@ -272,15 +299,18 @@ function two_button_frame(){
    $('.arm_img').hover( function() {
       $(this).toggleClass('highlighted_arm_img');
    });
-}
+
+   button.update_button();
+   driver();
+};
 
 //This function constructs after press message that provides extra instruction
 
-function after_press_message(outcome){
+function after_press_message(){
    // appending button info section
    $('#button_section').html('');
 
-   if(outcome){
+   if(button.last_button_outcome){
       $('#button_section').append($('<div>', {
          'html': after_press_win_message + '<br>\
                         Your total result after using this button is:',
@@ -315,12 +345,61 @@ function after_press_message(outcome){
    $(document).keyup(function(event) {
       if(event.which === 13) {
          two_button_frame();
-         button.update_button();
          $(document).off('keyup');
-         driver();
       }
    });
-}
+};
+
+//This function constructs attention check frame
+
+function attention_check_frame(){
+   let num_choices = 5;
+   let choice_num = Math.floor(num_choices*Math.random());
+
+   $('#button_section').html($('<form>', {
+      'id': 'attention_check_form'
+   }));
+
+   //Appending check form message
+   $('#attention_check_form').append($('<div>', {
+      'id': 'attention_check_message',
+      'html': 'We just want to check that you are paying attention. Choose option ' + String(choice_num + 1) + ' if you are:'
+   }));
+
+   //Appending check form options
+   for(let i = 0; i < num_choices; i++){
+      $('#attention_check_form').append($('<div>', {
+         'id': 'attention_option_' + i,
+         'class': 'attention_choice_option'
+      }));
+      $('#attention_option_' + i).append($('<input>', {
+         'type': 'radio',
+         'name': 'attention_choice',
+         'id': 'attention_choice_' + i,
+         'value': String(i)
+      }));
+      $('#attention_option_' + i).append($('<label>', {
+         'for': 'attention_choice_' + i,
+         'html': 'Option ' + (i+1)
+      }));
+   }
+
+   //Checking choice option
+   $('#attention_check_form input').on('change', function() {
+      let correct_choice = ($('input[name=attention_choice]:checked', '#attention_check_form').val() == choice_num);
+      // if(correct_choice) alert("Correct choice!");
+      // else alert("Incorrect choice!");
+      if(correct_choice) attention_check_results.push(1);
+      else attention_check_results.push(0);
+      $('#attention_check_form input').off();
+      if(number_of_after_press_messages>0) after_press_message();
+      else{
+         two_button_frame();
+      }
+   });
+
+};
+
 
 //This function constructs the general experimental frame outlay
 
@@ -378,22 +457,21 @@ function driver(){
       counter.update_counter();
       button.update_button();
       if(counter.remaining_presses == 0) debrief_screen();
-      if(armID == 'button' && number_of_after_press_messages > 0){
-         number_of_after_press_messages--;
-         after_press_message(button_outcome);
+
+      if(armID == 'button'){
+         if(number_of_after_press_messages >= 0) number_of_after_press_messages--;
+         if((counter.remaining_presses-1) % attention_check_interval == 0) attention_check_frame();
+         else if(number_of_after_press_messages >= 0) after_press_message();
       }
    })
-}
+};
 
 //This function starts experimental screen
 
 function experimental_screen(){
    experiment_frame();
    counter.update_counter();
-   button.update_button();
-
    experimental_data.start_timer();
-   driver();
 };
 
 /*
@@ -436,4 +514,4 @@ function debrief_screen(){
 
 function run_experiment(){
    instruction_screen();
-}
+};

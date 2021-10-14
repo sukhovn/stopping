@@ -184,7 +184,22 @@ table {
     margin: 0 auto 0 auto;
 }
 
+/*
+*   Styling choice attention checker
+*/
 
+#attention_check_message {
+    width: 650px; 
+    margin-top: 20px;
+    margin-bottom: 30px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 22px; 
+}
 
-
-
+.attention_choice_option {
+    line-height: 1.75em;
+    /*margin-top: 10px;*/
+    /*margin-bottom: 10px;*/
+    font-size: 20px;
+}
