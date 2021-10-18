@@ -101,10 +101,19 @@ styling the footer below the button area
 styling the bandit area
 */
 
+#global_press_info {
+    background: white;
+    font-size: 26px; 
+    border-bottom: 1px solid #eaeaea;
+    padding: 10px 10px 20px 10px;
+    margin: 10px 10px 10px 10px;
+    height: 60px;
+}
+
 #current_button_info {
     background: white;
     font-size: 26px; 
-/*    border-bottom: 1px solid #eaeaea;*/
+    border-bottom: 1px solid #eaeaea;
     padding: 10px 10px 20px 10px;
     margin: 10px 10px 10px 10px;
     height: 60px;
@@ -120,6 +129,7 @@ styling the bandit area
 
 #after_press_description {
     width: 750px; 
+    margin-top: 20px;
     margin-bottom: 20px;
     margin-right: auto;
     margin-left: auto;

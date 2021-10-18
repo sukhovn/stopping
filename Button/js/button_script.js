@@ -4,7 +4,7 @@
 
 var number_of_practice_presses = 10;
 var number_of_presses = 20;
-var number_of_after_press_messages = 15; //Number of times after press message is flashed out
+var number_of_detailed_instructions = 10;
 var subjectID = Math.round(Math.random()*100000000); //Random subject ID
 
 /*
@@ -27,8 +27,6 @@ var instruction_screen_description_part2 = '<p style="text-align: left;">&emsp;\
                                        Now press ENTER key to begin with the practice round.</p>';
 
 var after_practice_screen_description = '<p>This was the practice round.</p><p>Now press ENTER key to begin with the experiment.</p>'
-
-var experimental_prompt = 'Click with a mouse to choose an option. Once you move to the next button you cannot return to the previous one.';
 var debrief_screen_description = '<p>That\'s it. Thank you for your participation!<br>Please save or write down the following number: ' + 
                                     subjectID + '</p>';
 
@@ -36,7 +34,8 @@ var button_folder_path = 'pictures/square_buttons/';
 var next_button_arrow_path = 'pictures/white_arrow.jpeg';
 var after_press_win_message = 'Congratulations, after pressing the button you got 1 point!';
 var after_press_fail_message = 'Unfortunately, after pressing the button you get nothing.';
-var after_press_message_instruction = 'Now you have a choice: you can either continue pressing this button and observe the outcome.\
+var after_press_short_instruction = 'Press ENTER key to continue.';
+var after_press_detailed_instruction = 'Now you have a choice: you can either continue pressing this button and observe the outcome.\
                         Alternatively, you can make the decision to move to the next button. Press ENTER key to continue.';
 
 var initial_screen_time; //Records the time the test subject looked at the initial screen
@@ -75,8 +74,6 @@ var button = (function(){
    };
 
    core.update_button = function(){
-      $('#current_presses_info').html('Current button presses: ' + this.presses);
-      $('#current_wins_info').html('Current button wins: ' + this.wins);
       $('#button').attr('src', button_folder_path + 'button_' + this.current_button + '.jpg');
    };
 
@@ -105,11 +102,6 @@ var counter = {
    new_counter: function(npress){
       this.remaining_presses = npress;
       this.wins = 0;
-   },
-
-   update_counter: function(){
-      $('#presses_info').html('Remaining presses: ' + this.remaining_presses);
-      $('#wins_info').html('Total win: ' + this.wins);
    },
 
    count_win: function(){
@@ -190,17 +182,16 @@ var experimental_data = {
 function single_button_frame(driver){
    // appending button info section
    $('#button_section').html($('<div>', {
-      'id': 'current_button_info'
+      'id': 'global_press_info'
    }));
 
-   $('#current_button_info').attr('style', 'border-bottom: 1px solid #eaeaea');
-   $('#current_button_info').append($('<div>', {
-      'html': 'Current button presses: ' + button.presses,
-      'id': 'current_presses_info'
+   $('#global_press_info').append($('<div>', {
+      'html': 'Remaining presses: ' + counter.remaining_presses,
+      'id': 'presses_info'
    }));
-   $('#current_button_info').append($('<div>', {
-      'html': 'Current button wins: ' + button.wins,
-      'id': 'current_wins_info'
+   $('#global_press_info').append($('<div>', {
+      'html': 'Total win: ' + counter.wins,
+      'id': 'wins_info'
    }));
 
    // appending button area
@@ -234,17 +225,16 @@ function single_button_frame(driver){
 function two_button_frame(driver){
    // appending button info section
    $('#button_section').html($('<div>', {
-      'id': 'current_button_info'
+      'id': 'global_press_info'
    }));
 
-   $('#current_button_info').attr('style', 'border-bottom: 1px solid #eaeaea');
-   $('#current_button_info').append($('<div>', {
-      'html': 'Current button presses: ' + button.presses,
-      'id': 'current_presses_info'
+   $('#global_press_info').append($('<div>', {
+      'html': 'Remaining presses: ' + counter.remaining_presses,
+      'id': 'presses_info'
    }));
-   $('#current_button_info').append($('<div>', {
-      'html': 'Current button wins: ' + button.wins,
-      'id': 'current_wins_info'
+   $('#global_press_info').append($('<div>', {
+      'html': 'Total win: ' + counter.wins,
+      'id': 'wins_info'
    }));
 
    // appending button area
@@ -321,10 +311,19 @@ function after_press_message(driver){
       'html': 'Current button wins: ' + button.wins,
       'id': 'current_wins_info'
    }));
-   $('#button_section').append($('<div>', {
-         'html': after_press_message_instruction,
-         'id': 'after_press_instruction'
-   }));
+   if(number_of_detailed_instructions > 0){
+      $('#button_section').append($('<div>', {
+            'html': after_press_detailed_instruction,
+            'id': 'after_press_instruction'
+      }));
+      number_of_detailed_instructions--;
+   }
+   else{
+      $('#button_section').append($('<div>', {
+            'html': after_press_short_instruction,
+            'id': 'after_press_instruction'
+      }));
+   }
 
    $(document).keyup(function(event) {
       if(event.which === 13) {
@@ -372,14 +371,9 @@ function attention_check_frame(driver){
    $('#attention_check_form input').on('change', function() {
       $('#attention_check_form input').off();
       let correct_choice = ($('input[name=attention_choice]:checked', '#attention_check_form').val() == choice_num);
-      // if(correct_choice) alert("Correct choice!");
-      // else alert("Incorrect choice!");
       if(correct_choice) attention_check_results.push(1);
       else attention_check_results.push(0);
-      if(number_of_after_press_messages >= 0) after_press_message(driver);
-      else{
-         two_button_frame(driver);
-      }
+      after_press_message(driver);
    });
 
 };
@@ -389,38 +383,12 @@ function attention_check_frame(driver){
 
 function experiment_frame(driver){
    $('body').html('');
-   // header part
-   $('body').append($('<div>', {
-      'id': 'header'
-   }));
 
-   $('#header').append($('<div>', {
-      'html': 'Remaining presses:',
-      'id': 'presses_info'
-   }));
-   $('#header').append($('<div>', {
-      'html': 'Total win:',
-      'id': 'wins_info'
-   }));
-
-   // current button info part
    $('body').append($('<div>', {
       'id': 'button_section'
    }))
     
    single_button_frame(driver);
-
-   // appending footer, below the screen part with the bandits
-   $('body').append($('<div>', {
-      'id': 'footer'
-   }));
-
-   // prompt
-
-   $('#footer').append($('<div>', {
-      'html': experimental_prompt,
-      'id': 'prompt'
-   }));
 };
 
 //These functions wait for current button or next button clicks and does all the related procedures 
@@ -441,16 +409,13 @@ var practice_driver = function(){
       if(armID == 'arrow'){
          button.new_button();
          if(button.button_number == 1) button.current_p = 1.0; //The second button always gives one first win
+         button.update_button();
       }
-      counter.update_counter();
-      button.update_button();
 
       if(counter.remaining_presses == 0) experimental_screen();
       else if(armID == 'button'){
-         if(number_of_after_press_messages >= 0) number_of_after_press_messages--;
          if((counter.remaining_presses-1) % attention_check_interval == 0) attention_check_frame(practice_driver);
-         else if(number_of_after_press_messages >= 0) after_press_message(practice_driver);
-         else if(button.button_number == 0 && button.presses == 1) two_button_frame(practice_driver);
+         else after_press_message(practice_driver);
       }
    })
 };
@@ -468,16 +433,13 @@ var main_driver = function(){
       }
       if(armID == 'arrow'){
          button.new_button();
+         button.update_button();
       }
-      counter.update_counter();
-      button.update_button();
       
       if(counter.remaining_presses == 0) debrief_screen();
       else if(armID == 'button'){
-         if(number_of_after_press_messages >= 0) number_of_after_press_messages--;
          if((counter.remaining_presses-1) % attention_check_interval == 0) attention_check_frame(main_driver);
-         else if(number_of_after_press_messages >= 0) after_press_message(main_driver);
-         else if(button.button_number == 0 && button.presses == 1) two_button_frame(main_driver);
+         else after_press_message(main_driver);
       }
    })
 };
@@ -508,7 +470,6 @@ function instruction_screen(){
                
                counter.new_counter(number_of_practice_presses);
                experiment_frame(practice_driver);
-               counter.update_counter();
                experimental_data.start_timer();
             }
          });
@@ -532,7 +493,6 @@ function experimental_screen(){
          experimental_data.new_round();
          counter.new_counter(number_of_presses);
          experiment_frame(main_driver);
-         counter.update_counter();
          experimental_data.start_timer();
       }
    });
