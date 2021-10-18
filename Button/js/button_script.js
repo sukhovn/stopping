@@ -14,16 +14,17 @@ var subjectID = Math.round(Math.random()*100000000); //Random subject ID
 var attention_check_interval = 10;
 var attention_check_results = []; //Tracks the results of attention checks, if the check is passed, the result is 1, else 0
 
-var instruction_screen_description = '<p style="text-align: left;">&emsp; Welcome to the experiment about decision making. In the beginning of this experiment you will be given a series of buttons.\
+var instruction_screen_description_part1 = '<p style="text-align: left;">&emsp; Welcome to the experiment about decision making. In the beginning of this experiment you will be given a series of buttons.\
                                        When you press a button you either receive a reward or you receive nothing. Each button has a fixed chance of giving a reward,\
                                        for example, one button may give a reward in 9 out of 10 presses on average, another may only give one reward per 10 presses.\
-                                       Every button has its own unique chance of giving a reward.\
-                                       You know that the buttons are distributed uniformly, which means you are equally likely to get a good or a bad button.<br>\
+                                       Every button has its own unique chance of giving a reward.  You know that the buttons are distributed uniformly, which means you are equally likely to get a good or a bad button.</p>'
+                                    +  '<p>Press ENTER to continue.</p>'
+var instruction_screen_description_part2 = '<p style="text-align: left;">&emsp;\
                                        &emsp; You start with a given button and a fixed number of ' + number_of_presses + ' presses. At each point in time you can either press a button\
-                                       you currently have or request another one. You can request as many buttons as you like, however, you move to the next button you can no longer return\
+                                       you currently have or request another one. Moving to the next button has no cost, you can change as many buttons as you want, however, when you move to the next button you can no longer return\
                                        to any of the previous ones. Your goal is to get as many rewards as you can get given the number of presses. Good luck!</p>'
-                                    + '<p>Before the main experiment you will be given a practice round with just ' + number_of_practice_presses + ' presses.</p>'
-                                    + '<p>Now press ENTER key to begin with the practice round.</p>';
+                                    + '<p>Before the main experiment you will be given a practice round with just ' + number_of_practice_presses + ' presses. \
+                                       Now press ENTER key to begin with the practice round.</p>';
 
 var after_practice_screen_description = '<p>This was the practice round.</p><p>Now press ENTER key to begin with the experiment.</p>'
 
@@ -488,19 +489,29 @@ var main_driver = function(){
 function instruction_screen(){
    initial_screen_time = (new Date()).getTime();
    $('body').html($('<div>', {
-      'html': instruction_screen_description,
+      'html': instruction_screen_description_part1,
       'id': 'instruction_screen'
    }));
 
    $(document).keyup(function(event) {
       if(event.which === 13) {
          $(document).off('keyup');
-         initial_screen_time = (new Date()).getTime() - initial_screen_time;
-         
-         counter.new_counter(number_of_practice_presses);
-         experiment_frame(practice_driver);
-         counter.update_counter();
-         experimental_data.start_timer();
+         $('body').html($('<div>', {
+            'html': instruction_screen_description_part2,
+            'id': 'instruction_screen'
+         }));
+
+         $(document).keyup(function(event) {
+            if(event.which === 13) {
+               $(document).off('keyup');
+               initial_screen_time = (new Date()).getTime() - initial_screen_time;
+               
+               counter.new_counter(number_of_practice_presses);
+               experiment_frame(practice_driver);
+               counter.update_counter();
+               experimental_data.start_timer();
+            }
+         });
       }
    });
 };
