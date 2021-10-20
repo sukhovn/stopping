@@ -5,6 +5,7 @@
 var number_of_practice_presses = 10;
 var number_of_presses = 20;
 var number_of_detailed_instructions = 10;
+var price_per_win = 0.1;
 var subjectID = Math.round(Math.random()*100000000); //Random subject ID
 
 /*
@@ -14,21 +15,22 @@ var subjectID = Math.round(Math.random()*100000000); //Random subject ID
 var attention_check_interval = 10;
 var attention_check_results = []; //Tracks the results of attention checks, if the check is passed, the result is 1, else 0
 
-var instruction_screen_description_part1 = '<p style="text-align: left;">&emsp; Welcome to the experiment about decision making. In the beginning of this experiment you will be given a series of buttons.\
-                                       When you press a button you either receive a reward or you receive nothing. Each button has a fixed chance of giving a reward,\
-                                       for example, one button may give a reward in 9 out of 10 presses on average, another may only give one reward per 10 presses.\
+var instruction_screen_description_part1 = '<p style="text-align: left;">&emsp; Welcome to the experiment about decision making. In this experiment you will be given a series of buttons.\
+                                       When you press a button you either randomly receive a reward or you receive nothing. Each button has a fixed chance of giving a reward,\
+                                       for example, one button may give a reward in 9 out of 10 presses on average, another may only give an average of one reward per 10 presses.\
                                        Every button has its own unique chance of giving a reward.  You know that the buttons are distributed uniformly, which means you are equally likely to get a good or a bad button.</p>'
                                     +  '<p>Press ENTER to continue.</p>'
 var instruction_screen_description_part2 = '<p style="text-align: left;">&emsp;\
-                                       &emsp; You start with a given button and a fixed number of ' + number_of_presses + ' presses. At each point in time you can either press a button\
+                                       &emsp; You start with a given button and a fixed number of ' + number_of_presses + ' presses. At each point in time you can either press the button\
                                        you currently have or request another one. Moving to the next button has no cost, you can change as many buttons as you want, however, when you move to the next button you can no longer return\
-                                       to any of the previous ones. Your goal is to get as many rewards as you can get given the number of presses. Good luck!</p>'
-                                    + '<p>Before the main experiment you will be given a practice round with just ' + number_of_practice_presses + ' presses. \
+                                       to any of the previous ones. Your goal is to get as many rewards as you can get given the number of presses, you will be payed based on the accumulated reward you receive. Good luck!</p>'
+                                    + '<p>Before the experiment you will be given a practice round with just ' + number_of_practice_presses + ' presses. \
                                        Now press ENTER key to begin with the practice round.</p>';
 
-var after_practice_screen_description = '<p>This was the practice round.</p><p>Now press ENTER key to begin with the experiment.</p>'
-var debrief_screen_description = '<p>That\'s it. Thank you for your participation!<br>Please save or write down the following number: ' + 
-                                    subjectID + '</p>';
+var after_practice_screen_description = '<p>This was the practice round. Now you will begin the experimental round. At the beginning of the experimental round you will be given a new button.</p>' + 
+                                       '<p>Now press ENTER key to begin with the experimental round.</p>'
+var debrief_screen_description = '<p>That\'s it. Thank you for your participation!</p>' 
+var ID_message = '<p>Please save or write down the following number: ' + subjectID + '</p>';
 
 var button_folder_path = 'pictures/square_buttons/';
 var next_button_arrow_path = 'pictures/white_arrow.jpeg';
@@ -98,6 +100,7 @@ var button = (function(){
 var counter = {
    remaining_presses: 0,
    wins: 0,
+   total_win: 0,
 
    new_counter: function(npress){
       this.remaining_presses = npress;
@@ -107,6 +110,7 @@ var counter = {
    count_win: function(){
       this.remaining_presses--;
       this.wins++;
+      this.total_win++;
    },
 
    count_fail: function(){
@@ -165,7 +169,7 @@ var experimental_data = {
 
    getData: function(){
       let outcome = this.data;
-      let head_data = {"subjectID": subjectID, "is_time": initial_screen_time, "date": Date()};
+      let head_data = {"subjectID": subjectID, "is_time": initial_screen_time, "date": Date(), "total_win": counter.total_win};
       if(attention_check_results.length > 0) head_data = $.extend({}, head_data, {"attention_checks": attention_check_results});
       outcome.unshift(head_data);
       let dLen = this.data.length;
@@ -290,14 +294,14 @@ function after_press_message(driver){
       $('#button_section').append($('<div>', {
          'html': after_press_win_message + '<br>\
                         Your total result after using this button is:',
-         'id': 'after_press_description'
+         'class': 'after_press_description'
       }));
    }
    else{
       $('#button_section').append($('<div>', {
          'html': after_press_fail_message + '<br>\
                         Your total result after using this button is:',
-         'id': 'after_press_description'
+         'class': 'after_press_description'
       }));
    }
    $('#button_section').append($('<div>', {
@@ -314,14 +318,14 @@ function after_press_message(driver){
    if(number_of_detailed_instructions > 0){
       $('#button_section').append($('<div>', {
             'html': after_press_detailed_instruction,
-            'id': 'after_press_instruction'
+            'class': 'after_press_description'
       }));
       number_of_detailed_instructions--;
    }
    else{
       $('#button_section').append($('<div>', {
             'html': after_press_short_instruction,
-            'id': 'after_press_instruction'
+            'class': 'after_press_description'
       }));
    }
 
@@ -503,7 +507,18 @@ function experimental_screen(){
 */
 
 function debrief_screen(){
-   // $('body').html(debrief_screen_description);
+   // $('body').html($('<div>', {
+   //    'id': 'instruction_screen'
+   // }));
+   // $('#instruction_screen').append(debrief_screen_description);
+   // $('#instruction_screen').append($('<p>', {
+   //    'html': 'In the final round you scored ' + counter.wins + ' wins out of ' + number_of_presses + ' presses.'
+   // }));
+   // $('#instruction_screen').append($('<p>', {
+   //    'html': 'Overall you scored ' + counter.total_win + ' wins, this will be converted into ' + Number.parseFloat(price_per_win*counter.total_win).toFixed(1) + '$, \
+   //                the bonus will be payed to you in 1-2 days time.'
+   // }))
+   // $('#instruction_screen').append(ID_message);
 
    // //Temporary section that outputs the collected experimental data
    // $('body').append('<p>Time spent on the instruction screen: ' + initial_screen_time + '</p>');
@@ -523,12 +538,22 @@ function debrief_screen(){
       contentType: "application/json"
    })
    .done(function() {
-       $('body').html(debrief_screen_description);
-      // $('body').append('<p>Success!</p>');
+      $('body').html($('<div>', {
+         'id': 'instruction_screen'
+      }));
+      $('#instruction_screen').append(debrief_screen_description);
+      $('#instruction_screen').append($('<p>', {
+         'html': 'In the final round you scored ' + counter.wins + ' wins out of ' + number_of_presses + ' presses.'
+      }));
+      $('#instruction_screen').append($('<p>', {
+         'html': 'Overall you scored ' + counter.total_win + ' wins, this will be converted into ' + Number.parseFloat(price_per_win*counter.total_win).toFixed(1) + '$, \
+                     the bonus will be payed to you in 1-2 days time.'
+      }))
+      $('#instruction_screen').append(ID_message);
    })
    .fail(function() {
       alert("A problem occurred while writing to the database. Please contact the researcher for more information.")
-      window.location.href = "/";
+      // window.location.href = "/";
    })
 };
 

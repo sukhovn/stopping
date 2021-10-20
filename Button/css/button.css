@@ -45,14 +45,13 @@ h1 {
     margin-bottom: 5%;
 }
 
+table { 
+    margin: 0 auto 0 auto;
+}
 
 button {
     margin-top: 5%;
     min-width: 100px;
-}
-
-.checkbox {
-    margin-top: 5%;
 }
 
 #instruction_screen {
@@ -64,38 +63,13 @@ button {
 }
 
 /*
-styling the header above the button area
-*/
-
-#header {
-    background: white;
-    font-size: 28px; 
-    border-bottom: 5px solid #eaeaea;
-    padding: 10px 10px 10px 10px;
-    margin: 10px 10px 10px 10px;
-    height: 70px;
-}
-
-/*
 styling the footer below the button area
 */
-
-#footer {
-    background: white;
-    border-top: 5px solid #eaeaea;
-    padding: 10px 10px 10px 10px;
-    margin: 10px 10px 10px 10px;
-}
 
 #button_section {
     height: 291px;
     margin: auto;
 }
-
-#prompt {
-    width: 700px; 
-    margin: auto;
-    }
 
 /*
 styling the bandit area
@@ -127,18 +101,10 @@ styling the bandit area
     font-size: 14px; 
 }
 
-#after_press_description {
+.after_press_description {
     width: 750px; 
     margin-top: 20px;
     margin-bottom: 20px;
-    margin-right: auto;
-    margin-left: auto;
-    font-size: 22px; 
-}
-
-#after_press_instruction {
-    width: 750px; 
-    margin-top: 20px;
     margin-right: auto;
     margin-left: auto;
     font-size: 22px; 
@@ -188,10 +154,6 @@ styling the bandit area
 
 .arm_labels {
     padding-bottom: 5%;
-}
-
-table { 
-    margin: 0 auto 0 auto;
 }
 
 /*
