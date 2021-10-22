@@ -61,13 +61,27 @@ table {
 styling the button screen
 */
 
+#header {
+    background: white; 
+    border-bottom: 1px solid #eaeaea;
+}
+
 #message_area {
     font-size: 18px; 
     height: 100px;
     width: 600px;
     margin-right: auto;
     margin-left: auto;
-    border-bottom: 1px solid #eaeaea;
+}
+
+#tutorial_message {
+    line-height: 100px;
+}
+
+#tutorial_message span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
 }
 
 #flash_message {
@@ -78,6 +92,11 @@ styling the button screen
 /*
 styling the bandit area
 */
+
+#button_section {
+    background: white; 
+    border-bottom: 1px solid #eaeaea;
+}
 
 #button_area {
     height: 200px; /* we modify this part depending on how many rows we have*/
@@ -92,7 +111,7 @@ styling the bandit area
     margin:1px;
     height:174.5px;
     width:150px;
-    /*border: 1px solid #eaeaea;*/
+    border: 1px solid transparent;
 }
 
 .arm_labels {
@@ -127,19 +146,27 @@ styling the info area
     width: 600px;
     margin-right: auto;
     margin-left: auto;
-    border-bottom: 1px solid #eaeaea;
+    border: 1px solid transparent;
 }
 
 .info_message {
     background: white;
     font-size: 24px;
     margin: 5px 5px 5px 5px;
+    border: 1px solid transparent;
  /*   height: 60px;*/
 }
 
 /*
 styling the next button
 */
+
+#next_button_frame{
+    margin-right: auto;
+    margin-left: auto;
+    width: 120px;
+    border: 1px solid transparent;
+}
 
 #next_button {
     margin-top: 10px;

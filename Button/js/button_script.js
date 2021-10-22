@@ -23,6 +23,29 @@ var instruction_screen_description_part2 = '<p style="text-align: left;">&emsp;\
                                        you currently have or request another one. Moving to the next button has no cost, you can change as many buttons as you want, however, when you move to the next button you can no longer return\
                                        to any of the previous ones. Your goal is to get as many rewards as you can get given the number of presses, you will be payed based on the accumulated reward you receive. Good luck!</p>'
                                     + '<p>Now press ENTER key to begin with the practice round.</p>';
+// var tutorial_instructions = {message: 'Pr'}
+var tutorial_instructions = [
+   {message: 'We begin with a simple tutorial. Just follow the instructions on screen. Press ENTER to continue.', 
+      highlight: 'none', trigger: 'enter'},
+   {message: 'Let us give the button a press.', highlight: '#button_frame', trigger: 'button', button_p: 1.0},
+   {message: 'Congratulations, your first press gives you a reward! You can see on the highlighted section that you have accumulated one reward.\
+               However, you have also spent one button press. Press the button again a couple of times.', 
+      highlight: '#info_area', trigger: 'button', button_p: 1.0},
+   {message: 'Another win! Press the button again.', 
+      highlight: 'none', trigger: 'button', button_p: 0.0},
+   {message: 'This time you weren\'t so lucky. The button gave you no reward. Let\'s press the button a few more times' , highlight: '#info_area', trigger: 'button', button_p: 0.0},
+   {message: 'Again no reward this time.' , highlight: 'none', trigger: 'button', button_p: 0.0},
+   {message: 'Again no reward this time.' , highlight: 'none', trigger: 'button', button_p: 1.0},
+   {message: 'Congratulations, you get another reward! Now that you have given the button a few presses you can get a feeling how it performs. Press enter to continue' , highlight: '#info_area', trigger: 'enter'},
+   {message: 'Let\'s suppose you are not satisfied with this button\'s performace. Press next button to get another button.', highlight: '#next_button_frame', trigger: 'next button'},
+   {message: 'You can notice that your button has changed. Your statistics reflects this change. Press next button another time.', highlight: '#info_area', trigger: 'next button'},
+   {message: 'Notice that choosing next button does not count as a button press. You are free to change as many buttons as you want for free. Press next button another time.', highlight: '#info_area', trigger: 'next button'}
+]
+
+var after_tutorial_presses = 100;
+var after_tutorial_message = 'You have got some feel of the experimental setup now. We will give you ' + after_tutorial_presses + ' presses to play around if you want.\
+                              This round will not count towards your performance. You can press ENTER whenever you want to begin with the experiment.';
+var experimental_round_message = 'This is the experimental round. Good luck!';
 
 var debrief_screen_description = '<p>That\'s it. Thank you for your participation!</p>' 
 var ID_message = '<p>Please save or write down the following number: ' + subjectID + '</p>';
@@ -66,7 +89,6 @@ var button = (function(){
       this.presses = 0;
       this.wins = 0;
       this.update_button();
-      $('#message_area').html('');
    };
 
    core.update_button_info = function(){
@@ -104,6 +126,7 @@ var counter = {
    new_counter: function(npress){
       this.remaining_presses = npress;
       this.wins = 0;
+      this.update_counter();
    },
 
    update_counter: function(npress){
@@ -125,7 +148,7 @@ var counter = {
 var experimental_data = {
    data: [],
    time: 0,
-   // round_number: 0,
+   round_number: 0,
    press_number: 0,
 
    start_timer: function(){
@@ -137,13 +160,13 @@ var experimental_data = {
       button.button_number = 0;
       button.last_button_outcome = 0;
       this.press_number = 0;
-      // this.round_number++;
+      this.round_number++;
    },
 
    record_press: function(outcome){
       let time_curr = (new Date()).getTime();
       let press_data = {
-         // "round_number": this.round_number,
+         "round_number": this.round_number,
          "press_number": this.press_number,
          "button_number": button.button_number,
          "current_p": button.current_p,
@@ -157,7 +180,7 @@ var experimental_data = {
 
    return_csv: function(){
       let outcome = [];
-      outcome.push('press_number,button_number,current_p,outcome,time');
+      outcome.push('round_number,press_number,button_number,current_p,outcome,time');
       let dLen = this.data.length;
       let pLen = this.data[0].length-1;
       for(let i = 0; i < dLen; i++){
@@ -233,11 +256,17 @@ var experimental_data = {
 
 function experiment_frame(){
       $('body').html($('<div>', {
+         'id': 'header',
+      }));
+      $('#header').html($('<div>', {
          'id': 'message_area',
       }));
 
       // initialize button area
       $('body').append($('<div>', {
+         'id': 'button_section',
+      }));
+      $('#button_section').append($('<div>', {
             'id': 'button_area'
          }));
 
@@ -263,7 +292,7 @@ function experiment_frame(){
       });
 
       // intialize info
-      $('body').append($('<div>', {
+      $('#button_section').append($('<div>', {
          'id': 'info_area',
       }));
       $('#info_area').append($('<div>', {
@@ -283,14 +312,15 @@ function experiment_frame(){
       }));
 
       // initialize the next button
-      $('body').append($('<button>', {
+      $('body').append($('<div>', {
+         'id': 'next_button_frame',
+      }));
+
+      $('#next_button_frame').append($('<button>', {
          'type': 'button',
          'id': 'next_button',
          'html': 'Next button',
-         'onclick': 'button.new_button()'
       }));
-
-      driver();
 };
 
 //These functions wait for current button or next button clicks and does all the related procedures 
@@ -303,15 +333,35 @@ function flash_message(message){
    $('#message_area').html($('<div>', {
       'html': message,
       'id': 'flash_message'
-   }))
+   }));
 
    message_remove = setTimeout(function(){
       $('#message_area').html('');
    }, message_duration*1000);
 }
 
-function driver(){
+function driver_practice(){
+   $('#next_button').attr('onclick', 'button.new_button();');
    // choice is made when an arm is clicked on
+   $('.arm_img').off('click');
+   $('.arm_img').click(function() {
+      var armID = this.getAttribute('id');
+      if(armID == 'button'){
+         var button_outcome = button.press_button();
+         experimental_data.record_press(button_outcome);
+         if(button_outcome) counter.count_win();
+         else counter.count_fail();
+         button.update_button_info();
+         counter.update_counter();
+      }
+      if(counter.remaining_presses == 0) experimental_run();
+   })
+};
+
+function driver(){
+   $('#next_button').attr('onclick', 'button.new_button();$(\'#message_area\').html(\'\');');
+   // choice is made when an arm is clicked on
+   $('.arm_img').off('click');
    $('.arm_img').click(function() {
       var armID = this.getAttribute('id');
       if(armID == 'button'){
@@ -344,10 +394,55 @@ function instruction_screen(){
                
       counter.new_counter(number_of_presses);
       experiment_frame();
-      experimental_data.start_timer();
+
+      tutorial.run(tutorial_instructions, post_tutorial);
    });
 };
 
+function post_tutorial(){
+   $('#message_area').html($('<div>', {
+      'id': 'tutorial_message'
+   }));
+
+   $('#tutorial_message').html($('<span>', {
+      'html': after_tutorial_message,
+   }))
+
+   counter.new_counter(after_tutorial_presses);
+   button.new_button();
+   button.button_number = 0;
+   button.last_button_outcome = 0;
+   $('#next_button').attr('onclick', 'button.new_button()');
+   driver_practice();
+   experimental_data.start_timer();
+
+   $(document).keyup(function(event) {
+      if(event.which === 13) {
+         $(document).off('keyup');
+         experimental_run();
+      }
+   });
+}
+
+function experimental_run(){
+   $('#message_area').html('');
+   counter.new_counter(number_of_presses);
+   driver();
+   experimental_data.start_timer();
+   experimental_data.new_round();
+   
+   $('#message_area').html($('<div>', {
+      'id': 'tutorial_message'
+   }));
+
+   $('#tutorial_message').html($('<span>', {
+      'html': experimental_round_message,
+   }))
+
+   message_remove = setTimeout(function(){
+      $('#message_area').html('');
+   }, message_duration*1000);
+}
 
 /*
 *  Here goes the debrief screen code
