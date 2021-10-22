@@ -49,11 +49,6 @@ table {
     margin: 0 auto 0 auto;
 }
 
-button {
-    margin-top: 5%;
-    min-width: 100px;
-}
-
 #instruction_screen {
     background: white;
     font-size: 18px; 
@@ -63,61 +58,46 @@ button {
 }
 
 /*
-styling the footer below the button area
+styling the button screen
 */
 
-#button_section {
-    height: 291px;
-    margin: auto;
+#message_area {
+    font-size: 18px; 
+    height: 100px;
+    width: 600px;
+    margin-right: auto;
+    margin-left: auto;
+    border-bottom: 1px solid #eaeaea;
+}
+
+#flash_message {
+    font-size: 30px; 
+    padding-top: 15px;
 }
 
 /*
 styling the bandit area
 */
 
-#global_press_info {
-    background: white;
-    font-size: 26px; 
-    border-bottom: 1px solid #eaeaea;
-    padding: 10px 10px 20px 10px;
-    margin: 10px 10px 10px 10px;
-    height: 60px;
-}
-
-#current_button_info {
-    background: white;
-    font-size: 26px; 
-    border-bottom: 1px solid #eaeaea;
-    padding: 10px 10px 20px 10px;
-    margin: 10px 10px 10px 10px;
-    height: 60px;
-}
-
 #button_area {
     height: 200px; /* we modify this part depending on how many rows we have*/
-    width: 320px;  
+    width: 160px;  
     margin-right: auto;
     margin-left: auto;
     font-size: 14px; 
 }
 
-.after_press_description {
-    width: 750px; 
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-right: auto;
-    margin-left: auto;
-    font-size: 22px; 
-}
-
 .arm_frames {
     padding: 5px 5px 5px 5px;
     margin:1px;
-    height:150px;
+    height:174.5px;
     width:150px;
     /*border: 1px solid #eaeaea;*/
 }
 
+.arm_labels {
+    padding-bottom: 5%;
+}
 
 .arm_img {
     width: 150px;
@@ -137,23 +117,33 @@ styling the bandit area
     cursor:pointer;
 }
 
+/*
+styling the info area
+*/
 
-.arm {
-    background-color: #C02942;
-    border-radius: 2px;
-    text-align: center;
-    font-family: Verdana, Arial, Sans-Serif;
-    color: #FFFFFF;
-    width: 60px;
-    height: 60px;
+#info_area {
+    font-size: 18px; 
+    height: auto;
+    width: 600px;
     margin-right: auto;
     margin-left: auto;
-    position: relative;
-    
+    border-bottom: 1px solid #eaeaea;
 }
 
-.arm_labels {
-    padding-bottom: 5%;
+.info_message {
+    background: white;
+    font-size: 24px;
+    margin: 5px 5px 5px 5px;
+ /*   height: 60px;*/
+}
+
+/*
+styling the next button
+*/
+
+#next_button {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 /*
