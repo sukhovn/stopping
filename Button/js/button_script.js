@@ -13,39 +13,34 @@ var subjectID = Math.round(Math.random()*100000000); //Random subject ID
 var attention_check_interval = 10;
 var attention_check_results = []; //Tracks the results of attention checks, if the check is passed, the result is 1, else 0
 
-var instruction_screen_description_part1 = '<p style="text-align: left;">&emsp; Welcome to the experiment about decision making. In this experiment you will be given a series of buttons.\
-                                       When you press a button you either randomly receive a reward or you receive nothing. Each button has a fixed chance of giving a reward,\
-                                       for example, one button may give a reward in 9 out of 10 presses on average, another may only give an average of one reward per 10 presses.\
-                                       Every button has its own unique chance of giving a reward.  You know that the buttons are distributed uniformly, which means you are equally likely to get a good or a bad button.</p>'
-                                    +  '<p>Press ENTER to continue.</p>'
-var instruction_screen_description_part2 = '<p style="text-align: left;">&emsp;\
-                                       &emsp; You start with a given button and a fixed number of ' + number_of_presses + ' presses. At each point in time you can either press the button\
-                                       you currently have or request another one. Moving to the next button has no cost, you can change as many buttons as you want, however, when you move to the next button you can no longer return\
-                                       to any of the previous ones. Your goal is to get as many rewards as you can get given the number of presses, you will be payed based on the accumulated reward you receive. Good luck!</p>'
-                                    + '<p>Now press ENTER key to begin with the practice round.</p>';
+var instruction_screen_description_part1 = '<p style="text-align: center;">&emsp; <h2>Instructions</h2></p>'+'<p>Welcome! Your goal in the experiment is to collect as many POINTS as you can. Each point you receive will give you a bonus of $0.1. The maximum points you can collect is 20, so you can receive a bonus of upto $2 in the task! </p>' +  '<p>Please press ENTER to continue.</p>'
+
+var instruction_screen_description_part2 = '<p style="text-align: center;">&emsp; <h2>Button presses and points</h2></p>'+ '<p> In the experiment, we will provide you with a series of buttons to press. When you press a button, the button will either randomly provide 1 point or provide 0 points. Each button has a fixed UNIQUE chance of providing a point. For example, one button may give a point 9 out of 10 times while another button may only give a point 1 out of 10 times. </p>' +'<p> <b>Important:</b> The buttons you will be provided with are uniformly distributed i.e., every time you select a new button, you are equally likely to get a good or a bad button.</p>'+ '<p>Please press ENTER to continue.</p>'                                    
+var instruction_screen_description_part3 = '<p style="text-align: left;">&emsp;\
+                                       &emsp; <h2>Pressing current button and choosing a new one</h2>'+ '<p> At the start of the experiment, we will provide you with one random button to press and a total of ' + number_of_presses + ' button presses.</p>'+ '<p> At each time point, you can choose to either press the button you currently have or you can request a new button to press. Requesting a new button has no cost -- you can chose to change the button as many times as you want. However, when you move to the next button, you will not be able to select any of your previous buttons.</p>'+'<p>Your goal is to get as many points as you can get given the number of presses you have. You will be payed based on the accumulated points you receive. Good luck!</p>'
+                                    + '<p>Please press ENTER key to begin with the practice round.</p>';
 // var tutorial_instructions = {message: 'Pr'}
 var tutorial_instructions = [
-   {message: 'We begin with a simple tutorial. Just follow the instructions on screen. Press ENTER to continue.', 
+   {message: 'To help you understand the task, let us start with a simple tutorial. Simply follow the instructions on screen. Press ENTER to continue.', 
       highlight: 'none', trigger: 'enter'},
-   {message: 'Let us give the button a press.', highlight: '#button_frame', trigger: 'button', button_p: 1.0},
-   {message: 'Congratulations, your first press gives you a reward! You can see on the highlighted section that you have accumulated one reward.\
+   {message: 'Let us give the highlighted red button a press.', highlight: '#button_frame', trigger: 'button', button_p: 1.0},
+   {message: 'Congratulations, your first press gives you a point! You can see on the highlighted section that you have accumulated one point.\
                However, you have also spent one button press. Press the button again a couple of times.', 
       highlight: '#info_area', trigger: 'button', button_p: 1.0},
-   {message: 'Another win! Press the button again.', 
+   {message: 'Another point! Press the button again.', 
       highlight: 'none', trigger: 'button', button_p: 0.0},
-   {message: 'This time you weren\'t so lucky. The button gave you no reward. Let\'s press the button a few more times' , highlight: '#info_area', trigger: 'button', button_p: 0.0},
-   {message: 'Again no reward this time.' , highlight: 'none', trigger: 'button', button_p: 0.0},
-   {message: 'Again no reward this time.' , highlight: 'none', trigger: 'button', button_p: 1.0},
-   {message: 'Congratulations, you get another reward! Now that you have given the button a few presses you can get a feeling how it performs. Press enter to continue' , highlight: '#info_area', trigger: 'enter'},
-   {message: 'Let\'s suppose you are not satisfied with this button\'s performace. Press next button to get another button.', highlight: '#next_button_frame', trigger: 'next button'},
-   {message: 'You can notice that your button has changed. Your statistics reflects this change. Press next button another time.', highlight: '#info_area', trigger: 'next button'},
-   {message: 'Notice that choosing next button does not count as a button press. You are free to change as many buttons as you want for free. Press next button another time.', highlight: '#info_area', trigger: 'next button'}
+   {message: 'This time you weren\'t so lucky. The button gave you no point. Let\'s press the button a few more times' , highlight: '#info_area', trigger: 'button', button_p: 0.0},
+   {message: 'Again no point this time.' , highlight: 'none', trigger: 'button', button_p: 0.0},
+   {message: 'Again no point this time.' , highlight: 'none', trigger: 'button', button_p: 1.0},
+   {message: 'Congratulations, you get another point! Now that you have given the button a few presses you can get a feeling how it performs. Press ENTER to continue' , highlight: '#info_area', trigger: 'enter'},
+   {message: 'Let\'s suppose you are not satisfied with this button\'s performance. Press the highlighted box to get another button.', highlight: '#next_button_frame', trigger: 'next button'},
+   {message: 'You can notice that your button has changed. Request a new button again.', highlight: '#info_area', trigger: 'next button'},
+   {message: 'Notice that requesting a new button does not count as a button press. You are free to request as many buttons as you want for free. Request a new button another time.', highlight: '#info_area', trigger: 'next button'}
 ]
 
 var after_tutorial_presses = 100;
-var after_tutorial_message = 'You have got some feel of the experimental setup now. We will give you ' + after_tutorial_presses + ' presses to play around if you want.\
-                              This round will not count towards your performance. You can press ENTER whenever you want to begin with the experiment.';
-var experimental_round_message = 'This is the experimental round. Good luck!';
+var after_tutorial_message = '<p> The tutorial is now finished. We will now give you some more time to practice. </p>' + ' <p>This round will not count to your final points. You can press ENTER whenever you want to begin the main experiment.</p>';
+var experimental_round_message = 'This is the main experimental round. Good luck!';
 
 var debrief_screen_description = '<p>That\'s it. Thank you for your participation!</p>' 
 var ID_message = '<p>Please save or write down the following number: ' + subjectID + '</p>';
@@ -92,8 +87,8 @@ var button = (function(){
    };
 
    core.update_button_info = function(){
-      $('#current_presses_info').html('Current button presses: ' + this.presses);
-      $('#current_wins_info').html('Current button wins: ' + this.wins);
+      $('#current_presses_info').html('You have pressed this button <b>' + this.presses + '</b> times');
+      $('#current_wins_info').html('You have received <b>' + this.wins + '</b> points from this button');
    };
 
    core.update_button = function(){
@@ -130,7 +125,7 @@ var counter = {
    },
 
    update_counter: function(npress){
-      $('#presses_info').html('Remaining presses: ' + this.remaining_presses);
+      $('#presses_info').html('You have <b>' + this.remaining_presses +'</b> button presses remaining');
    },
 
    count_win: function(){
@@ -277,7 +272,7 @@ function experiment_frame(){
       }));
 
       $('#button_frame').append($('<div>', {
-         'html': 'The current button',
+         'html': '',
          'class': 'arm_labels'
       }));
       $('#button_frame').append($('<img>', {
@@ -296,18 +291,18 @@ function experiment_frame(){
          'id': 'info_area',
       }));
       $('#info_area').append($('<div>', {
-         'html': 'Remaining presses: ' + number_of_presses,
-         'id': 'presses_info',
-         'class': 'info_message'
-      }));
-      $('#info_area').append($('<div>', {
-         'html': 'Current button presses: ' + button.presses,
+         'html': 'You have pressed this button <b>' + button.presses +'</b> times',
          'id': 'current_presses_info',
          'class': 'info_message'
       }));
       $('#info_area').append($('<div>', {
-         'html': 'Current button wins: ' + button.wins,
+         'html': 'You have received <b>' + button.wins + '</b> points from this button',
          'id': 'current_wins_info',
+         'class': 'info_message'
+      }));
+      $('#info_area').append($('<div>', {
+         'html': 'You have a total of <b>' + number_of_presses +'</b> presses remaining',
+         'id': 'presses_info',
          'class': 'info_message'
       }));
 
@@ -319,7 +314,7 @@ function experiment_frame(){
       $('#next_button_frame').append($('<button>', {
          'type': 'button',
          'id': 'next_button',
-         'html': 'Next button',
+         'html': 'Give me a new button to press!',
       }));
 };
 
@@ -388,7 +383,7 @@ function driver(){
 
 function instruction_screen(){
    initial_screen_time = (new Date()).getTime();
-   instruction_list = [instruction_screen_description_part1, instruction_screen_description_part2];
+   instruction_list = [instruction_screen_description_part1, instruction_screen_description_part2, instruction_screen_description_part3];
    instruction_prompt.run(instruction_list, function(){
       initial_screen_time = (new Date()).getTime() - initial_screen_time;
                
@@ -482,7 +477,7 @@ function debrief_screen(){
       }));
       $('#instruction_screen').append(debrief_screen_description);
       $('#instruction_screen').append($('<p>', {
-         'html': 'Overall you scored ' + counter.wins + ' wins, this will be converted into ' + Number.parseFloat(price_per_win*counter.wins).toFixed(1) + '$, \
+         'html': 'Overall you scored ' + counter.wins + ' points, this will be converted into ' + Number.parseFloat(price_per_win*counter.wins).toFixed(1) + '$, \
                      the bonus will be payed to you in 1-2 days time.'
       }))
       $('#instruction_screen').append(ID_message);
