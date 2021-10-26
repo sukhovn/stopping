@@ -64,7 +64,23 @@ var tutorial_instructions = [
    {message: 'Let\'s suppose you are not satisfied with this button\'s performance. Press the highlighted box to get another button.', highlight: '#next_button_frame', trigger: 'next button'},
    {message: 'You can notice that your button has changed. Request a new button again.', highlight: '#info_area', trigger: 'next button'},
    {message: 'Notice that requesting a new button does not count as a button press. You are free to request as many buttons as you want for free. Request a new button another time.', highlight: '#info_area', trigger: 'next button'}
-]
+];
+
+/*
+* Here we define quiz questions
+*/
+
+var quiz_message = 'Before we continue please answer the following short quiz';
+
+var quiz_questions = [
+   {question: 'How many total button presses will you get in the experiment?', answer_1: '20', answer_2: '50', answer_3: '100', correct: 1},
+   {question: 'What happens when you select the option of requesting a new button', answer_1: 'The number of button presses you have is reduced by 1', 
+                                                                                    answer_2: 'The number of button presses you have is reduced by 2', 
+                                                                                    answer_3: 'The number of button presses you have remains the same as before', 
+                                                                                    correct: 3},
+   {question: 'What is the maximum point you can obtain with a single button press', answer_1: '0 points', answer_2: '1 point', answer_3: '2 points', 
+                                                                                    correct: 2}
+];
 
 /*
 * Here we define practice round and main round parameters
@@ -217,6 +233,7 @@ var experimental_data = {
    getData: function(){
       let outcome = this.data;
       let head_data = {"subjectID": subjectID, "inst_time": instruction_screen_time, "tut_time": tutorial_time, "date": Date(), "total_win": counter.wins};
+      head_data = $.extend({}, head_data, {"quiz_results": quiz.answers});
       // if(attention_check_results.length > 0) head_data = $.extend({}, head_data, {"attention_checks": attention_check_results});
       outcome.unshift(head_data);
       let dLen = this.data.length;
@@ -277,63 +294,63 @@ var experimental_data = {
 //This function constructs the experimental screen
 
 function experiment_frame(){
-      $('body').html($('<div>', {
-         'id': 'header',
-      }));
-      $('#header').html($('<div>', {
-         'id': 'message_area',
-      }));
+   $('body').html($('<div>', {
+      'id': 'header',
+   }));
+   $('#header').html($('<div>', {
+      'id': 'message_area',
+   }));
 
-      // initialize button area
-      $('body').append($('<div>', {
-         'id': 'button_section',
-      }));
-      $('#button_section').append($('<div>', {
-            'id': 'button_area'
-         }));
+   // initialize button area
+   $('body').append($('<div>', {
+      'id': 'button_section',
+   }));
+   $('#button_section').append($('<div>', {
+      'id': 'button_area'
+   }));
 
-      // intialize buttons
-      $('#button_area').append($('<div>', {
-         'id': 'button_frame',
-         'class': 'arm_frames'
-      }));
+   // intialize buttons
+   $('#button_area').append($('<div>', {
+      'id': 'button_frame',
+      'class': 'arm_frames'
+   }));
 
-      $('#button_frame').append($('<img>', {
-         'src': button_folder_path + 'button_' + button.current_button + '.jpg',
-         'id': 'button',
-         'class': 'arm_img' 
-      }));
+   $('#button_frame').append($('<img>', {
+      'src': button_folder_path + 'button_' + button.current_button + '.jpg',
+      'id': 'button',
+      'class': 'arm_img' 
+   }));
 
-      // animating arms when mouse is hovering over them
-      $('.arm_img').hover( function() {
-         $(this).toggleClass('highlighted_arm_img');
-      });
+   // animating arms when mouse is hovering over them
+   $('.arm_img').hover( function() {
+      $(this).toggleClass('highlighted_arm_img');
+   });
 
-      // intialize info
-      $('#button_section').append($('<div>', {
-         'id': 'info_area',
-      }));
-      $('#info_area').append($('<div>', {
-         'html': button_press_message(button.presses, button.wins),
-         'id': 'current_button_info',
-         'class': 'info_message'
-      }));
-      $('#info_area').append($('<div>', {
-         'html': 'You have a total of <b>' + number_of_presses +'</b> presses remaining',
-         'id': 'presses_info',
-         'class': 'info_message'
-      }));
+   // intialize info
+   $('#button_section').append($('<div>', {
+      'id': 'info_area',
+   }));
+   $('#info_area').append($('<div>', {
+      'html': button_press_message(button.presses, button.wins),
+      'id': 'current_button_info',
+      'class': 'info_message'
+   }));
+   $('#info_area').append($('<div>', {
+      'html': 'You have a total of <b>' + number_of_presses +'</b> presses remaining',
+      'id': 'presses_info',
+      'class': 'info_message'
+   }));
 
-      // initialize the next button
-      $('body').append($('<div>', {
-         'id': 'next_button_frame',
-      }));
+   // initialize the next button
+   $('body').append($('<div>', {
+      'id': 'next_button_frame',
+   }));
 
-      $('#next_button_frame').append($('<button>', {
-         'type': 'button',
-         'id': 'next_button',
-         'html': 'Give me a new button to press!',
-      }));
+   $('#next_button_frame').append($('<button>', {
+      'type': 'button',
+      'id': 'next_button',
+      'html': 'Give me a new button to press!',
+   }));
 };
 
 //These functions wait for current button or next button clicks and does all the related procedures 
@@ -411,12 +428,17 @@ function instruction_screen(){
       experiment_frame();
 
       tutorial_time = (new Date()).getTime();
-      tutorial.run(tutorial_instructions, post_tutorial);
+      tutorial.run(tutorial_instructions, function(){
+         tutorial_time = (new Date()).getTime() - tutorial_time;
+         quiz.message = quiz_message;
+         quiz.run(quiz_questions, post_tutorial);
+      });
    });
 };
 
 function post_tutorial(){
-   tutorial_time = (new Date()).getTime() - tutorial_time;
+   experiment_frame();
+
    $('#message_area').html($('<div>', {
       'id': 'tutorial_message'
    }));

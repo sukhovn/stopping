@@ -34,7 +34,6 @@ body {
     text-align: center;
 }
 
-
 /*
  *
  * Form elements like input fields and buttons
@@ -102,6 +101,7 @@ styling the bandit area
 #button_section {
     background: white; 
     border-bottom: 1px solid #eaeaea;
+    height: 281px;
 }
 
 #button_area {
@@ -182,6 +182,41 @@ styling the next button
     margin-top: 10px;
     margin-bottom: 10px;
     width: 120px;
+}
+
+/*
+*   Styling choice quiz
+*/
+
+#quiz_choices {
+    height: 150px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    display: block;
+}
+
+#question_message {
+    width: auto; 
+    height: 75px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 22px; 
+}
+
+.question_option {
+    line-height: 1.75em;
+    /*margin-top: 10px;*/
+    /*margin-bottom: 10px;*/
+    font-size: 20px;
+}
+
+#quiz_button {
+    font-size: 14px;
 }
 
 /*
