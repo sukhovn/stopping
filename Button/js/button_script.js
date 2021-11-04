@@ -58,12 +58,12 @@ var tutorial_instructions = [
    {message: 'Another point! Press the button again.', 
       highlight: 'none', trigger: 'button', button_p: 0.0},
    {message: 'This time you weren\'t so lucky. The button gave you no point. Let\'s press the button a few more times' , highlight: '#info_area', trigger: 'button', button_p: 0.0},
-   {message: 'Again no point this time.' , highlight: 'none', trigger: 'button', button_p: 0.0},
-   {message: 'And again no point this time.' , highlight: 'none', trigger: 'button', button_p: 1.0},
+   {message: 'Again, the button gave you no point.' , highlight: 'none', trigger: 'button', button_p: 0.0},
+   {message: 'Again, the button gave you no point.' , highlight: 'none', trigger: 'button', button_p: 1.0},
    {message: 'Congratulations, you get another point! Now that you have given the button a few presses you can get a feeling how it performs. Press ENTER to continue' , highlight: '#info_area', trigger: 'enter'},
    {message: 'Let\'s suppose you are not satisfied with this button\'s performance. Press the highlighted box to get another button.', highlight: '#next_button_frame', trigger: 'next button'},
    {message: 'You can notice that your button has changed. Request a new button again.', highlight: '#info_area', trigger: 'next button'},
-   {message: 'Notice that requesting a new button does not count as a button press. You are free to request as many buttons as you want for free. Request a new button another time.', highlight: '#info_area', trigger: 'next button'}
+   {message: '<b>Notice that requesting a new button does not count as a button press.</b> You are free to request as many buttons as you want for free. Request a new button another time.', highlight: '#info_area', trigger: 'next button'}
 ];
 
 /*
