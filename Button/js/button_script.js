@@ -2,8 +2,8 @@
 *  Here we define main experiment parameters
 */
 
-var number_of_presses = 20;
-var price_per_win = 0.1;
+var number_of_presses = 40;
+var price_per_win = 0.05;
 var message_duration = 3; //Message duration for win and fail messages in seconds
 var subjectID = Math.round(Math.random()*100000000); //Random subject ID
 /*
@@ -40,9 +40,22 @@ var instruction_screen_description_part3 = '<p style="text-align: left;">&emsp; 
                                           However, when you move to the next button, you will not be able to select any of your previous buttons.</p>' + 
                                           '<p>Your goal is to get as many points as you can get given the number of presses you have. \
                                           You will be payed based on the accumulated points you receive. Good luck!</p>' + 
-                                          '<p>Please press ENTER key to begin with the practice round.</p>';
+                                          '<p>Please press ENTER key to continue.</p>';
 
 var instruction_list = [instruction_screen_description_part1, instruction_screen_description_part2, instruction_screen_description_part3];
+
+var recap_screen_part1 = '<p style="text-align: center;">&emsp; <h2>Instructions recap</h2></p>' + '<p>&emsp; \
+                           We provide you with a series of buttons to press. When you press a button, the button will either randomly provide 1 point or provide 0 points. \
+                           Each button has a fixed UNIQUE chance of providing a point. At the start of the experiment, we provide you a total of ' + 
+                           number_of_presses + ' button presses.</p>'+ '<p> At each time point, you can choose to either press \
+                           the button you currently have or you can request a new button to press. \
+                           Requesting a new button has no cost. \
+                           However, when you move to the next button, you will not be able to select any of your previous buttons.</p>' + 
+                           '<p>Your goal is to get as many points as you can get given the number of presses you have.</p>' + 
+                           '<p>Please press ENTER key to continue.</p>';
+
+
+var recap_instruction_list = [recap_screen_part1];
 
 /*
 * Here we define tutorial instructions
@@ -73,12 +86,12 @@ var tutorial_instructions = [
 var quiz_message = 'Before we continue please answer the following short quiz';
 
 var quiz_questions = [
-   {question: 'How many total button presses will you get in the experiment?', answer_1: '20', answer_2: '50', answer_3: '100', correct: 1},
+   {question: 'How many total button presses will you get in the experiment?', answer_1: number_of_presses, answer_2: '50', answer_3: '100', correct: 1},
    {question: 'What happens when you select the option of requesting a new button', answer_1: 'The number of button presses you have is reduced by 1', 
                                                                                     answer_2: 'The number of button presses you have is reduced by 2', 
                                                                                     answer_3: 'The number of button presses you have remains the same as before', 
                                                                                     correct: 3},
-   {question: 'What is the maximum point you can obtain with a single button press', answer_1: '0 points', answer_2: '1 point', answer_3: '2 points', 
+   {question: 'What is the maximum number of points you can obtain with a single button press', answer_1: '0 points', answer_2: '1 point', answer_3: '2 points', 
                                                                                     correct: 2}
 ];
 
@@ -88,7 +101,7 @@ var quiz_questions = [
 
 var after_tutorial_presses = 100;
 var after_tutorial_message = '<p>The tutorial is now finished. We will now give you some more time to practice.</p>' + ' <p>This round will not count to your final points. You can press ENTER whenever you want to begin the main experiment.</p>';
-var experimental_round_message = 'This is the main experimental round. Good luck!';
+var experimental_round_message = 'The tutorial is now finished. Good luck!';
 
 var debrief_screen_description = '<p>That\'s it. Thank you for your participation!</p>' 
 var ID_message = '<p>Please save or write down the following number: ' + subjectID + '</p>';
@@ -118,7 +131,7 @@ function button_press_message(presses, wins){
 }
 
 var button = (function(){
-   core = {};
+   let core = {};
 
    core.button_number = 0;
    core.current_p = Math.random();
@@ -218,7 +231,7 @@ var experimental_data = {
    record_press: function(outcome){
       let time_curr = (new Date()).getTime();
       let press_data = {
-         "round_number": this.round_number,
+         // "round_number": this.round_number,
          "press_number": this.press_number,
          "button_number": button.button_number,
          "current_p": button.current_p,
@@ -233,7 +246,7 @@ var experimental_data = {
    getData: function(){
       let outcome = this.data;
       let head_data = {"subjectID": subjectID, "inst_time": instruction_screen_time, "tut_time": tutorial_time, "date": Date(), "total_win": counter.wins};
-      head_data = $.extend({}, head_data, {"quiz_results": quiz.answers});
+      head_data = $.extend({}, head_data, {"quiz_results": quiz_answers});
       // if(attention_check_results.length > 0) head_data = $.extend({}, head_data, {"attention_checks": attention_check_results});
       outcome.unshift(head_data);
       let dLen = this.data.length;
@@ -421,54 +434,53 @@ function driver(){
 
 function instruction_screen(){
    instruction_screen_time = (new Date()).getTime();
-   instruction_prompt.run(instruction_list, function(){
+   instruction_prompt(instruction_list, function(){
       instruction_screen_time = (new Date()).getTime() - instruction_screen_time;
                
       counter.new_counter(number_of_presses);
       experiment_frame();
 
       tutorial_time = (new Date()).getTime();
-      tutorial.run(tutorial_instructions, function(){
+      tutorial(tutorial_instructions, function(){
          tutorial_time = (new Date()).getTime() - tutorial_time;
-         quiz.message = quiz_message;
-         quiz.run(quiz_questions, post_tutorial);
+         instruction_prompt(recap_instruction_list, function(){
+            quiz(quiz_message, quiz_questions, experimental_run);
+         });
       });
    });
 };
 
-function post_tutorial(){
-   experiment_frame();
+// function post_tutorial(){
+//    experiment_frame();
 
-   $('#message_area').html($('<div>', {
-      'id': 'tutorial_message'
-   }));
+//    $('#message_area').html($('<div>', {
+//       'id': 'tutorial_message'
+//    }));
 
-   $('#tutorial_message').html($('<span>', {
-      'html': after_tutorial_message,
-   }))
+//    $('#tutorial_message').html($('<span>', {
+//       'html': after_tutorial_message,
+//    }))
 
-   counter.new_counter(after_tutorial_presses);
-   button.new_button();
-   button.button_number = 0;
-   button.last_button_outcome = 0;
-   $('#next_button').attr('onclick', 'button.new_button()');
-   driver_practice();
-   experimental_data.start_timer();
+//    counter.new_counter(after_tutorial_presses);
+//    button.new_button();
+//    button.button_number = 0;
+//    button.last_button_outcome = 0;
+//    $('#next_button').attr('onclick', 'button.new_button()');
+//    driver_practice();
+//    experimental_data.start_timer();
 
-   $(document).keyup(function(event) {
-      if(event.which === 13) {
-         $(document).off('keyup');
-         experimental_run();
-      }
-   });
-}
+//    $(document).keyup(function(event) {
+//       if(event.which === 13) {
+//          $(document).off('keyup');
+//          experimental_run();
+//       }
+//    });
+// }
 
 function experimental_run(){
+   experiment_frame();
+
    $('#message_area').html('');
-   counter.new_counter(number_of_presses);
-   driver();
-   experimental_data.start_timer();
-   experimental_data.new_round();
    
    $('#message_area').html($('<div>', {
       'id': 'tutorial_message'
@@ -477,6 +489,14 @@ function experimental_run(){
    $('#tutorial_message').html($('<span>', {
       'html': experimental_round_message,
    }))
+
+   counter.new_counter(number_of_presses);
+   button.new_button();
+   button.button_number = 0;
+   button.last_button_outcome = 0;   
+   $('#next_button').attr('onclick', 'button.new_button()');
+   driver();
+   experimental_data.start_timer();
 
    message_remove = setTimeout(function(){
       $('#message_area').html('');
@@ -493,7 +513,7 @@ function debrief_screen(){
    // }));
    // $('#instruction_screen').append(debrief_screen_description);
    // $('#instruction_screen').append($('<p>', {
-   //    'html': 'Overall you scored ' + counter.wins + ' points, this will be converted into ' + Number.parseFloat(price_per_win*counter.wins).toFixed(1) + '$, \
+   //    'html': 'Overall you scored ' + counter.wins + ' points, this will be converted into ' + Number.parseFloat(price_per_win*counter.wins).toFixed(2) + '$, \
    //             the bonus will be payed to you in 1-2 days time.'
    // }))
    // $('#instruction_screen').append(ID_message);
