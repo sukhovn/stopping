@@ -1,0 +1,5 @@
+This Node.js app was primarily developed using the github:
+https://github.com/Tuuleh/jsPsychBackendStart
+
+To start local MongoDB:
+sudo systemctl start mongod

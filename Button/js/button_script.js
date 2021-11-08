@@ -19,7 +19,7 @@ var subjectID = Math.round(Math.random()*100000000); //Random subject ID
 
 var instruction_screen_description_part1 = '<p style="text-align: center;">&emsp; <h2>Instructions</h2></p>' + 
                                           '<p>Welcome! Your goal in the experiment is to collect as many POINTS as you can. \
-                                          Each point you receive will give you a bonus of $' + price_per_win + '. The maximum points you can collect is ' + number_of_presses + ', \
+                                          Each point you receive will give you a bonus of $' + price_per_win + '. The maximum points you can collect is <b>' + number_of_presses + '</b>, \
                                           so you can receive a bonus of up to $' + Number.parseFloat(price_per_win*number_of_presses).toFixed(0) + ' in the task! </p>' +  '<p>Please press ENTER to continue.</p>'
 
 var instruction_screen_description_part2 = '<p style="text-align: center;">&emsp; <h2>Button presses and points</h2></p>' + 
@@ -33,8 +33,8 @@ var instruction_screen_description_part2 = '<p style="text-align: center;">&emsp
                                           '<p>Please press ENTER to continue.</p>'                                    
 var instruction_screen_description_part3 = '<p style="text-align: left;">&emsp; \
                                           &emsp; <h2>Pressing current button and choosing a new one</h2>' +
-                                          '<p> At the start of the experiment, we will provide you with one random button to press and a total of ' + 
-                                          number_of_presses + ' button presses.</p>'+ '<p> At each time point, you can choose to either press \
+                                          '<p> At the start of the experiment, we will provide you with one random button to press and a total of <b>' + 
+                                          number_of_presses + '</b> button presses.</p>'+ '<p> At each time point, you can choose to either press \
                                           the button you currently have or you can request a new button to press. \
                                           Requesting a new button has no cost -- you can chose to change the button as many times as you want. \
                                           However, when you move to the next button, you will not be able to select any of your previous buttons.</p>' + 
@@ -44,18 +44,15 @@ var instruction_screen_description_part3 = '<p style="text-align: left;">&emsp; 
 
 var instruction_list = [instruction_screen_description_part1, instruction_screen_description_part2, instruction_screen_description_part3];
 
-var recap_screen_part1 = '<p style="text-align: center;">&emsp; <h2>Instructions recap</h2></p>' + '<p>&emsp; \
+var recap_instruction_list = ['<p style="text-align: center;">&emsp; <h2>Instructions recap</h2></p>' + '<p>&emsp; \
                            We provide you with a series of buttons to press. When you press a button, the button will either randomly provide 1 point or provide 0 points. \
-                           Each button has a fixed UNIQUE chance of providing a point. At the start of the experiment, we provide you a total of ' + 
-                           number_of_presses + ' button presses.</p>'+ '<p> At each time point, you can choose to either press \
+                           Each button has a fixed UNIQUE chance of providing a point. At the start of the experiment, we provide you a total of <b>' + 
+                           number_of_presses + '</b> button presses.</p>'+ '<p> At each time point, you can choose to either press \
                            the button you currently have or you can request a new button to press. \
                            Requesting a new button has no cost. \
                            However, when you move to the next button, you will not be able to select any of your previous buttons.</p>' + 
                            '<p>Your goal is to get as many points as you can get given the number of presses you have.</p>' + 
-                           '<p>Please press ENTER key to continue.</p>';
-
-
-var recap_instruction_list = [recap_screen_part1];
+                           '<p>Please press ENTER key to continue.</p>'];
 
 /*
 * Here we define tutorial instructions
@@ -95,21 +92,41 @@ var quiz_questions = [
                                                                                     correct: 2}
 ];
 
+var quiz_fail = 0;
+var quiz_fail_message = ['<p style="text-align: center;">&emsp; <h2>Quiz results</h2></p>' + 
+                     '<p>You have answered at least one of the questions incorrectly.\
+                     All of the information presented is very important for the experiment.\
+                     Please, complete the tutorial again.</p>' + 
+                     '<p>Press ENTER key to continue.</p>'];
+
+var main_experiment_announcement = ['<p style="text-align: center;">&emsp; <h2>The tutorial is completed</h2></p>' + 
+                                    '<p>Now the main experiment will begin</p>' + 
+                                    '<p>Please press ENTER key to continue.</p>'];
+
 /*
 * Here we define practice round and main round parameters
 */
 
-var after_tutorial_presses = 100;
-var after_tutorial_message = '<p>The tutorial is now finished. We will now give you some more time to practice.</p>' + ' <p>This round will not count to your final points. You can press ENTER whenever you want to begin the main experiment.</p>';
-var experimental_round_message = 'The tutorial is now finished. Good luck!';
+// var after_tutorial_presses = 100;
+// var after_tutorial_message = '<p>The tutorial is now finished. We will now give you some more time to practice.</p>' + ' <p>This round will not count to your final points. You can press ENTER whenever you want to begin the main experiment.</p>';
 
-var debrief_screen_description = '<p>That\'s it. Thank you for your participation!</p>' 
-var ID_message = '<p>Please save or write down the following number: ' + subjectID + '</p>';
+var experimental_round_message = 'The tutorial is now finished. Good luck!';
 
 var button_folder_path = 'pictures/square_buttons/';
 var next_button_arrow_path = 'pictures/white_arrow.jpeg';
 var after_press_win_message = 'Congratulations, after pressing the button you got 1 point!';
 var after_press_fail_message = 'Unfortunately, after pressing the button you get nothing.';
+
+/*
+* Here we define post experiment parameters
+*/
+
+var debrief_screen_description = '<p>That\'s it. Thank you for your participation!</p>' 
+var ID_message = '<p>Please save or write down the following number: ' + subjectID + '</p>';
+
+var feedback_instruction = 'If you felt that the task was unclear or you have some ideas how to improve the experiment,\
+                              please leave your feedback here. Thank you!';
+var post_feedback_message = 'Your feedback has been recorded. Thank you!<br>You may now close the web page.';
 
 var instruction_screen_time; //Records the time the test subject looked at the instruction screen
 var tutorial_time; //Records the time the test subject spent on the tutorial
@@ -244,12 +261,13 @@ var experimental_data = {
    },
 
    getData: function(){
-      let outcome = this.data;
-      let head_data = {"subjectID": subjectID, "inst_time": instruction_screen_time, "tut_time": tutorial_time, "date": Date(), "total_win": counter.wins};
-      head_data = $.extend({}, head_data, {"quiz_results": quiz_answers});
+      // let outcome = this.data;
+      let head_data = {"subjectID": subjectID, "inst_time": instruction_screen_time, "tut_time": tutorial_time, "date": Date(), "total_win": counter.wins, "quiz_failed": quiz_fail};
+      // head_data = $.extend({}, head_data, {"quiz_results": quiz_answers});
       // if(attention_check_results.length > 0) head_data = $.extend({}, head_data, {"attention_checks": attention_check_results});
-      outcome.unshift(head_data);
-      let dLen = this.data.length;
+      // outcome.unshift(head_data);
+      // outcome.push({"feedback": "none"});
+      let outcome = $.extend({}, head_data, {"press_data": experimental_data.data}, {"feedback": "none"});
       return outcome;
    }
 };
@@ -257,52 +275,6 @@ var experimental_data = {
 /*
 *  Here goes the testing screen code
 */
-
-//This function constructs attention check frame
-
-// function attention_check_frame(driver){
-//    let num_choices = 5;
-//    let choice_num = Math.floor(num_choices*Math.random());
-
-//    $('#button_section').html($('<form>', {
-//       'id': 'attention_check_form'
-//    }));
-
-//    //Appending check form message
-//    $('#attention_check_form').append($('<div>', {
-//       'id': 'attention_check_message',
-//       'html': 'We just want to check that you are paying attention. Choose option ' + String(choice_num + 1) + ' if you are:'
-//    }));
-
-//    //Appending check form options
-//    for(let i = 0; i < num_choices; i++){
-//       $('#attention_check_form').append($('<div>', {
-//          'id': 'attention_option_' + i,
-//          'class': 'attention_choice_option'
-//       }));
-//       $('#attention_option_' + i).append($('<input>', {
-//          'type': 'radio',
-//          'name': 'attention_choice',
-//          'id': 'attention_choice_' + i,
-//          'value': String(i)
-//       }));
-//       $('#attention_option_' + i).append($('<label>', {
-//          'for': 'attention_choice_' + i,
-//          'html': 'Option ' + (i+1)
-//       }));
-//    }
-
-//    //Checking choice option
-//    $('#attention_check_form input').on('change', function() {
-//       $('#attention_check_form input').off();
-//       let correct_choice = ($('input[name=attention_choice]:checked', '#attention_check_form').val() == choice_num);
-//       if(correct_choice) attention_check_results.push(1);
-//       else attention_check_results.push(0);
-//       after_press_message(driver);
-//    });
-
-// };
-
 
 //This function constructs the experimental screen
 
@@ -386,23 +358,23 @@ function flash_message(message){
    }, message_duration*1000);
 }
 
-function driver_practice(){
-   $('#next_button').attr('onclick', 'button.new_button();');
-   // choice is made when an arm is clicked on
-   $('.arm_img').off('click');
-   $('.arm_img').click(function() {
-      var armID = this.getAttribute('id');
-      if(armID == 'button'){
-         var button_outcome = button.press_button();
-         experimental_data.record_press(button_outcome);
-         if(button_outcome) counter.count_win();
-         else counter.count_fail();
-         button.update_button_info();
-         counter.update_counter();
-      }
-      if(counter.remaining_presses == 0) experimental_run();
-   })
-};
+// function driver_practice(){
+//    $('#next_button').attr('onclick', 'button.new_button();');
+//    // choice is made when an arm is clicked on
+//    $('.arm_img').off('click');
+//    $('.arm_img').click(function() {
+//       var armID = this.getAttribute('id');
+//       if(armID == 'button'){
+//          var button_outcome = button.press_button();
+//          experimental_data.record_press(button_outcome);
+//          if(button_outcome) counter.count_win();
+//          else counter.count_fail();
+//          button.update_button_info();
+//          counter.update_counter();
+//       }
+//       if(counter.remaining_presses == 0) experimental_run();
+//    })
+// };
 
 function driver(){
    $('#next_button').attr('onclick', 'button.new_button();$(\'#message_area\').html(\'\');');
@@ -443,12 +415,28 @@ function instruction_screen(){
       tutorial_time = (new Date()).getTime();
       tutorial(tutorial_instructions, function(){
          tutorial_time = (new Date()).getTime() - tutorial_time;
-         instruction_prompt(recap_instruction_list, function(){
-            quiz(quiz_message, quiz_questions, experimental_run);
-         });
+         post_instruction_screen();
       });
    });
 };
+
+function post_instruction_screen(){
+   instruction_prompt(recap_instruction_list, function(){
+      quiz(quiz_message, quiz_questions, function(){
+         var has_errors = 0;
+         for(let i = 0; i < quiz_answers.length; i++){
+            if(quiz_answers[i] == 0){has_errors = 1;}
+         }
+         if(has_errors == 1){
+            quiz_fail += 1;
+            instruction_prompt(quiz_fail_message, instruction_screen);
+         }
+         else{
+            instruction_prompt(main_experiment_announcement, experimental_run);
+         }
+      });
+   });
+}
 
 // function post_tutorial(){
 //    experiment_frame();
@@ -518,8 +506,16 @@ function debrief_screen(){
    // }))
    // $('#instruction_screen').append(ID_message);
 
+   // feedback_window.feedback_instruction = feedback_instruction;
+   // feedback_window.post_feedback_message = post_feedback_message;
+   // feedback_window.show(function(){
+   //    console.log(feedback_window.feedback);
+   //    feedback_window.submission_success();
+   // });
+
    // console.log(JSON.stringify(experimental_data.getData()));
 
+   //Saving experimental data
    $.ajax({
       type: "POST",
       url: "/experiment-data",
@@ -532,14 +528,31 @@ function debrief_screen(){
       }));
       $('#instruction_screen').append(debrief_screen_description);
       $('#instruction_screen').append($('<p>', {
-         'html': 'Overall you scored ' + counter.wins + ' points, this will be converted into ' + Number.parseFloat(price_per_win*counter.wins).toFixed(1) + '$, \
+         'html': 'Overall you scored ' + counter.wins + ' points, this will be converted into ' + Number.parseFloat(price_per_win*counter.wins).toFixed(2) + '$, \
                      the bonus will be payed to you in 1-2 days time.'
       }))
       $('#instruction_screen').append(ID_message);
+      //Requesting feedback
+      feedback_window.feedback_instruction = feedback_instruction;
+      feedback_window.post_feedback_message = post_feedback_message;
+      feedback_window.show(function(){
+         //Saving feedback
+         $.ajax({
+            type: "POST",
+            url: "/experiment-feedback/" + subjectID,
+            data: JSON.stringify({feedback: feedback_window.feedback}),
+            contentType: "application/json"
+         })
+         .done(function() {
+            feedback_window.submission_success();
+         })
+         .fail(function() {
+            alert("A problem occurred while writing to the database. Please contact the researcher for more information.")
+         })
+      });
    })
    .fail(function() {
       alert("A problem occurred while writing to the database. Please contact the researcher for more information.")
-      // window.location.href = "/";
    })
 };
 

@@ -108,6 +108,8 @@ function quiz(quiz_message, quiz_instructions, input_next){
 		next_step: input_next,
 	}
 
+	quiz_answers = [];
+
 	core.quiz_display = function(){
 		$('body').html($('<div>', {
 			'id': 'header',
@@ -197,7 +199,7 @@ function quiz(quiz_message, quiz_instructions, input_next){
 				'value': 'Submit'
 			}));
 
-			$("#question_form").submit(function(){
+			$('#question_form').submit(function(){
 				if($("input[name='question_choice']:checked").val() == core.instructions[core.current]['correct']) quiz_answers.push(1);
 				else quiz_answers.push(0);
 				core.current++;
@@ -209,3 +211,98 @@ function quiz(quiz_message, quiz_instructions, input_next){
 	core.quiz_display();
 	core.display_prompt();
 };
+
+var feedback_window = {
+	feedback_instruction: "Feedback instructions",
+	feedback_message: "Please, enter your feedback here",
+	post_feedback_message: "Thank you!",
+	feedback: "",
+	next_step: function(){},
+
+	show: function(next_action){
+		this.next_step = next_action;
+
+		$('body').append($('<div>', {
+			'id': 'feedback_section'
+		}));
+
+		$('#feedback_section').append($('<form>', {
+			'id': 'feedback_window'
+		}));
+
+		$('#feedback_window').append($('<div>',{
+			'id': 'feedback_instruction',
+			'html': this.feedback_instruction
+		}));
+		$('#feedback_window').append($('<textarea>',{
+			'id': 'feedback_input',
+			'rows': '10',
+			'cols': '50',
+			'html': this.feedback_message
+		}));
+		$('#feedback_window').append('<br>');
+		$('#feedback_window').append($('<input>',{
+			'type': 'submit',
+			'id': 'feedback_submit',
+			'value': 'Submit feedback'
+		}));
+
+		$('#feedback_window').submit(function(event){
+			event.preventDefault();
+			feedback_window.feedback = $('#feedback_input').val();
+			feedback_window.next_step();
+		});
+	},
+
+	submission_success: function(){
+		$('#feedback_section').html($('<div>',{
+			'id': 'feedback_instruction',
+			'html': this.post_feedback_message
+		}));
+	}
+}
+
+//This function constructs attention check frame
+
+// function attention_check_frame(driver){
+//    let num_choices = 5;
+//    let choice_num = Math.floor(num_choices*Math.random());
+
+//    $('#button_section').html($('<form>', {
+//       'id': 'attention_check_form'
+//    }));
+
+//    //Appending check form message
+//    $('#attention_check_form').append($('<div>', {
+//       'id': 'attention_check_message',
+//       'html': 'We just want to check that you are paying attention. Choose option ' + String(choice_num + 1) + ' if you are:'
+//    }));
+
+//    //Appending check form options
+//    for(let i = 0; i < num_choices; i++){
+//       $('#attention_check_form').append($('<div>', {
+//          'id': 'attention_option_' + i,
+//          'class': 'attention_choice_option'
+//       }));
+//       $('#attention_option_' + i).append($('<input>', {
+//          'type': 'radio',
+//          'name': 'attention_choice',
+//          'id': 'attention_choice_' + i,
+//          'value': String(i)
+//       }));
+//       $('#attention_option_' + i).append($('<label>', {
+//          'for': 'attention_choice_' + i,
+//          'html': 'Option ' + (i+1)
+//       }));
+//    }
+
+//    //Checking choice option
+//    $('#attention_check_form input').on('change', function() {
+//       $('#attention_check_form input').off();
+//       let correct_choice = ($('input[name=attention_choice]:checked', '#attention_check_form').val() == choice_num);
+//       if(correct_choice) attention_check_results.push(1);
+//       else attention_check_results.push(0);
+//       after_press_message(driver);
+//    });
+
+// };

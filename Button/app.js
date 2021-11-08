@@ -6,10 +6,6 @@ var express = require('express'),
 
 var app = express();
 
-// var server = app.listen(3000, function(){
-// 	console.log("Listening on port %d", server.address().port);
-// });
-
 app.use(express.static('./'));
 app.use('/css', express.static('./css'));
 app.use('/js', express.static('./js'));
@@ -38,14 +34,18 @@ db.once('open', function callback() {
     console.log('database opened');
 });
 
-// app.post('/experiment-data', function(request, response) {
-//     console.log(request.body);
-// })
-
 app.post('/experiment-data', function(request, response){
-    Entry.create({
-        "data": request.body
-    });    
+    Entry.create(request.body);    
+    response.end();
+})
+
+app.post('/experiment-feedback/:id', function(request, response){
+    Entry.updateOne({subjectID: parseInt(request.params.id)},
+        {$set: {feedback: request.body.feedback}},
+        function(err, docs){
+            if(err){console.log(err);}
+            else{console.log("Added feedback:", docs);}
+        });   
     response.end();
 })
 
@@ -53,7 +53,3 @@ app.post('/experiment-data', function(request, response){
 var server = app.listen(3000, function(){
     console.log("Listening on port %d", server.address().port);
 });
-
-// app.get('/', function(request, response) {
-//     response.send('Hello, Express!');
-// });
