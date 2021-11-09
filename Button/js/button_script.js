@@ -67,10 +67,10 @@ var tutorial_instructions = [
                highlight: '#info_area', trigger: 'button', button_p: 1.0},
    {message: 'Another point! Press the button again.', 
       highlight: 'none', trigger: 'button', button_p: 0.0},
-   {message: 'This time you weren\'t so lucky. The button gave you no point. Let\'s press the button a few more times' , highlight: '#info_area', trigger: 'button', button_p: 0.0},
+   {message: 'This time you weren\'t so lucky. The button gave you no point. Let\'s press the button a few more times.' , highlight: '#info_area', trigger: 'button', button_p: 0.0},
    {message: 'Again, the button gave you no point.' , highlight: 'none', trigger: 'button', button_p: 0.0},
-   {message: 'Again, the button gave you no point.' , highlight: 'none', trigger: 'button', button_p: 1.0},
-   {message: 'Congratulations, you get another point! Now that you have given the button a few presses you can get a feeling how it performs. Press ENTER to continue' , highlight: '#info_area', trigger: 'enter'},
+   {message: 'And again, the button gave you no point.' , highlight: 'none', trigger: 'button', button_p: 1.0},
+   {message: 'Congratulations, you get another point! Now that you have given the button a few presses you can get a feeling how it performs. Press ENTER to continue.' , highlight: '#info_area', trigger: 'enter'},
    {message: 'Let\'s suppose you are not satisfied with this button\'s performance. Press the highlighted box to get another button.', highlight: '#next_button_frame', trigger: 'next button'},
    {message: 'You can notice that your button has changed. Request a new button again.', highlight: '#info_area', trigger: 'next button'},
    {message: '<b>Notice that requesting a new button does not count as a button press.</b> You are free to request as many buttons as you want for free. Request a new button another time.', highlight: '#info_area', trigger: 'next button'}
@@ -100,7 +100,7 @@ var quiz_fail_message = ['<p style="text-align: center;">&emsp; <h2>Quiz results
                      '<p>Press ENTER key to continue.</p>'];
 
 var main_experiment_announcement = ['<p style="text-align: center;">&emsp; <h2>The tutorial is completed</h2></p>' + 
-                                    '<p>Now the main experiment will begin</p>' + 
+                                    '<p>Now the main experiment will begin.</p>' + 
                                     '<p>Please press ENTER key to continue.</p>'];
 
 /*
@@ -162,11 +162,13 @@ var button = (function(){
    core.new_button = function(){
       this.current_p = Math.random();      
 
-      do{
-         var random_number = Math.floor(this.number_of_buttons*Math.random());
-      }
-      while(random_number == this.current_button);
-      this.current_button = random_number;
+      // do{
+      //    var random_number = Math.floor(this.number_of_buttons*Math.random());
+      // }
+      // while(random_number == this.current_button);
+      // this.current_button = random_number;
+      this.current_button++;
+      if(this.current_button == this.number_of_buttons) this.current_button = 0;
 
       if(this.presses > 0) this.button_number++;
       this.presses = 0;
