@@ -262,6 +262,23 @@ var feedback_window = {
 	}
 }
 
+//This function returns a random transposition of an array of consecutive ints form begin to end
+
+function random_transposition(begin, end){
+	let size = end-begin;
+	let tmp_x = Array(size);
+	let tmp_y = Array(size);
+	for(let i = 0; i < size; i++){
+		tmp_x[i] = begin+i;
+	}
+	for(let i = size-1; i >= 0; i--){
+		let pick = Math.floor(i*Math.random());
+		tmp_y[size-i-1] = tmp_x[pick];
+		tmp_x.splice(pick, 1);
+	}
+	return tmp_y;
+}
+
 //This function constructs attention check frame
 
 // function attention_check_frame(driver){

@@ -18,28 +18,29 @@ var subjectID = Math.round(Math.random()*100000000); //Random subject ID
 */
 
 var instruction_screen_description_part1 = '<p style="text-align: center;">&emsp; <h2>Instructions</h2></p>' + 
-                                          '<p>Welcome! Your goal in the experiment is to collect as many POINTS as you can. \
+                                          '<p>Welcome! In this experiment we will ask you to make some simple decisions. You will receive points for each decision. Your goal is to collect as many points as you can. \
                                           Each point you receive will give you a bonus of $' + price_per_win + '. The maximum points you can collect is <b>' + number_of_presses + '</b>, \
                                           so you can receive a bonus of up to $' + Number.parseFloat(price_per_win*number_of_presses).toFixed(0) + ' in the task! </p>' +  '<p>Please press ENTER to continue.</p>'
 
 var instruction_screen_description_part2 = '<p style="text-align: center;">&emsp; <h2>Button presses and points</h2></p>' + 
                                           '<p> In the experiment, we will provide you with a series of buttons to press. \
-                                          When you press a button, the button will either randomly provide 1 point or provide 0 points. \
-                                          Each button has a fixed UNIQUE chance of providing a point. \
+                                          When you press a button, the button will randomly provide either 1 point or 0 points. \
+                                          Each button has a different chance of providing a point. \
                                           For example, one button may give a point 9 out of 10 times while another button \
-                                          may only give a point 1 out of 10 times. </p>' +
-                                          '<p> <b>Important:</b> The buttons you will be provided with are uniformly distributed i.e., \
-                                          every time you select a new button, you are equally likely to get a good or a bad button.</p>' + 
-                                          '<p>Please press ENTER to continue.</p>'                                    
+                                          may only give a point 1 out of 10 times. You will have the opportunity to press each button multiple times if you want to. \
+                                          Every time you press a particular button you have the same chance of getting a point. </p>' +
+                                          '<p> <b>Important:</b> The probability with which each button gives you a point is determined randomly, \
+                                          and all probabilities are equally likely. Every time you select a new button, you are equally likely to get \
+                                          a good or a bad button.</p>' + '<p>Please press ENTER to continue.</p>'                                    
 var instruction_screen_description_part3 = '<p style="text-align: left;">&emsp; \
                                           &emsp; <h2>Pressing current button and choosing a new one</h2>' +
-                                          '<p> At the start of the experiment, we will provide you with one random button to press and a total of <b>' + 
-                                          number_of_presses + '</b> button presses.</p>'+ '<p> At each time point, you can choose to either press \
+                                          '<p> At the start of the experiment, we will provide you with one randomly selected button to press and a total of <b>' + 
+                                          number_of_presses + '</b> button presses.</p>'+ '<p> For each button press, you can choose to either press \
                                           the button you currently have or you can request a new button to press. \
-                                          Requesting a new button has no cost -- you can chose to change the button as many times as you want. \
+                                          Requesting a new button has no cost -- you can choose to change the button as many times as you want. \
                                           However, when you move to the next button, you will not be able to select any of your previous buttons.</p>' + 
                                           '<p>Your goal is to get as many points as you can get given the number of presses you have. \
-                                          You will be payed based on the accumulated points you receive. Good luck!</p>' + 
+                                          You will be paid based on the accumulated points you receive, for a total of $' + price_per_win.toFixed(2) + ' per point. Good luck!</p>' + 
                                           '<p>Please press ENTER key to continue.</p>';
 
 var instruction_list = [instruction_screen_description_part1, instruction_screen_description_part2, instruction_screen_description_part3];
@@ -47,7 +48,7 @@ var instruction_list = [instruction_screen_description_part1, instruction_screen
 var recap_instruction_list = ['<p style="text-align: center;">&emsp; <h2>Instructions recap</h2></p>' + '<p>&emsp; \
                            We provide you with a series of buttons to press. When you press a button, the button will either randomly provide 1 point or provide 0 points. \
                            Each button has a fixed UNIQUE chance of providing a point. At the start of the experiment, we provide you a total of <b>' + 
-                           number_of_presses + '</b> button presses.</p>'+ '<p> At each time point, you can choose to either press \
+                           number_of_presses + '</b> button presses.</p>'+ '<p> Each time you press a button, you can choose to either press \
                            the button you currently have or you can request a new button to press. \
                            Requesting a new button has no cost. \
                            However, when you move to the next button, you will not be able to select any of your previous buttons.</p>' + 
@@ -61,7 +62,7 @@ var recap_instruction_list = ['<p style="text-align: center;">&emsp; <h2>Instruc
 var tutorial_instructions = [
    {message: 'To help you understand the task, let us start with a simple tutorial. Simply follow the instructions on screen. Press ENTER to continue.', 
       highlight: 'none', trigger: 'enter'},
-   {message: 'Let us give the highlighted red button a press.', highlight: '#button_frame', trigger: 'button', button_p: 1.0},
+   {message: 'Please give the highlighted red button a press.', highlight: '#button_frame', trigger: 'button', button_p: 1.0},
    {message: 'Congratulations, your first press gives you a point! You can see on the highlighted section that you have accumulated one point.\
                However, you have also spent one button press. Press the button again a couple of times.', 
                highlight: '#info_area', trigger: 'button', button_p: 1.0},
@@ -70,7 +71,7 @@ var tutorial_instructions = [
    {message: 'This time you weren\'t so lucky. The button gave you no point. Let\'s press the button a few more times.' , highlight: '#info_area', trigger: 'button', button_p: 0.0},
    {message: 'Again, the button gave you no point.' , highlight: 'none', trigger: 'button', button_p: 0.0},
    {message: 'And again, the button gave you no point.' , highlight: 'none', trigger: 'button', button_p: 1.0},
-   {message: 'Congratulations, you get another point! Now that you have given the button a few presses you can get a feeling how it performs. Press ENTER to continue.' , highlight: '#info_area', trigger: 'enter'},
+   {message: 'Congratulations, you get another point! Now that you have given the button a few presses you can get a feeling for how it performs. Press ENTER to continue.' , highlight: '#info_area', trigger: 'enter'},
    {message: 'Let\'s suppose you are not satisfied with this button\'s performance. Press the highlighted box to get another button.', highlight: '#next_button_frame', trigger: 'next button'},
    {message: 'You can notice that your button has changed. Request a new button again.', highlight: '#info_area', trigger: 'next button'},
    {message: '<b>Notice that requesting a new button does not count as a button press.</b> You are free to request as many buttons as you want for free. Request a new button another time.', highlight: '#info_area', trigger: 'next button'}
@@ -154,10 +155,16 @@ var button = (function(){
    core.current_p = Math.random();
    core.presses = 0;
    core.wins = 0;
-   core.last_button_outcome = 0;
 
    core.number_of_buttons = 10;
+   //Initial button shuffling
+   core.button_order = [0].concat(random_transposition(1, core.number_of_buttons));
    core.current_button = 0;
+
+   //Randomly reshuffle the buttons
+   core.reshuffle_buttons = function(){
+      this.button_order = random_transposition(0, core.number_of_buttons);
+   }
 
    core.new_button = function(){
       this.current_p = Math.random();      
@@ -167,6 +174,7 @@ var button = (function(){
       // }
       // while(random_number == this.current_button);
       // this.current_button = random_number;
+
       this.current_button++;
       if(this.current_button == this.number_of_buttons) this.current_button = 0;
 
@@ -182,18 +190,16 @@ var button = (function(){
 
    core.update_button = function(){
       this.update_button_info();
-      $('#button').attr('src', button_folder_path + 'button_' + this.current_button + '.jpg');
+      $('#button').attr('src', button_folder_path + 'button_' + this.button_order[this.current_button] + '.jpg');
    };
 
    core.press_button = function(){
       this.presses++;
       if(Math.random() < this.current_p){
          core.wins++;
-         this.last_button_outcome = 1;
          return 1;
       }
       else{
-         this.last_button_outcome = 0;
          return 0;
       }
    };
@@ -232,7 +238,7 @@ var counter = {
 var experimental_data = {
    data: [],
    time: 0,
-   round_number: 0,
+   // round_number: 0,
    press_number: 0,
 
    start_timer: function(){
@@ -242,9 +248,8 @@ var experimental_data = {
    new_round: function(){
       button.new_button();
       button.button_number = 0;
-      button.last_button_outcome = 0;
+      button.current_button = 0;
       this.press_number = 0;
-      this.round_number++;
    },
 
    record_press: function(outcome){
@@ -263,12 +268,7 @@ var experimental_data = {
    },
 
    getData: function(){
-      // let outcome = this.data;
       let head_data = {"subjectID": subjectID, "inst_time": instruction_screen_time, "tut_time": tutorial_time, "date": Date(), "total_win": counter.wins, "quiz_failed": quiz_fail};
-      // head_data = $.extend({}, head_data, {"quiz_results": quiz_answers});
-      // if(attention_check_results.length > 0) head_data = $.extend({}, head_data, {"attention_checks": attention_check_results});
-      // outcome.unshift(head_data);
-      // outcome.push({"feedback": "none"});
       let outcome = $.extend({}, head_data, {"press_data": experimental_data.data}, {"feedback": "none"});
       return outcome;
    }
@@ -303,7 +303,7 @@ function experiment_frame(){
    }));
 
    $('#button_frame').append($('<img>', {
-      'src': button_folder_path + 'button_' + button.current_button + '.jpg',
+      'src': button_folder_path + 'button_' + button.button_order[button.current_button] + '.jpg',
       'id': 'button',
       'class': 'arm_img' 
    }));
@@ -360,24 +360,6 @@ function flash_message(message){
    }, message_duration*1000);
 }
 
-// function driver_practice(){
-//    $('#next_button').attr('onclick', 'button.new_button();');
-//    // choice is made when an arm is clicked on
-//    $('.arm_img').off('click');
-//    $('.arm_img').click(function() {
-//       var armID = this.getAttribute('id');
-//       if(armID == 'button'){
-//          var button_outcome = button.press_button();
-//          experimental_data.record_press(button_outcome);
-//          if(button_outcome) counter.count_win();
-//          else counter.count_fail();
-//          button.update_button_info();
-//          counter.update_counter();
-//       }
-//       if(counter.remaining_presses == 0) experimental_run();
-//    })
-// };
-
 function driver(){
    $('#next_button').attr('onclick', 'button.new_button();$(\'#message_area\').html(\'\');');
    // choice is made when an arm is clicked on
@@ -431,6 +413,7 @@ function post_instruction_screen(){
          }
          if(has_errors == 1){
             quiz_fail += 1;
+            experimental_data.new_round();
             instruction_prompt(quiz_fail_message, instruction_screen);
          }
          else{
@@ -440,34 +423,9 @@ function post_instruction_screen(){
    });
 }
 
-// function post_tutorial(){
-//    experiment_frame();
-
-//    $('#message_area').html($('<div>', {
-//       'id': 'tutorial_message'
-//    }));
-
-//    $('#tutorial_message').html($('<span>', {
-//       'html': after_tutorial_message,
-//    }))
-
-//    counter.new_counter(after_tutorial_presses);
-//    button.new_button();
-//    button.button_number = 0;
-//    button.last_button_outcome = 0;
-//    $('#next_button').attr('onclick', 'button.new_button()');
-//    driver_practice();
-//    experimental_data.start_timer();
-
-//    $(document).keyup(function(event) {
-//       if(event.which === 13) {
-//          $(document).off('keyup');
-//          experimental_run();
-//       }
-//    });
-// }
-
 function experimental_run(){
+   button.reshuffle_buttons();
+   experimental_data.new_round();
    experiment_frame();
 
    $('#message_area').html('');
@@ -481,9 +439,6 @@ function experimental_run(){
    }))
 
    counter.new_counter(number_of_presses);
-   button.new_button();
-   button.button_number = 0;
-   button.last_button_outcome = 0;   
    $('#next_button').attr('onclick', 'button.new_button()');
    driver();
    experimental_data.start_timer();
@@ -538,19 +493,24 @@ function debrief_screen(){
       feedback_window.feedback_instruction = feedback_instruction;
       feedback_window.post_feedback_message = post_feedback_message;
       feedback_window.show(function(){
-         //Saving feedback
-         $.ajax({
-            type: "POST",
-            url: "/experiment-feedback/" + subjectID,
-            data: JSON.stringify({feedback: feedback_window.feedback}),
-            contentType: "application/json"
-         })
-         .done(function() {
+         //Saving feedback if it is different from the feedback message
+         if(feedback_window.feedback != feedback_window.feedback_message){
+            $.ajax({
+               type: "POST",
+               url: "/experiment-feedback/" + subjectID,
+               data: JSON.stringify({feedback: feedback_window.feedback}),
+               contentType: "application/json"
+            })
+            .done(function() {
+               feedback_window.submission_success();
+            })
+            .fail(function() {
+               alert("A problem occurred while writing to the database. Please contact the researcher for more information.")
+            })
+         }
+         else{
             feedback_window.submission_success();
-         })
-         .fail(function() {
-            alert("A problem occurred while writing to the database. Please contact the researcher for more information.")
-         })
+         }
       });
    })
    .fail(function() {
