@@ -1,5 +1,5 @@
 #include <trial.h>
-#include <coef_calculator.h>
+#include <reward_calculator.h>
 #include <transition_calculator.h>
 
 #ifndef BERNOULLI_H
@@ -11,6 +11,8 @@
  
 // for (int i = 0; i < 10; ++i)
 // 	std::cout << distr(generator) << '\n';
+
+// Simulates Bernoulii button drawn out of the uniform distribution 
 
 class Bernoulli_Button: public Button{
 private:
@@ -42,6 +44,8 @@ public:
 		new_button();
 	}
 };
+
+// Simulates Bernoulii button drawn out of the Beta(\alpha, \beta) distribution
 
 class Biased_Bernoulli_Button: public Button{
 private:
@@ -86,6 +90,62 @@ public:
 	}
 };
 
+// Calculates Bernoulli coefficient table using general recursive transition table calculator
+
+class Bernoulli_Reward: public Reward_Table{
+	double alpha_prior;
+	double beta_prior;
+
+	double mean_step_reward(int win, int fail){
+		return (alpha_prior+win)/(win+fail+alpha_prior+beta_prior);
+	}
+
+	double success_transition_p(int win, int fail){
+		return (alpha_prior+win)/(win+fail+alpha_prior+beta_prior);
+	}
+
+public:
+	Bernoulli_Reward(int win_init, int fail_init, int time_init, double alpha_0 = 1.0, double beta_0 = 1.0): Reward_Table(win_init, fail_init, time_init),
+																										alpha_prior(alpha_0), beta_prior(beta_0){
+																											fill_reward_table();
+																										};
+
+	Bernoulli_Reward(double *reward_table_init, int win_init, int fail_init, int time_init, double alpha_0 = 1.0, double beta_0 = 1.0): 
+																										Reward_Table(reward_table_init, win_init, fail_init, time_init),
+																										alpha_prior(alpha_0), beta_prior(beta_0){
+																											fill_reward_table();
+																										};
+};
+
+// Calculates Bernoulli transition table using general recursive transition table calculator
+
+class Bernoulli_Transition: public Transition_Table{
+	double alpha_prior;
+	double beta_prior;
+
+	double mean_step_reward(int win, int fail){
+		return (alpha_prior+win)/(win+fail+alpha_prior+beta_prior);
+	}
+
+	double success_transition_p(int win, int fail){
+		return (alpha_prior+win)/(win+fail+alpha_prior+beta_prior);
+	}
+
+public:
+	Bernoulli_Transition(int win_init, int fail_init, int time_init, double alpha_0 = 1.0, double beta_0 = 1.0): Transition_Table(win_init, fail_init, time_init),
+																										alpha_prior(alpha_0), beta_prior(beta_0){
+																											fill_transition_table();
+																										};
+
+	Bernoulli_Transition(int *transition_table_init, int win_init, int fail_init, int time_init, double alpha_0 = 1.0, double beta_0 = 1.0): 
+																										Transition_Table(transition_table_init, win_init, fail_init, time_init),
+																										alpha_prior(alpha_0), beta_prior(beta_0){
+																											fill_transition_table();
+																										};
+};
+
+// Implements Bernoulli policy decision making by referencing optimal transition table
+
 class Bernoulli_Policy_Direct: public Policy{
 private:
 	double alpha_prior;
@@ -95,7 +155,7 @@ private:
 	int time;
 	int time_left;
 
-	Transition trans;
+	Bernoulli_Transition trans;
 
 public:
 	Bernoulli_Policy_Direct(int time_init, double alpha_0 = 1.0, double beta_0 = 1.0): wins(0), fails(0), alpha_prior(alpha_0), beta_prior(beta_0), 
@@ -120,6 +180,8 @@ public:
 	}
 };
 
+// Implements Bernoulli policy decision making by comparing with reward table at every step (superceded by Bernoulli_Policy_Direct)
+
 class Bernoulli_Policy_Reward: public Policy{
 private:
 	double alpha_prior;
@@ -131,10 +193,10 @@ private:
 
 	bool comments;
 
-	Coefficient expect_coeff;
+	Bernoulli_Reward expect_coeff;
 
 public:
-	const Coefficient &table;
+	const Bernoulli_Reward &table;
 
 	Bernoulli_Policy_Reward(int time_init, double alpha_0 = 1.0, double beta_0 = 1.0): wins(0), fails(0), alpha_prior(alpha_0), beta_prior(beta_0), 
 		time(time_init), time_left(time_init), expect_coeff(time, time, time, alpha_0, beta_0), table(expect_coeff), comments(false) {};
@@ -190,6 +252,8 @@ public:
 		}
 	}
 };
+
+// Runs a button given a policy a single time
 
 class Single_Bernoulli_Run{
 private:

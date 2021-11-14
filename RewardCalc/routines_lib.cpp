@@ -1,9 +1,10 @@
-#include <coef_calculator.h>
-#include <transition_calculator.h>
 #include <iostream>
 #include <cstring>
 #include <timer.h>
 #include <random>
+
+#include <reward_calculator.h>
+#include <transition_calculator.h>
 
 #include <trial.h>
 #include <bernoulli.h>
@@ -12,7 +13,7 @@
 // This function is used when expected_reward_table is called in Python
 extern "C" void reward_table(double *table, int win_max, int fail_max, int time_max, double alpha_prior, double beta_prior)
 {
-	Coefficient coef(table, win_max, fail_max, time_max, alpha_prior, beta_prior);
+	Bernoulli_Reward coef(table, win_max, fail_max, time_max, alpha_prior, beta_prior);
 
 	return;
 }
@@ -20,7 +21,7 @@ extern "C" void reward_table(double *table, int win_max, int fail_max, int time_
 // This function is used when expected_reward_table is called in Python
 extern "C" void transition_table(int *table, int win_max, int fail_max, int time_max, double alpha_prior, double beta_prior)
 {
-	Transition trans(table, win_max, fail_max, time_max, alpha_prior, beta_prior);
+	Bernoulli_Transition trans(table, win_max, fail_max, time_max, alpha_prior, beta_prior);
 
 	return;
 }

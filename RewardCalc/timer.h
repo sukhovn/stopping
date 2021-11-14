@@ -20,11 +20,15 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& os, Print_Time prnt){
+	std::ios_base::fmtflags originalFlags = os.flags();
+
 	if(prnt.hours > 0) os << prnt.hours << " hours ";
 	if(prnt.hours > 0 || prnt.minutes > 0) os << prnt.minutes << " minutes ";
 	os << std::fixed << std::setprecision(2);
 	os << prnt.seconds << " seconds";
 	os << std::scientific <<  std::setprecision(6);
+
+	os.flags(originalFlags);
 	return os;
 }
 

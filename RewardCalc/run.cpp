@@ -1,9 +1,10 @@
-#include <coef_calculator.h>
-#include <transition_calculator.h>
 #include <iostream>
 #include <cstring>
 #include <timer.h>
 #include <random>
+
+#include <reward_calculator.h>
+#include <transition_calculator.h>
 
 #include <trial.h>
 #include <bernoulli.h>
@@ -37,7 +38,7 @@ void run_coefficient_table_generator(int argc, char const *argv[]){
 	}
 
 	Timer timer;
-	Coefficient coef(win_max, fail_max, time_max, alpha_prior, beta_prior);
+	Bernoulli_Reward coef(win_max, fail_max, time_max, alpha_prior, beta_prior);
 	timer.record();
 	std::cout << "The calculation took " << timer.total << std::endl;
 	std::cout << std::fixed;
@@ -80,7 +81,7 @@ void run_transition_table_generator(int argc, char const *argv[]){
 	}
 
 	Timer timer;
-	Transition trans(win_max, fail_max, time_max, alpha_prior, beta_prior);
+	Bernoulli_Transition trans(win_max, fail_max, time_max, alpha_prior, beta_prior);
 	timer.record();
 	std::cout << "The calculation took " << timer.total << std::endl;
 	std::cout << std::fixed;
@@ -125,7 +126,7 @@ void run_bernoulli_trials(int argc, char const *argv[]){
 
 	Bernoulli_Policy_Direct plc(time);
 	Policy_Test plc_test(&bb, &plc, time, num_tries);
-	Coefficient coef(1, 1, time);
+	Bernoulli_Reward coef(1, 1, time);
 
 	plc_test.run();
 	// std::cout << "Theoretical expected reward: " << plc.table(time-1, 0, 0) << std::endl;
@@ -168,7 +169,7 @@ void run_biased_bernoulli_trials(int argc, char const *argv[]){
 
 	Bernoulli_Policy_Direct plc(time, alpha_prior, beta_prior);
 	Policy_Test plc_test(&bbb, &plc, time, num_tries);
-	Coefficient coef(1, 1, time);
+	Bernoulli_Reward coef(1, 1, time);
 
 	plc_test.run();
 	// std::cout << "Theoretical expected reward: " << plc.table(time-1, 0, 0) << std::endl;
@@ -216,10 +217,17 @@ void run_meta_bernoulli_trials(int argc, char const *argv[]){
 	Policy_Test plc_test_ub(&bbb, &plc_ub, time, num_tries);
 	Policy_Test plc_test_meta(&bbb, &plc_meta, time, num_tries);
 
-	Coefficient coef(1, 1, time, alpha_prior, beta_prior);
+	Bernoulli_Reward coef(1, 1, time, alpha_prior, beta_prior);
 
+	Timer timer;
 	plc_test_ub.run();
+	timer.record();
+	std::cout << "The unbiased calculation took " << timer.last_period << std::endl;
+
 	plc_test_meta.run();
+	timer.record();
+	std::cout << "The meta calculation took " << timer.last_period << "\n" << std::endl;
+
 	// std::cout << "Theoretical expected reward: " << plc.table(time-1, 0, 0) << std::endl;
 	std::cout << "Theoretical expected reward: " << coef(time-1, 0, 0) << std::endl;
 	std::cout << "\nUnbiased run\n\n";
@@ -266,7 +274,7 @@ void print_transition_table(int argc, char const *argv[]){
 	int *transition_table = new int[win_max*fail_max];
 
 	Timer timer;
-	Transition trans(transition_table, win_max, fail_max, time_max, alpha_prior, beta_prior);
+	Bernoulli_Transition trans(transition_table, win_max, fail_max, time_max, alpha_prior, beta_prior);
 	timer.record();
 	std::cout << "The calculation took " << timer.total << std::endl;
 	std::cout << std::fixed;

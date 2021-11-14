@@ -8,9 +8,12 @@
 
 class Button{
 public:
+	// Draws a new button
 	virtual void new_button() = 0;
 
+	// Presses the current button and outputs resulting reward
 	virtual double press_current_button() = 0;
+
 	double press_next_button()
 	{
 		new_button();
@@ -20,7 +23,10 @@ public:
 
 class Policy{
 public:
+	// Resets the policy memory tracking
 	virtual void reset() = 0;
+
+	// Outputs the decision whether the button should be changed based on the reward received
 	virtual bool change_button(double reward) = 0;
 };
 
