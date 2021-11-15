@@ -126,3 +126,71 @@ def record_full_meta_bernoulli_trials(time, num_tries, **kwargs):
 	val = val.reshape((num_tries, time, 4))
 	val[::,0:2] = np.rint(val[::,0:2])
 	return val
+
+#Truncated Bernoulli trials
+
+truncated_reward_table_cpp = lib.truncated_reward_table
+truncated_reward_table_cpp.argtypes = [ctl.ndpointer(np.float64, 
+                                         flags='aligned, c_contiguous'), 
+                           ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_double]
+
+def expected_truncated_reward_table(win_max, fail_max, time_max, **kwargs):
+	truncation = 1.0
+	if 'truncation' in kwargs:
+		truncation = kwargs['truncation']
+
+	val = np.zeros(win_max*fail_max*time_max, dtype=np.float64)
+	truncated_reward_table_cpp(val, win_max, fail_max, time_max, truncation)
+	val = val.reshape((time_max, win_max, fail_max))
+	return val
+
+truncated_transition_table_cpp = lib.truncated_transition_table
+truncated_transition_table_cpp.argtypes = [ctl.ndpointer(np.intc, 
+                                         flags='aligned, c_contiguous'), 
+                           ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_double]
+
+def optimal_truncated_transition_table(win_max, fail_max, time_max, **kwargs):
+	truncation = 0.9
+	if 'truncation' in kwargs:
+		truncation = kwargs['truncation']
+
+	val = np.zeros(win_max*fail_max, dtype=np.intc)
+	truncated_transition_table_cpp(val, win_max, fail_max, time_max, truncation)
+	val = val.reshape((win_max, fail_max))
+	return val
+
+run_truncated_bernoulli_trials_cpp = lib.run_truncated_bernoulli_trials
+run_truncated_bernoulli_trials_cpp.argtypes = [ctl.ndpointer(np.float64, 
+                                         flags='aligned, c_contiguous'), 
+                           ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double]
+
+def run_truncated_bernoulli_trials(time, num_tries, **kwargs):
+	button_truncation = 0.9
+	policy_truncation = 0.9
+	if 'button_truncation' in kwargs:
+		button_truncation = kwargs['button_truncation']
+	if 'policy_truncation' in kwargs:
+		policy_truncation = kwargs['policy_truncation']
+
+	val = np.zeros(num_tries, dtype=np.float64)
+	run_truncated_bernoulli_trials_cpp(val, time, num_tries, button_truncation, policy_truncation)
+	return val
+
+record_full_truncated_bernoulli_trials_cpp = lib.record_full_truncated_bernoulli_trials
+record_full_truncated_bernoulli_trials_cpp.argtypes = [ctl.ndpointer(np.float64, 
+                                         flags='aligned, c_contiguous'), 
+                           ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double]
+
+def record_full_truncated_bernoulli_trials(time, num_tries, **kwargs):
+	button_truncation = 0.9
+	policy_truncation = 0.9
+	if 'button_truncation' in kwargs:
+		button_truncation = kwargs['button_truncation']
+	if 'policy_truncation' in kwargs:
+		policy_truncation = kwargs['policy_truncation']
+
+	val = np.zeros(num_tries*time*4, dtype=np.float64)
+	record_full_truncated_bernoulli_trials_cpp(val, time, num_tries, button_truncation, policy_truncation)
+	val = val.reshape((num_tries, time, 4))
+	val[::,0:2] = np.rint(val[::,0:2])
+	return val
