@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Experiment</title>
+    
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="js/jquery-min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+
+    <link href="css/title.css" rel="stylesheet" type="text/css">
+
+    <script>
+        $(document).ready(function() {
+            $('#captcha_form').submit(function() {
+                $(this).ajaxSubmit({
+                    error: function(xhr) {
+                        console.log('Error: ' + xhr.status);
+                    },
+                    success: function(response) {
+                        if(response.responseCode == 0) window.location.href = "/consent";
+                        else alert("Something went wrong or you didn't pass the captcha. Try reloading the page or contact the researcher.")
+                    }
+                });
+                //Very important line, it disables the page refresh.
+                return false;
+            });
+        });
+
+        function enableBtn(){
+            $("#submit_button").removeAttr("disabled");
+        }
+    </script>
+
+</head>
+<body tabindex="0" style="margin: 0px;">
+
+    <h1>Are you a Robot?</h1> 
+    <p>Please verify that you are not a robot</p>
+    
+    <center>
+        <form id="captcha_form" action='/submit-captcha' method="post">
+            <div class="g-recaptcha" data-sitekey="6LeArTsdAAAAAAeyQ9giPfYdbhTWJlFfKPwEFjLn" data-callback="enableBtn"></div><br>
+            <input type="submit" class="submit-button" id="submit_button" value="Verify" disabled>
+        </form>
+    </center>
+
+</body>
+</html>

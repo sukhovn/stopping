@@ -154,3 +154,35 @@ label.multi-choice-text input[type="radio"] {
     display: block;
     margin: auto;
 }
+
+.submit-button, button {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 0 8px;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    line-height: 1.4;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+.submit-button:hover, button:hover {
+    background-color: #ddd;
+    border-color: #aaa;
+}
+
+
+.submit-button:disabled, button:disabled {
+    background-color: #eee;
+    color: #aaa;
+    border-color: #ccc;
+    cursor: not-allowed;
+}

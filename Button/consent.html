@@ -6,7 +6,7 @@
     <script src="js/jquery-min.js"></script>
     <link href="css/title.css" rel="stylesheet" type="text/css">
 </head>
-<body tabindex="0" class=" display-element" style="margin: 0px; width: 100%;">
+<body tabindex="0" class="display-element" style="margin: 0px; width: 100%;">
     <form id="multi-choice-form">
     <div id="consent-preamble">
         <h1 id="consentform">Consent Form</h1>
@@ -57,7 +57,7 @@
             <label class="multi-choice-text" for="consent-decline-response"> I do not consent to participate</label>
         </div>
     </div>
-    <input type="submit" id="multi-choice-next" value="Continue">
+    <input type="submit" class="submit-button" id="multi-choice-next" value="Continue">
     </form>
     <pre id="log">
     </pre>
@@ -69,7 +69,6 @@
         form.addEventListener("submit", function(event) {
             var data = new FormData(form);
             if(data.get('consent-choice') == " I consent to participate"){
-                // window.location.href = "button.html";
                 window.location.href = "/experiment";
             }
             if(data.get('consent-choice') == " I do not consent to participate"){

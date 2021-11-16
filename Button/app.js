@@ -1,8 +1,14 @@
-var express = require('express');
-
 var express = require('express'),
     mongoose = require('mongoose'),
-    body_parser = require('body-parser');
+    body_parser = require('body-parser'),
+    request = require('request');
+
+// Loading reCaptcha variables
+var dotenv = require('dotenv');
+const result = dotenv.config({path: './process.env'})
+if (result.error) {
+  throw result.error
+}
 
 var app = express();
 
@@ -15,15 +21,22 @@ app.set('views', './');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use(body_parser.json());
+app.use(body_parser.urlencoded({extended : false}));
 
-app.get('/', function(request, response) {
-    response.render('consent.html');
+// Describes pages paths
+app.get('/', function(req, res) {
+    res.render('index.html');
 });
 
-app.get('/experiment', function(request, response) {
-    response.render('button.html');
+app.get('/consent', function(req, res) {
+    res.render('consent.html');
 });
 
+app.get('/experiment', function(req, res) {
+    res.render('button.html');
+});
+
+// Database access
 var emptySchema = new mongoose.Schema({}, { strict: false });
 var Entry = mongoose.model('Entry', emptySchema);
 
@@ -34,20 +47,38 @@ db.once('open', function callback() {
     console.log('database opened');
 });
 
-app.post('/experiment-data', function(request, response){
-    Entry.create(request.body);    
-    response.end();
+// Posts experimental results
+app.post('/experiment-data', function(req, res){
+    Entry.create(req.body);    
+    res.end();
 })
 
-app.post('/experiment-feedback/:id', function(request, response){
-    Entry.updateOne({subjectID: parseInt(request.params.id)},
-        {$set: {feedback: request.body.feedback}},
+// Updates experimental feedback
+app.post('/experiment-feedback/:id', function(req, res){
+    Entry.updateOne({subjectID: parseInt(req.params.id)},
+        {$set: {feedback: req.body.feedback}},
         function(err, docs){
             if(err){console.log(err);}
             else{console.log("Added feedback:", docs);}
         });   
-    response.end();
+    res.end();
 })
+
+// Checks captcha verification result
+app.post('/submit-captcha',function(req,res){
+    if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
+        return res.json({"responseCode" : 1,"responseDesc" : "Please select captcha"});
+    }
+    var secretKey = process.env.RECAPTCHA_SECRET_KEY;
+    var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+    request(verificationUrl,function(error,response,body) {
+        body = JSON.parse(body);
+        if(body.success !== undefined && !body.success) {
+            return res.json({"responseCode" : 1,"responseDesc" : "Failed captcha verification"});
+        }
+        res.json({"responseCode" : 0, "responseDesc" : "Success"});
+    });
+});
 
 // --- START THE SERVER 
 var server = app.listen(3000, function(){
