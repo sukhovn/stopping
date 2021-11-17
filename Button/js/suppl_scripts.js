@@ -248,9 +248,9 @@ var feedback_window = {
 		}));
 
 		$('#feedback_window').submit(function(event){
-			event.preventDefault();
 			feedback_window.feedback = $('#feedback_input').val();
 			feedback_window.next_step();
+			event.preventDefault();
 		});
 	},
 
