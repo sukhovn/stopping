@@ -2,6 +2,7 @@
 *  Here we define main experiment parameters
 */
 
+var p_truncation = 0.9;
 var number_of_presses = 40;
 var price_per_win = 0.05;
 var message_duration = 3; //Message duration for win and fail messages in seconds
@@ -152,7 +153,7 @@ var button = (function(){
    let core = {};
 
    core.button_number = 0;
-   core.current_p = Math.random();
+   core.current_p = p_truncation*Math.random();
    core.presses = 0;
    core.wins = 0;
 
@@ -167,7 +168,7 @@ var button = (function(){
    }
 
    core.new_button = function(){
-      this.current_p = Math.random();      
+      this.current_p = p_truncation*Math.random();      
 
       // do{
       //    var random_number = Math.floor(this.number_of_buttons*Math.random());
