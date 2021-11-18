@@ -14,12 +14,13 @@ var post_feedback_message = 'Your feedback has been recorded. Thank you!<br>You 
 */
 
 function debrief_screen(){
+   let total_pay = base_pay + price_per_win*counter.wins;
    // $('body').html($('<div>', {
    //    'id': 'instruction_screen'
    // }));
    // $('#instruction_screen').append(debrief_screen_description);
    // $('#instruction_screen').append($('<p>', {
-   //    'html': 'Overall you scored ' + counter.wins + ' points, this will be converted into ' + Number.parseFloat(price_per_win*counter.wins).toFixed(2) + '$, \
+   //    'html': 'Overall you scored ' + counter.wins + ' points, this will be converted into ' + Number.parseFloat(Math.ceil(100*total_pay)/100).toFixed(2) + '$, \
    //             the bonus will be payed to you in 1-2 days time.'
    // }))
    // $('#instruction_screen').append(ID_message);
@@ -46,7 +47,7 @@ function debrief_screen(){
       }));
       $('#instruction_screen').append(debrief_screen_description);
       $('#instruction_screen').append($('<p>', {
-         'html': 'Overall you scored ' + counter.wins + ' points, this will be converted into ' + Number.parseFloat(Math.ceil(100*price_per_win*counter.wins)/100).toFixed(2) + '$, \
+         'html': 'Overall you scored ' + counter.wins + ' points, this will be converted into ' + Number.parseFloat(Math.ceil(100*total_pay)/100).toFixed(2) + '$, \
                      the bonus will be payed to you in 1-2 days time.'
       }))
       $('#instruction_screen').append(ID_message);

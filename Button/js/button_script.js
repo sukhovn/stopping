@@ -4,6 +4,7 @@
 
 var p_truncation = 0.9;
 var number_of_presses = 40;
+var base_pay = 1.2;
 var price_per_win = 0.025;
 var prolificID = 'none';
 var subjectID = Math.round(Math.random()*100000000); //Random subject ID

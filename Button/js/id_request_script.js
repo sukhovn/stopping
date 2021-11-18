@@ -42,6 +42,5 @@ function request_ID(){
 			prolificID = $('#prolific_input').val();
 			run_experiment();
 		}
-		event.preventDefault();
 	});
 }
