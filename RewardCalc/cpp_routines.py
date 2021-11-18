@@ -3,15 +3,16 @@ import numpy.ctypeslib as ctl
 import numpy as np
 import os
 
-if os.path.exists("./RewardCalc/routines_lib.so") == False:
+cwd = os.getcwd()
+if os.path.exists(cwd + "/../RewardCalc/routines_lib.so") == False:
 	print("The library file routines_lib.so does not exist")
 	print("Attempting to compile the library")
-	if os.system("(cd RewardCalc/; make)") != 0:
+	if os.system("(cd " + cwd + "/../RewardCalc/; make)") != 0:
 		print("Compilation failed")
 	else:
 		print("Compilation was successful")
 
-lib=ctl.load_library('routines_lib.so', './RewardCalc/')
+lib=ctl.load_library('routines_lib.so', cwd + "/../RewardCalc/")
 
 #Reward table function
 reward_table_cpp = lib.reward_table
