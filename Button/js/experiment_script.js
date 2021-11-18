@@ -2,8 +2,8 @@
 * Here we define post experiment parameters
 */
 
-var debrief_screen_description = '<p>That\'s it. Thank you for your participation!</p>' 
-var ID_message = '<p>Please save or write down the following number: ' + subjectID + '</p>';
+var debrief_screen_description = '<p>The experiment is now complete. Thank you for your participation!</p>' 
+var ID_message = '<p>Here is your unique completion code: 531B56EC.</p>';
 
 var feedback_instruction = 'If you felt that the task was unclear or you have some ideas how to improve the experiment,\
                               please leave your feedback here. Thank you!';
