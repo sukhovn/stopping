@@ -9,3 +9,4 @@ RewardCalc/routines_lib.so
 Figures/
 Button/node_modules
 Button/process.env
+db_user_pass.txt
