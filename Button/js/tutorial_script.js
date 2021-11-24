@@ -4,7 +4,7 @@
 
 var instruction_screen_description_part1 = '<p style="text-align: center;">&emsp; <h2>Instructions</h2></p>' + 
                                           '<p>Welcome! In this experiment we will ask you to make some simple decisions. You will receive points for each decision. Your goal is to collect as many points as you can. \
-                                          Each point you receive will give you a bonus of $' + price_per_win.toFixed(3) + '. The maximum points you can collect is <b>' + number_of_presses + '</b>, \
+                                          Each point you receive will give you a bonus of $' + price_per_win.toFixed(2) + '. The maximum points you can collect is <b>' + number_of_presses + '</b>, \
                                           so you can receive a bonus of up to $' + Number.parseFloat(price_per_win*number_of_presses).toFixed(0) + ' in the task! </p>' +  '<p>Please press ENTER to continue.</p>'
 
 var instruction_screen_description_part2 = '<p style="text-align: center;">&emsp; <h2>Button presses and points</h2></p>' + 
@@ -25,7 +25,7 @@ var instruction_screen_description_part3 = '<p style="text-align: left;">&emsp; 
                                           Requesting a new button has no cost -- you can choose to change the button as many times as you want. \
                                           However, when you move to the next button, you will not be able to select any of your previous buttons.</p>' + 
                                           '<p>Your goal is to get as many points as you can get given the number of presses you have. \
-                                          You will be paid based on the accumulated points you receive, for a total of $' + price_per_win.toFixed(3) + ' per point. Good luck!</p>' + 
+                                          You will be paid based on the accumulated points you receive, for a total of $' + price_per_win.toFixed(2) + ' per point. Good luck!</p>' + 
                                           '<p>Please press ENTER key to continue.</p>';
 
 var instruction_list = [instruction_screen_description_part1, instruction_screen_description_part2, instruction_screen_description_part3];
@@ -69,7 +69,7 @@ var tutorial_instructions = [
 var quiz_message = 'Before we continue please answer the following short quiz';
 
 var quiz_questions = [
-   {question: 'How many total button presses will you get in the experiment?', answer_1: number_of_presses, answer_2: '50', answer_3: '100', correct: 1},
+   {question: 'How many total button presses will you get in the experiment?', answer_1: '50' , answer_2: '70', answer_3: number_of_presses, correct: 3},
    {question: 'What happens when you select the option of requesting a new button', answer_1: 'The number of button presses you have is reduced by 1', 
                                                                                     answer_2: 'The number of button presses you have is reduced by 2', 
                                                                                     answer_3: 'The number of button presses you have remains the same as before', 
@@ -84,10 +84,6 @@ var quiz_fail_message = ['<p style="text-align: center;">&emsp; <h2>Quiz results
                      All of the information presented is very important for the experiment.\
                      Please, complete the tutorial again.</p>' + 
                      '<p>Press ENTER key to continue.</p>'];
-
-var main_experiment_announcement = ['<p style="text-align: center;">&emsp; <h2>The tutorial is completed</h2></p>' + 
-                                    '<p>Now the main experiment will begin.</p>' + 
-                                    '<p>Please press ENTER key to continue.</p>'];
 
 /*
 *  Here goes the instruction screen code
@@ -122,7 +118,7 @@ function post_instruction_screen(){
             instruction_prompt(quiz_fail_message, instruction_screen);
          }
          else{
-            instruction_prompt(main_experiment_announcement, experimental_run);
+            practice_run();
          }
       });
    });

@@ -2,21 +2,16 @@
 *  Here we define main experiment parameters
 */
 
+var number_of_presses = 100;
 var p_truncation = 0.9;
-var number_of_presses = 40;
-var base_pay = 1.2;
-var price_per_win = 0.025;
+var base_pay = 1.8;
+var price_per_win = 0.01;
 var prolificID = 'none';
 var subjectID = Math.round(Math.random()*100000000); //Random subject ID
 
 /*
 * Here we define practice round and main round parameters
 */
-
-// var after_tutorial_presses = 100;
-// var after_tutorial_message = '<p>The tutorial is now finished. We will now give you some more time to practice.</p>' + ' <p>This round will not count to your final points. You can press ENTER whenever you want to begin the main experiment.</p>';
-
-var experimental_round_message = 'The tutorial is now finished. Good luck!';
 
 var button_folder_path = 'pictures/square_buttons/';
 var next_button_arrow_path = 'pictures/white_arrow.jpeg';
@@ -130,10 +125,12 @@ var counter = {
 //This object collects and handles experimental data
 
 var experimental_data = {
-   data: [],
+   practice_data: [],
+   main_data: [],
    time: 0,
    // round_number: 0,
    press_number: 0,
+   practice_round: 0,
 
    start_timer: function(){
       this.time = (new Date()).getTime();
@@ -156,14 +153,15 @@ var experimental_data = {
          "outcome": outcome,
          "press_time": time_curr - this.time
       }
-      this.data.push(press_data);
+      if(this.practice_round == 1) this.practice_data.push(press_data);
+      else this.main_data.push(press_data);
       this.press_number++;
       this.time = time_curr;
    },
 
    getData: function(){
       let head_data = {"subjectID": subjectID, "prolificID": prolificID, "inst_time": instruction_screen_time, "tut_time": tutorial_time, "date": Date(), "total_win": counter.wins, "quiz_failed": quiz_fail};
-      let outcome = $.extend({}, head_data, {"press_data": experimental_data.data}, {"feedback": "none"});
+      let outcome = $.extend({}, head_data,  {"practice_data": experimental_data.practice_data}, {"press_data": experimental_data.main_data}, {"feedback": "none"});
       return outcome;
    }
 };
