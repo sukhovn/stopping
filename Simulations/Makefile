@@ -1,24 +1,24 @@
 .PHONY: all clean
 
-TRIAL_DIR = Trial
-TRIAL_SRC := $(wildcard $(TRIAL_DIR)/*.cpp)
-TRIAL_BINS := $(patsubst $(TRIAL_DIR)/%.cpp, obj/trial/%.o, $(TRIAL_SRC))
+CORE_DIR = Core
+CORE_SRC := $(wildcard $(TRIAL_DIR)/*.cpp)
+CORE_BINS := $(patsubst $(TRIAL_DIR)/%.cpp, obj/core/%.o, $(TRIAL_SRC))
 
-HEAD_FOLDERS = TableCalc $(TRIAL_DIR) boost
+HEAD_FOLDERS = $(CORE_DIR) Strategies Suppl
 HEAD_LINK = $(patsubst %, -I%, $(HEAD_FOLDERS))
 
 CC = g++ # compiler to use
 CFLAGS = -c -g -O3 -I. $(HEAD_LINK) # flags to use at compliation
 LINKERFLAG = -lm
 
-all: obj $(TRIAL_BINS) obj/run.o obj/routines_lib.o 
-	${CC} -o run $(TRIAL_BINS) obj/run.o ${LINKERFLAG}
-	${CC} -shared -o routines_lib.so $(TRIAL_BINS) obj/routines_lib.o ${LINKERFLAG}
+all: obj $(CORE_BINS) obj/run.o obj/routines_lib.o 
+	${CC} -o run $(CORE_BINS) obj/run.o ${LINKERFLAG}
+	${CC} -shared -o routines_lib.so $(CORE_BINS) obj/routines_lib.o ${LINKERFLAG}
 
 obj:
 	@echo "Making obj directory..."
 	mkdir obj
-	mkdir obj/trial
+	mkdir obj/core
 
 obj/run.o: run.cpp
 	@echo "Compiling run.cpp..."

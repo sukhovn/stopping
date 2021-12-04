@@ -1,11 +1,11 @@
 .ipynb_checkpoints/
-RewardCalc/obj/
-RewardCalc/run
+Simulations/obj/
+Simulations/run
 Supplement/*
 !Supplement/supplement.tex
 !Supplement/supplement.pdf
 __pycache__/
-RewardCalc/routines_lib.so
+Simulations/routines_lib.so
 Figures/
 Button/node_modules
 Button/process.env
