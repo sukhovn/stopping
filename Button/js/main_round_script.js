@@ -2,7 +2,7 @@
 *  Here goes the main round code
 */
 
-var after_tutorial_presses = 100;
+var show_remaining_count = true;
 var after_tutorial_message = '<p>The tutorial is now finished. We will now give you some more time to practice.</p>' + ' <p>This round will not count to your final points. You can press ENTER whenever you want to begin the main experiment.</p>';
 
 var experimental_round_message = 'The tutorial is now finished. Good luck!';
@@ -57,11 +57,16 @@ function experiment_frame(){
       'id': 'current_button_info',
       'class': 'info_message'
    }));
-   $('#info_area').append($('<div>', {
-      'html': 'You have a total of <b>' + number_of_presses + '</b> presses remaining',
-      'id': 'presses_info',
-      'class': 'info_message'
-   }));
+
+   if(show_remaining_count){
+      $('#info_area').append($('<div>', {
+         'html': 'You have a total of <b>' + number_of_presses + '</b> presses remaining',
+         'id': 'presses_info',
+         'class': 'info_message'
+      }));
+   }else{
+      $('#info_area').css({"margin-top": "25px", "margin-bottom": "25px"});
+   }
 
    // initialize the next button
    $('body').append($('<div>', {
@@ -95,7 +100,7 @@ function flash_message(message){
    }, message_duration*1000);
 }
 
-function driver_no_announcement(exit_step){
+function driver_practice(exit_step){
    $('#next_button').attr('onclick', 'button.new_button();');
    // choice is made when an arm is clicked on
    $('.arm_img').off('click');
@@ -104,12 +109,8 @@ function driver_no_announcement(exit_step){
       if(armID == 'button'){
          var button_outcome = button.press_button();
          experimental_data.record_press(button_outcome);
-         if(button_outcome) counter.count_win();
-         else counter.count_fail();
          button.update_button_info();
-         counter.update_counter();
       }
-      if(counter.remaining_presses == 0) exit_step();
    })
 };
 
@@ -141,6 +142,7 @@ function practice_run(){
    button.reshuffle_buttons();
    experimental_data.new_round();
    experimental_data.practice_round = 1;
+   show_remaining_count = false;
    experiment_frame();
 
    $('#message_area').html($('<div>', {
@@ -151,9 +153,8 @@ function practice_run(){
       'html': after_tutorial_message,
    }))
 
-   counter.new_counter(after_tutorial_presses);
    $('#next_button').attr('onclick', 'button.new_button()');
-   driver_no_announcement(function(){
+   driver_practice(function(){
       instruction_prompt(main_experiment_announcement, experimental_run)
    });
    experimental_data.start_timer();
@@ -172,6 +173,7 @@ function experimental_run(){
    button.reshuffle_buttons();
    experimental_data.new_round();
    experimental_data.practice_round = 0;
+   show_remaining_count = true;
    experiment_frame();
    
    $('#message_area').html($('<div>', {

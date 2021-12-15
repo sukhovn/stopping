@@ -85,6 +85,12 @@ var quiz_fail_message = ['<p style="text-align: center;">&emsp; <h2>Quiz results
                      Please, complete the tutorial again.</p>' + 
                      '<p>Press ENTER key to continue.</p>'];
 
+var quiz_success_message = ['<p style="text-align: center;">&emsp; <h2>You have passed the practice quiz!</h2></p>' + 
+                              '<p>The tutorial is now finished. We will now give you some more time to practice. \
+                              This round will not count to your final points. In this round you have unlimited number of presses, \
+                              the main purpose of this round is to give you a feeling of the setup mechanic and button distribution. You can press ENTER whenever you want to begin the main experiment.</p>' + 
+                              '<p>Please press ENTER key to continue.</p>'];
+
 /*
 *  Here goes the instruction screen code
 */ 
@@ -118,7 +124,7 @@ function post_instruction_screen(){
             instruction_prompt(quiz_fail_message, instruction_screen);
          }
          else{
-            practice_run();
+            instruction_prompt(quiz_success_message, practice_run);
          }
       });
    });
