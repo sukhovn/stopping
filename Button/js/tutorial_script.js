@@ -59,7 +59,7 @@ var tutorial_instructions = [
    {message: 'Congratulations, you get another point! Now that you have given the button a few presses you can get a feeling for how it performs. Press ENTER to continue.' , highlight: '#info_area', trigger: 'enter'},
    {message: 'Let\'s suppose you are not satisfied with this button\'s performance. Press the highlighted box to get another button.', highlight: '#next_button_frame', trigger: 'next button'},
    {message: 'You can notice that your button has changed. Request a new button again.', highlight: '#info_area', trigger: 'next button'},
-   {message: '<b>Notice that requesting a new button does not count as a button press.</b> You are free to request as many buttons as you want for free. Request a new button another time.', highlight: '#info_area', trigger: 'next button'}
+   {message: '<b>Notice that requesting a new button does not count as a button press.</b> You are free to request as many buttons as you want for free. Note that each button is UNIQUE and has its own fixed chance of giving a point. Request a new button another time.', highlight: '#info_area', trigger: 'next button'}
 ];
 
 /*
@@ -88,7 +88,7 @@ var quiz_fail_message = ['<p style="text-align: center;">&emsp; <h2>Quiz results
 var quiz_success_message = ['<p style="text-align: center;">&emsp; <h2>You have passed the practice quiz!</h2></p>' + 
                               '<p>The tutorial is now finished. We will now give you some more time to practice. \
                               This round will not count to your final points. In this round you have unlimited number of presses, \
-                              the main purpose of this round is to give you a feeling of the setup mechanic and button distribution. You can press ENTER whenever you want to begin the main experiment.</p>' + 
+                              the main purpose of this practice round is to give you a feeling of how the different buttons behave and the overall experiment setup. You can press ENTER whenever you want to begin the main experiment.</p>' + 
                               '<p>Please press ENTER key to continue.</p>'];
 
 /*
