@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="RoutinesWin" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/Release/RoutinesWin" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-DBUILD_DLL" />
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="user32" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add directory="../Core" />
+			<Add directory="../Strategies" />
+			<Add directory="../Suppl" />
+		</Compiler>
+		<Unit filename="../Core/reward_calculator.h" />
+		<Unit filename="../Core/transition_calculator.h" />
+		<Unit filename="../Core/trial.h" />
+		<Unit filename="../Strategies/bernoulli.h" />
+		<Unit filename="../Strategies/inference_bernoulli.h" />
+		<Unit filename="../Strategies/meta_bernoulli.h" />
+		<Unit filename="../Strategies/suboptimal.h" />
+		<Unit filename="../Strategies/truncated_bernoulli.h" />
+		<Unit filename="../Suppl/boost/math/constants/calculate_constants.hpp" />
+		<Unit filename="../Suppl/boost/math/constants/constants.hpp" />
+		<Unit filename="../Suppl/boost/math/constants/info.hpp" />
+		<Unit filename="../Suppl/boost/math/policies/error_handling.hpp" />
+		<Unit filename="../Suppl/boost/math/policies/policy.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/bernoulli.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/beta.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/binomial.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/cbrt.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/cos_pi.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/bernoulli_details.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/erf_inv.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/fp_traits.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/gamma_inva.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/ibeta_inv_ab.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/ibeta_inverse.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/igamma_inverse.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/igamma_large.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/lanczos_sse2.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/lgamma_small.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/polygamma.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/round_fwd.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/t_distribution_inv.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/unchecked_bernoulli.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/detail/unchecked_factorial.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/digamma.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/erf.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/expm1.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/factorials.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/fpclassify.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/gamma.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/lanczos.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/log1p.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/math_fwd.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/next.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/polygamma.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/pow.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/powm1.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/round.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/sign.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/sin_pi.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/sqrt1pm1.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/trigamma.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/trunc.hpp" />
+		<Unit filename="../Suppl/boost/math/special_functions/zeta.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/assert.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/atomic.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/big_constant.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/complex.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/config.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/convert_from_string.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/cxx03_warn.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/detail/polynomial_horner3_20.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/detail/rational_horner3_20.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/fraction.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/is_detected.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/is_standalone.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/lexical_cast.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/mp.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/precision.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/promotion.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/rational.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/real_cast.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/roots.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/series.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/throw_exception.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/toms748_solve.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/traits.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/tuple.hpp" />
+		<Unit filename="../Suppl/boost/math/tools/user.hpp" />
+		<Unit filename="../Suppl/nelder-mead.h" />
+		<Unit filename="../Suppl/print_latex.h" />
+		<Unit filename="../Suppl/timer.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="main.h" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

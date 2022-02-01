@@ -1,0 +1,691 @@
+# depslib dependency file v1.0
+1643738539 source:c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\routineswin\main.cpp
+	"main.h"
+	<iostream>
+	<cstring>
+	<random>
+	"reward_calculator.h"
+	"transition_calculator.h"
+	"trial.h"
+	"bernoulli.h"
+	"meta_bernoulli.h"
+	"truncated_bernoulli.h"
+	"suboptimal.h"
+
+1584205420 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\routineswin\main.h
+	<windows.h>
+
+1643736092 source:c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\routines_lib.cpp
+	<iostream>
+	<cstring>
+	<random>
+	"RoutinesWin/main.h"
+	"Core/reward_calculator.h"
+	"Core/transition_calculator.h"
+	"Core/trial.h"
+	"Strategies/bernoulli.h"
+	"Strategies/meta_bernoulli.h"
+	"Strategies/truncated_bernoulli.h"
+	"Strategies/suboptimal.h"
+
+1636850986 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\core\reward_calculator.h
+	<cstdio>
+	<cmath>
+
+1636850859 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\core\transition_calculator.h
+	<cstdio>
+	<cmath>
+	<iostream>
+
+1637013855 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\core\trial.h
+	<cstdio>
+	<cmath>
+	<vector>
+	<random>
+
+1643738003 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\bernoulli.h
+	<trial.h>
+	<reward_calculator.h>
+	<transition_calculator.h>
+
+1643738003 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\meta_bernoulli.h
+	<trial.h>
+	<inference_bernoulli.h>
+	<transition_calculator.h>
+	<iostream>
+
+1643738003 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\inference_bernoulli.h
+	<cmath>
+	<nelder-mead.h>
+
+1627942952 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\nelder-mead.h
+	<iostream>
+	<vector>
+	<cmath>
+	<fstream>
+	<sstream>
+	<iomanip>
+	<time.h>
+
+1643738003 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\truncated_bernoulli.h
+	<trial.h>
+	<reward_calculator.h>
+	<transition_calculator.h>
+	<boost/math/special_functions/beta.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\beta.hpp
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/tools/config.hpp>
+	<boost/math/special_functions/gamma.hpp>
+	<boost/math/special_functions/binomial.hpp>
+	<boost/math/special_functions/factorials.hpp>
+	<boost/math/special_functions/erf.hpp>
+	<boost/math/special_functions/log1p.hpp>
+	<boost/math/special_functions/expm1.hpp>
+	<boost/math/special_functions/trunc.hpp>
+	<boost/math/tools/roots.hpp>
+	<boost/math/tools/assert.hpp>
+	<cmath>
+	<boost/math/special_functions/detail/ibeta_inverse.hpp>
+	<boost/math/special_functions/detail/ibeta_inv_ab.hpp>
+
+1643738003 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\suboptimal.h
+	<trial.h>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\math_fwd.hpp
+	<vector>
+	<complex>
+	<type_traits>
+	<boost/math/special_functions/detail/round_fwd.hpp>
+	<boost/math/tools/promotion.hpp>
+	<boost/math/policies/policy.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\round_fwd.hpp
+	<boost/math/tools/config.hpp>
+	<boost/math/tools/promotion.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\config.hpp
+	<boost/math/tools/is_standalone.hpp>
+	<boost/config.hpp>
+	<algorithm>
+	<limits>
+	<cmath>
+	<climits>
+	<cfloat>
+	<math.h>
+	<boost/math/tools/user.hpp>
+	<type_traits>
+	<cfenv>
+	<iostream>
+	<iomanip>
+	<typeinfo>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\is_standalone.hpp
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\user.hpp
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\promotion.hpp
+	<boost/math/tools/config.hpp>
+	<type_traits>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\policies\policy.hpp
+	<boost/math/tools/config.hpp>
+	<boost/math/tools/mp.hpp>
+	<limits>
+	<type_traits>
+	<cmath>
+	<cstdint>
+	<cstddef>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\mp.hpp
+	<type_traits>
+	<cstddef>
+	<utility>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\gamma.hpp
+	<boost/math/tools/series.hpp>
+	<boost/math/tools/fraction.hpp>
+	<boost/math/tools/precision.hpp>
+	<boost/math/tools/promotion.hpp>
+	<boost/math/tools/assert.hpp>
+	<boost/math/tools/config.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/constants/constants.hpp>
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/special_functions/log1p.hpp>
+	<boost/math/special_functions/trunc.hpp>
+	<boost/math/special_functions/powm1.hpp>
+	<boost/math/special_functions/sqrt1pm1.hpp>
+	<boost/math/special_functions/lanczos.hpp>
+	<boost/math/special_functions/fpclassify.hpp>
+	<boost/math/special_functions/detail/igamma_large.hpp>
+	<boost/math/special_functions/detail/unchecked_factorial.hpp>
+	<boost/math/special_functions/detail/lgamma_small.hpp>
+	<boost/math/special_functions/bernoulli.hpp>
+	<boost/math/special_functions/polygamma.hpp>
+	<cmath>
+	<algorithm>
+	<type_traits>
+	<boost/math/special_functions/detail/igamma_inverse.hpp>
+	<boost/math/special_functions/detail/gamma_inva.hpp>
+	<boost/math/special_functions/erf.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\series.hpp
+	<cmath>
+	<cstdint>
+	<limits>
+	<boost/math/tools/config.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\fraction.hpp
+	<boost/math/tools/precision.hpp>
+	<boost/math/tools/complex.hpp>
+	<type_traits>
+	<cstdint>
+	<cmath>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\precision.hpp
+	<boost/math/tools/assert.hpp>
+	<boost/math/policies/policy.hpp>
+	<type_traits>
+	<limits>
+	<climits>
+	<cmath>
+	<cstdint>
+	<cfloat>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\assert.hpp
+	<boost/math/tools/is_standalone.hpp>
+	<boost/assert.hpp>
+	<boost/static_assert.hpp>
+	<cassert>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\complex.hpp
+	<utility>
+	<boost/math/tools/is_detected.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\is_detected.hpp
+	<type_traits>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\policies\error_handling.hpp
+	<iomanip>
+	<string>
+	<cstring>
+	<typeinfo>
+	<cerrno>
+	<complex>
+	<cmath>
+	<cstdint>
+	<stdexcept>
+	<boost/math/tools/config.hpp>
+	<boost/math/policies/policy.hpp>
+	<boost/math/tools/precision.hpp>
+	<boost/math/tools/throw_exception.hpp>
+	<sstream>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\throw_exception.hpp
+	<boost/math/tools/is_standalone.hpp>
+	<boost/throw_exception.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\constants\constants.hpp
+	<boost/math/tools/config.hpp>
+	<boost/math/tools/cxx03_warn.hpp>
+	<boost/math/policies/policy.hpp>
+	<boost/math/tools/precision.hpp>
+	<boost/math/tools/convert_from_string.hpp>
+	<utility>
+	<type_traits>
+	<boost/math/constants/calculate_constants.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\cxx03_warn.hpp
+	<boost/math/tools/config.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\convert_from_string.hpp
+	<type_traits>
+	<boost/math/tools/lexical_cast.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\lexical_cast.hpp
+	<boost/math/tools/is_standalone.hpp>
+	<boost/lexical_cast.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\constants\calculate_constants.hpp
+	<type_traits>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\log1p.hpp
+	<cmath>
+	<cstdint>
+	<limits>
+	<boost/math/tools/config.hpp>
+	<boost/math/tools/series.hpp>
+	<boost/math/tools/rational.hpp>
+	<boost/math/tools/big_constant.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/tools/assert.hpp>
+	<boost/math/special_functions/fpclassify.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\rational.hpp
+	<array>
+	<boost/math/tools/config.hpp>
+	<boost/math/tools/assert.hpp>
+	<boost/math/tools/detail/polynomial_horner1_2.hpp>
+	<boost/math/tools/detail/polynomial_horner1_3.hpp>
+	<boost/math/tools/detail/polynomial_horner1_4.hpp>
+	<boost/math/tools/detail/polynomial_horner1_5.hpp>
+	<boost/math/tools/detail/polynomial_horner1_6.hpp>
+	<boost/math/tools/detail/polynomial_horner1_7.hpp>
+	<boost/math/tools/detail/polynomial_horner1_8.hpp>
+	<boost/math/tools/detail/polynomial_horner1_9.hpp>
+	<boost/math/tools/detail/polynomial_horner1_10.hpp>
+	<boost/math/tools/detail/polynomial_horner1_11.hpp>
+	<boost/math/tools/detail/polynomial_horner1_12.hpp>
+	<boost/math/tools/detail/polynomial_horner1_13.hpp>
+	<boost/math/tools/detail/polynomial_horner1_14.hpp>
+	<boost/math/tools/detail/polynomial_horner1_15.hpp>
+	<boost/math/tools/detail/polynomial_horner1_16.hpp>
+	<boost/math/tools/detail/polynomial_horner1_17.hpp>
+	<boost/math/tools/detail/polynomial_horner1_18.hpp>
+	<boost/math/tools/detail/polynomial_horner1_19.hpp>
+	<boost/math/tools/detail/polynomial_horner1_20.hpp>
+	<boost/math/tools/detail/polynomial_horner2_2.hpp>
+	<boost/math/tools/detail/polynomial_horner2_3.hpp>
+	<boost/math/tools/detail/polynomial_horner2_4.hpp>
+	<boost/math/tools/detail/polynomial_horner2_5.hpp>
+	<boost/math/tools/detail/polynomial_horner2_6.hpp>
+	<boost/math/tools/detail/polynomial_horner2_7.hpp>
+	<boost/math/tools/detail/polynomial_horner2_8.hpp>
+	<boost/math/tools/detail/polynomial_horner2_9.hpp>
+	<boost/math/tools/detail/polynomial_horner2_10.hpp>
+	<boost/math/tools/detail/polynomial_horner2_11.hpp>
+	<boost/math/tools/detail/polynomial_horner2_12.hpp>
+	<boost/math/tools/detail/polynomial_horner2_13.hpp>
+	<boost/math/tools/detail/polynomial_horner2_14.hpp>
+	<boost/math/tools/detail/polynomial_horner2_15.hpp>
+	<boost/math/tools/detail/polynomial_horner2_16.hpp>
+	<boost/math/tools/detail/polynomial_horner2_17.hpp>
+	<boost/math/tools/detail/polynomial_horner2_18.hpp>
+	<boost/math/tools/detail/polynomial_horner2_19.hpp>
+	<boost/math/tools/detail/polynomial_horner2_20.hpp>
+	<boost/math/tools/detail/polynomial_horner3_2.hpp>
+	<boost/math/tools/detail/polynomial_horner3_3.hpp>
+	<boost/math/tools/detail/polynomial_horner3_4.hpp>
+	<boost/math/tools/detail/polynomial_horner3_5.hpp>
+	<boost/math/tools/detail/polynomial_horner3_6.hpp>
+	<boost/math/tools/detail/polynomial_horner3_7.hpp>
+	<boost/math/tools/detail/polynomial_horner3_8.hpp>
+	<boost/math/tools/detail/polynomial_horner3_9.hpp>
+	<boost/math/tools/detail/polynomial_horner3_10.hpp>
+	<boost/math/tools/detail/polynomial_horner3_11.hpp>
+	<boost/math/tools/detail/polynomial_horner3_12.hpp>
+	<boost/math/tools/detail/polynomial_horner3_13.hpp>
+	<boost/math/tools/detail/polynomial_horner3_14.hpp>
+	<boost/math/tools/detail/polynomial_horner3_15.hpp>
+	<boost/math/tools/detail/polynomial_horner3_16.hpp>
+	<boost/math/tools/detail/polynomial_horner3_17.hpp>
+	<boost/math/tools/detail/polynomial_horner3_18.hpp>
+	<boost/math/tools/detail/polynomial_horner3_19.hpp>
+	<boost/math/tools/detail/polynomial_horner3_20.hpp>
+	<boost/math/tools/detail/rational_horner1_2.hpp>
+	<boost/math/tools/detail/rational_horner1_3.hpp>
+	<boost/math/tools/detail/rational_horner1_4.hpp>
+	<boost/math/tools/detail/rational_horner1_5.hpp>
+	<boost/math/tools/detail/rational_horner1_6.hpp>
+	<boost/math/tools/detail/rational_horner1_7.hpp>
+	<boost/math/tools/detail/rational_horner1_8.hpp>
+	<boost/math/tools/detail/rational_horner1_9.hpp>
+	<boost/math/tools/detail/rational_horner1_10.hpp>
+	<boost/math/tools/detail/rational_horner1_11.hpp>
+	<boost/math/tools/detail/rational_horner1_12.hpp>
+	<boost/math/tools/detail/rational_horner1_13.hpp>
+	<boost/math/tools/detail/rational_horner1_14.hpp>
+	<boost/math/tools/detail/rational_horner1_15.hpp>
+	<boost/math/tools/detail/rational_horner1_16.hpp>
+	<boost/math/tools/detail/rational_horner1_17.hpp>
+	<boost/math/tools/detail/rational_horner1_18.hpp>
+	<boost/math/tools/detail/rational_horner1_19.hpp>
+	<boost/math/tools/detail/rational_horner1_20.hpp>
+	<boost/math/tools/detail/rational_horner2_2.hpp>
+	<boost/math/tools/detail/rational_horner2_3.hpp>
+	<boost/math/tools/detail/rational_horner2_4.hpp>
+	<boost/math/tools/detail/rational_horner2_5.hpp>
+	<boost/math/tools/detail/rational_horner2_6.hpp>
+	<boost/math/tools/detail/rational_horner2_7.hpp>
+	<boost/math/tools/detail/rational_horner2_8.hpp>
+	<boost/math/tools/detail/rational_horner2_9.hpp>
+	<boost/math/tools/detail/rational_horner2_10.hpp>
+	<boost/math/tools/detail/rational_horner2_11.hpp>
+	<boost/math/tools/detail/rational_horner2_12.hpp>
+	<boost/math/tools/detail/rational_horner2_13.hpp>
+	<boost/math/tools/detail/rational_horner2_14.hpp>
+	<boost/math/tools/detail/rational_horner2_15.hpp>
+	<boost/math/tools/detail/rational_horner2_16.hpp>
+	<boost/math/tools/detail/rational_horner2_17.hpp>
+	<boost/math/tools/detail/rational_horner2_18.hpp>
+	<boost/math/tools/detail/rational_horner2_19.hpp>
+	<boost/math/tools/detail/rational_horner2_20.hpp>
+	<boost/math/tools/detail/rational_horner3_2.hpp>
+	<boost/math/tools/detail/rational_horner3_3.hpp>
+	<boost/math/tools/detail/rational_horner3_4.hpp>
+	<boost/math/tools/detail/rational_horner3_5.hpp>
+	<boost/math/tools/detail/rational_horner3_6.hpp>
+	<boost/math/tools/detail/rational_horner3_7.hpp>
+	<boost/math/tools/detail/rational_horner3_8.hpp>
+	<boost/math/tools/detail/rational_horner3_9.hpp>
+	<boost/math/tools/detail/rational_horner3_10.hpp>
+	<boost/math/tools/detail/rational_horner3_11.hpp>
+	<boost/math/tools/detail/rational_horner3_12.hpp>
+	<boost/math/tools/detail/rational_horner3_13.hpp>
+	<boost/math/tools/detail/rational_horner3_14.hpp>
+	<boost/math/tools/detail/rational_horner3_15.hpp>
+	<boost/math/tools/detail/rational_horner3_16.hpp>
+	<boost/math/tools/detail/rational_horner3_17.hpp>
+	<boost/math/tools/detail/rational_horner3_18.hpp>
+	<boost/math/tools/detail/rational_horner3_19.hpp>
+	<boost/math/tools/detail/rational_horner3_20.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\detail\polynomial_horner3_20.hpp
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\detail\rational_horner3_20.hpp
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\big_constant.hpp
+	<boost/math/tools/config.hpp>
+	<boost/math/tools/lexical_cast.hpp>
+	<type_traits>
+	<limits>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\fpclassify.hpp
+	<limits>
+	<type_traits>
+	<cmath>
+	<boost/math/tools/real_cast.hpp>
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/special_functions/detail/fp_traits.hpp>
+	<float.h>
+	"quadmath.h"
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\real_cast.hpp
+	<boost/math/tools/config.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\fp_traits.hpp
+	<cstring>
+	<cstdint>
+	<limits>
+	<type_traits>
+	<boost/math/tools/is_standalone.hpp>
+	<boost/math/tools/assert.hpp>
+	<boost/predef/other/endian.h>
+	<bit>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\trunc.hpp
+	<type_traits>
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/tools/config.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/special_functions/fpclassify.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\powm1.hpp
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/special_functions/log1p.hpp>
+	<boost/math/special_functions/expm1.hpp>
+	<boost/math/special_functions/trunc.hpp>
+	<boost/math/tools/assert.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\expm1.hpp
+	<cmath>
+	<cstdint>
+	<limits>
+	<boost/math/tools/config.hpp>
+	<boost/math/tools/series.hpp>
+	<boost/math/tools/precision.hpp>
+	<boost/math/tools/big_constant.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/tools/rational.hpp>
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/tools/assert.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\sqrt1pm1.hpp
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/special_functions/log1p.hpp>
+	<boost/math/special_functions/expm1.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\lanczos.hpp
+	<boost/math/tools/config.hpp>
+	<boost/math/tools/big_constant.hpp>
+	<boost/math/tools/rational.hpp>
+	<boost/math/policies/policy.hpp>
+	<limits>
+	<type_traits>
+	<cstdint>
+	<boost/math/special_functions/detail/lanczos_sse2.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\lanczos_sse2.hpp
+	<emmintrin.h>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\igamma_large.hpp
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\unchecked_factorial.hpp
+	<boost/math/tools/lexical_cast.hpp>
+	<cmath>
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/tools/cxx03_warn.hpp>
+	<array>
+	<type_traits>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\lgamma_small.hpp
+	<boost/math/tools/big_constant.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\bernoulli.hpp
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/special_functions/detail/unchecked_bernoulli.hpp>
+	<boost/math/special_functions/detail/bernoulli_details.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\unchecked_bernoulli.hpp
+	<limits>
+	<type_traits>
+	<array>
+	<cmath>
+	<cstdint>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/constants/constants.hpp>
+	<boost/math/special_functions/math_fwd.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\bernoulli_details.hpp
+	<boost/math/tools/atomic.hpp>
+	<boost/math/tools/toms748_solve.hpp>
+	<boost/math/tools/cxx03_warn.hpp>
+	<boost/math/tools/throw_exception.hpp>
+	<boost/math/tools/config.hpp>
+	<boost/math/special_functions/fpclassify.hpp>
+	<vector>
+	<type_traits>
+	<mutex>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\atomic.hpp
+	<boost/math/tools/config.hpp>
+	<boost/math/tools/cxx03_warn.hpp>
+	<atomic>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\toms748_solve.hpp
+	<boost/math/tools/precision.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/tools/config.hpp>
+	<boost/math/special_functions/sign.hpp>
+	<limits>
+	<utility>
+	<cstdint>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\sign.hpp
+	<boost/math/tools/config.hpp>
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/special_functions/detail/fp_traits.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\polygamma.hpp
+	<boost/math/special_functions/factorials.hpp>
+	<boost/math/special_functions/detail/polygamma.hpp>
+	<boost/math/special_functions/trigamma.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\factorials.hpp
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/special_functions/gamma.hpp>
+	<boost/math/special_functions/detail/unchecked_factorial.hpp>
+	<array>
+	<type_traits>
+	<cmath>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\polygamma.hpp
+	<cmath>
+	<limits>
+	<string>
+	<boost/math/policies/policy.hpp>
+	<boost/math/special_functions/bernoulli.hpp>
+	<boost/math/special_functions/trunc.hpp>
+	<boost/math/special_functions/zeta.hpp>
+	<boost/math/special_functions/digamma.hpp>
+	<boost/math/special_functions/sin_pi.hpp>
+	<boost/math/special_functions/cos_pi.hpp>
+	<boost/math/special_functions/pow.hpp>
+	<boost/math/tools/assert.hpp>
+	<boost/math/tools/config.hpp>
+	<mutex>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\zeta.hpp
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/tools/precision.hpp>
+	<boost/math/tools/series.hpp>
+	<boost/math/tools/big_constant.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/special_functions/gamma.hpp>
+	<boost/math/special_functions/factorials.hpp>
+	<boost/math/special_functions/sin_pi.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\sin_pi.hpp
+	<cmath>
+	<boost/math/tools/config.hpp>
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/special_functions/trunc.hpp>
+	<boost/math/tools/promotion.hpp>
+	<boost/math/constants/constants.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\digamma.hpp
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/tools/rational.hpp>
+	<boost/math/tools/series.hpp>
+	<boost/math/tools/promotion.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/constants/constants.hpp>
+	<boost/math/tools/big_constant.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\cos_pi.hpp
+	<cmath>
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/tools/config.hpp>
+	<boost/math/special_functions/trunc.hpp>
+	<boost/math/tools/promotion.hpp>
+	<boost/math/constants/constants.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\pow.hpp
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/policies/policy.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/tools/promotion.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\trigamma.hpp
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/tools/rational.hpp>
+	<boost/math/tools/series.hpp>
+	<boost/math/tools/promotion.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/constants/constants.hpp>
+	<boost/math/tools/big_constant.hpp>
+	<boost/math/special_functions/polygamma.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\igamma_inverse.hpp
+	<boost/math/tools/tuple.hpp>
+	<boost/math/special_functions/gamma.hpp>
+	<boost/math/special_functions/sign.hpp>
+	<boost/math/tools/roots.hpp>
+	<boost/math/policies/error_handling.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\tuple.hpp
+	<boost/math/tools/cxx03_warn.hpp>
+	<tuple>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\roots.hpp
+	<boost/math/tools/complex.hpp>
+	<utility>
+	<cmath>
+	<tuple>
+	<cstdint>
+	<boost/math/tools/config.hpp>
+	<boost/math/tools/cxx03_warn.hpp>
+	<boost/math/special_functions/sign.hpp>
+	<boost/math/special_functions/next.hpp>
+	<boost/math/tools/toms748_solve.hpp>
+	<boost/math/policies/error_handling.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\next.hpp
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/special_functions/fpclassify.hpp>
+	<boost/math/special_functions/sign.hpp>
+	<boost/math/special_functions/trunc.hpp>
+	<boost/math/tools/traits.hpp>
+	<type_traits>
+	<cfloat>
+	"xmmintrin.h"
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\tools\traits.hpp
+	<type_traits>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\gamma_inva.hpp
+	<cstdint>
+	<boost/math/tools/toms748_solve.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\erf.hpp
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/tools/config.hpp>
+	<boost/math/special_functions/gamma.hpp>
+	<boost/math/tools/roots.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/tools/big_constant.hpp>
+	<boost/math/special_functions/detail/erf_inv.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\erf_inv.hpp
+	<type_traits>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\binomial.hpp
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/special_functions/factorials.hpp>
+	<boost/math/special_functions/beta.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<type_traits>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\ibeta_inverse.hpp
+	<boost/math/special_functions/beta.hpp>
+	<boost/math/special_functions/erf.hpp>
+	<boost/math/tools/roots.hpp>
+	<boost/math/special_functions/detail/t_distribution_inv.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\t_distribution_inv.hpp
+	<boost/math/special_functions/cbrt.hpp>
+	<boost/math/special_functions/round.hpp>
+	<boost/math/special_functions/trunc.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\cbrt.hpp
+	<boost/math/tools/rational.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/special_functions/fpclassify.hpp>
+	<type_traits>
+	<cstdint>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\round.hpp
+	<boost/math/tools/config.hpp>
+	<boost/math/policies/error_handling.hpp>
+	<boost/math/special_functions/math_fwd.hpp>
+	<boost/math/special_functions/fpclassify.hpp>
+
+1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\detail\ibeta_inv_ab.hpp
+	<cstdint>
+	<utility>
+	<boost/math/tools/toms748_solve.hpp>
+

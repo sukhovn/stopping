@@ -10,3 +10,5 @@ Figures/
 Button/node_modules
 Button/process.env
 db_user_pass.txt
+Simulations/RoutinesWin/bin
+Simulations/RoutinesWin/obj

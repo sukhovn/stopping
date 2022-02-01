@@ -2,17 +2,23 @@ import ctypes
 import numpy.ctypeslib as ctl
 import numpy as np
 import os
+import platform
 
 cwd = os.getcwd()
-if os.path.exists(cwd + "/../Simulations/routines_lib.so") == False:
-	print("The library file routines_lib.so does not exist")
-	print("Attempting to compile the library")
-	if os.system("(cd " + cwd + "/../Simulations/; make)") != 0:
-		print("Compilation failed")
-	else:
-		print("Compilation was successful")
-
-lib=ctl.load_library('routines_lib.so', cwd + "/../Simulations/")
+if platform.system() == 'Windows':
+	if os.path.exists(cwd + "/../Simulations/routines_lib.dll") == False:
+		raise ImportError('No routines_lib.dll library found')
+	lib=ctl.load_library('routines_lib.dll', cwd + "/../Simulations/")
+else:
+	if os.path.exists(cwd + "/../Simulations/routines_lib.so") == False:
+		raise ImportError('No routines_lib.so library found')
+		print("The library file routines_lib.so does not exist")
+		print("Attempting to compile the library")
+		if os.system("(cd " + cwd + "/../Simulations/; make)") != 0:
+			print("Compilation failed")
+		else:
+			print("Compilation was successful")
+	lib=ctl.load_library('routines_lib.so', cwd + "/../Simulations/")
 
 #Reward table function
 reward_table_cpp = lib.reward_table

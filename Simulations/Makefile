@@ -8,7 +8,7 @@ HEAD_FOLDERS = $(CORE_DIR) Strategies Suppl
 HEAD_LINK = $(patsubst %, -I%, $(HEAD_FOLDERS))
 
 CC = g++ # compiler to use
-CFLAGS = -c -g -O3 -I. $(HEAD_LINK) # flags to use at compliation
+CFLAGS = -c -O3 -I. $(HEAD_LINK) # flags to use at compliation
 LINKERFLAG = -lm
 
 all: obj $(CORE_BINS) obj/run.o obj/routines_lib.o 
