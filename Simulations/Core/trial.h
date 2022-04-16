@@ -35,13 +35,15 @@ private:
 	int time;
 	int run_times;
 
+	double move_cost;
+
 public:
 	Button *btn;
 	Policy *pol;
 	double *rewards;
 
-	Policy_Test(Button *btn_init, Policy *pol_init, int time_init, int run_times_init):
-		btn(btn_init), pol(pol_init), time(time_init), run_times(run_times_init){
+	Policy_Test(Button *btn_init, Policy *pol_init, int time_init, double cost, int run_times_init):
+		btn(btn_init), pol(pol_init), move_cost(cost), time(time_init), run_times(run_times_init){
 			rewards = new double[run_times];
 		};
 	~Policy_Test(){
@@ -56,7 +58,10 @@ public:
 		btn->new_button();
 		pol->reset();
 		for(int i = 0; i < time; i++){
-			if(change_button) reward_curr = btn->press_next_button();
+			if(change_button){
+				reward_acc -= move_cost;
+				reward_curr = btn->press_next_button();
+			}
 			else reward_curr = btn->press_current_button();
 			change_button = pol->change_button(reward_curr);
 			reward_acc += reward_curr;
@@ -92,12 +97,14 @@ class Single_Policy_Run{
 private:
 	int time;
 
+	double move_cost;
+
 public:
 	Button *btn;
 	Policy *pol;
 
-	Single_Policy_Run(Button *btn_init, Policy *pol_init, int time_init):
-		btn(btn_init), pol(pol_init), time(time_init) {};
+	Single_Policy_Run(Button *btn_init, Policy *pol_init, int time_init, double cost):
+		btn(btn_init), pol(pol_init), move_cost(cost), time(time_init) {};
 
 	double single_run(double *results){
 		int indx = 0;
@@ -113,6 +120,7 @@ public:
 				wins = 0;
 				fails = 0;
 				button_no++;
+				reward_acc -= move_cost;
 				reward_curr = btn->press_next_button();
 			}
 			else reward_curr = btn->press_current_button();

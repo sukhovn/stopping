@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1643738539 source:c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\routineswin\main.cpp
+1649986818 source:c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\routineswin\main.cpp
 	"main.h"
 	<iostream>
 	<cstring>
@@ -12,7 +12,7 @@
 	"truncated_bernoulli.h"
 	"suboptimal.h"
 
-1584205420 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\routineswin\main.h
+1649980983 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\routineswin\main.h
 	<windows.h>
 
 1643736092 source:c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\routines_lib.cpp
@@ -28,33 +28,33 @@
 	"Strategies/truncated_bernoulli.h"
 	"Strategies/suboptimal.h"
 
-1636850986 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\core\reward_calculator.h
+1649892339 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\core\reward_calculator.h
 	<cstdio>
 	<cmath>
 
-1636850859 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\core\transition_calculator.h
+1649982658 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\core\transition_calculator.h
 	<cstdio>
 	<cmath>
 	<iostream>
 
-1637013855 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\core\trial.h
+1649896835 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\core\trial.h
 	<cstdio>
 	<cmath>
 	<vector>
 	<random>
 
-1643738003 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\bernoulli.h
+1649891741 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\bernoulli.h
 	<trial.h>
 	<reward_calculator.h>
 	<transition_calculator.h>
 
-1643738003 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\meta_bernoulli.h
+1649892626 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\meta_bernoulli.h
 	<trial.h>
 	<inference_bernoulli.h>
 	<transition_calculator.h>
 	<iostream>
 
-1643738003 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\inference_bernoulli.h
+1643741603 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\inference_bernoulli.h
 	<cmath>
 	<nelder-mead.h>
 
@@ -67,7 +67,7 @@
 	<iomanip>
 	<time.h>
 
-1643738003 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\truncated_bernoulli.h
+1649892438 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\truncated_bernoulli.h
 	<trial.h>
 	<reward_calculator.h>
 	<transition_calculator.h>
@@ -89,7 +89,7 @@
 	<boost/math/special_functions/detail/ibeta_inverse.hpp>
 	<boost/math/special_functions/detail/ibeta_inv_ab.hpp>
 
-1643738003 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\suboptimal.h
+1643741603 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\strategies\suboptimal.h
 	<trial.h>
 
 1628156512 c:\users\gwmni\dropbox (personal)\study\princeton\cogsci\stopping\simulations\suppl\boost\math\special_functions\math_fwd.hpp

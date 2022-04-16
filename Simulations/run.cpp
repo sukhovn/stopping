@@ -12,6 +12,7 @@
 
 void run_coefficient_table_generator(int argc, char const *argv[]){
 	int win_max = 10, fail_max = 10, time_max = 100;
+	double cost = 0.0;
 	double alpha_prior = 1.0, beta_prior = 1.0;
 
 	for(int i = 1; i < argc; i++){
@@ -27,6 +28,10 @@ void run_coefficient_table_generator(int argc, char const *argv[]){
 			time_max = atoi(argv[i+1]);
 			i++;
 		}
+		if(strcmp(argv[i], "-cost") == 0){
+			cost = atof(argv[i+1]);
+			i++;
+		}
 		if(strcmp(argv[i], "-alpha") == 0){
 			alpha_prior = atof(argv[i+1]);
 			i++;
@@ -38,7 +43,7 @@ void run_coefficient_table_generator(int argc, char const *argv[]){
 	}
 
 	Timer timer;
-	Bernoulli_Reward coef(win_max, fail_max, time_max, alpha_prior, beta_prior);
+	Bernoulli_Reward coef(win_max, fail_max, time_max, cost, alpha_prior, beta_prior);
 	timer.record();
 	std::cout << "The calculation took " << timer.total << std::endl;
 	std::cout << std::fixed;
@@ -55,6 +60,7 @@ void run_coefficient_table_generator(int argc, char const *argv[]){
 
 void run_transition_table_generator(int argc, char const *argv[]){
 	int win_max = 10, fail_max = 10, time_max = 100;
+	double cost = 0.0;
 	double alpha_prior = 1.0, beta_prior = 1.0;
 
 	for(int i = 1; i < argc; i++){
@@ -70,6 +76,10 @@ void run_transition_table_generator(int argc, char const *argv[]){
 			time_max = atoi(argv[i+1]);
 			i++;
 		}
+		if(strcmp(argv[i], "-cost") == 0){
+			cost = atof(argv[i+1]);
+			i++;
+		}
 		if(strcmp(argv[i], "-alpha") == 0){
 			alpha_prior = atof(argv[i+1]);
 			i++;
@@ -81,7 +91,7 @@ void run_transition_table_generator(int argc, char const *argv[]){
 	}
 
 	Timer timer;
-	Bernoulli_Transition trans(win_max, fail_max, time_max, alpha_prior, beta_prior);
+	Bernoulli_Transition trans(win_max, fail_max, time_max, cost, alpha_prior, beta_prior);
 	timer.record();
 	std::cout << "The calculation took " << timer.total << std::endl;
 	std::cout << std::fixed;
@@ -98,10 +108,15 @@ void run_transition_table_generator(int argc, char const *argv[]){
 
 void run_bernoulli_trials(int argc, char const *argv[]){
 	int time = 100, num_tries = 100;
+	double cost = 0.0;
 
 	for(int i = 1; i < argc; i++){
 		if(strcmp(argv[i], "-time") == 0){
 			time = atoi(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-cost") == 0){
+			cost = atof(argv[i+1]);
 			i++;
 		}
 		if(strcmp(argv[i], "-tries") == 0){
@@ -124,9 +139,9 @@ void run_bernoulli_trials(int argc, char const *argv[]){
 	// 	std::cout << "True probability " << true_p << "\n\n";
 	// }
 
-	Bernoulli_Policy_Direct plc(time);
-	Policy_Test plc_test(&bb, &plc, time, num_tries);
-	Bernoulli_Reward coef(1, 1, time);
+	Bernoulli_Policy_Direct plc(time, cost);
+	Policy_Test plc_test(&bb, &plc, time, cost, num_tries);
+	Bernoulli_Reward coef(1, 1, time, cost);
 
 	plc_test.run();
 	// std::cout << "Theoretical expected reward: " << plc.table(time-1, 0, 0) << std::endl;
@@ -144,6 +159,7 @@ void run_bernoulli_trials(int argc, char const *argv[]){
 
 void run_biased_bernoulli_trials(int argc, char const *argv[]){
 	int time = 100, num_tries = 100;
+	double cost = 0.0;
 	double alpha_prior = 1.0, beta_prior = 1.0;
 
 	for(int i = 1; i < argc; i++){
@@ -153,6 +169,10 @@ void run_biased_bernoulli_trials(int argc, char const *argv[]){
 		}
 		if(strcmp(argv[i], "-tries") == 0){
 			num_tries = atoi(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-cost") == 0){
+			cost = atof(argv[i+1]);
 			i++;
 		}
 		if(strcmp(argv[i], "-alpha") == 0){
@@ -167,9 +187,9 @@ void run_biased_bernoulli_trials(int argc, char const *argv[]){
 
 	Biased_Bernoulli_Button bbb(alpha_prior, beta_prior);
 
-	Bernoulli_Policy_Direct plc(time, alpha_prior, beta_prior);
-	Policy_Test plc_test(&bbb, &plc, time, num_tries);
-	Bernoulli_Reward coef(1, 1, time);
+	Bernoulli_Policy_Direct plc(time, cost, alpha_prior, beta_prior);
+	Policy_Test plc_test(&bbb, &plc, time, cost, num_tries);
+	Bernoulli_Reward coef(1, 1, time, cost);
 
 	plc_test.run();
 	// std::cout << "Theoretical expected reward: " << plc.table(time-1, 0, 0) << std::endl;
@@ -183,6 +203,7 @@ void run_biased_bernoulli_trials(int argc, char const *argv[]){
 
 void run_meta_bernoulli_trials(int argc, char const *argv[]){
 	int time = 100, num_tries = 100;
+	double cost = 0.0;
 	double alpha_prior = 1.0, beta_prior = 1.0;
 	double prior_k = 1.0;
 
@@ -193,6 +214,10 @@ void run_meta_bernoulli_trials(int argc, char const *argv[]){
 		}
 		if(strcmp(argv[i], "-tries") == 0){
 			num_tries = atoi(argv[i+1]);
+			i++;
+		}
+		if(strcmp(argv[i], "-cost") == 0){
+			cost = atof(argv[i+1]);
 			i++;
 		}
 		if(strcmp(argv[i], "-alpha") == 0){
@@ -211,13 +236,13 @@ void run_meta_bernoulli_trials(int argc, char const *argv[]){
 
 	Biased_Bernoulli_Button bbb(alpha_prior, beta_prior);
 
-	Bernoulli_Policy_Direct plc_ub(time);
+	Bernoulli_Policy_Direct plc_ub(time, cost);
 	Meta_Bernoulli_Policy plc_meta(time, prior_k);
 
-	Policy_Test plc_test_ub(&bbb, &plc_ub, time, num_tries);
-	Policy_Test plc_test_meta(&bbb, &plc_meta, time, num_tries);
+	Policy_Test plc_test_ub(&bbb, &plc_ub, time, cost, num_tries);
+	Policy_Test plc_test_meta(&bbb, &plc_meta, time, cost, num_tries);
 
-	Bernoulli_Reward coef(1, 1, time, alpha_prior, beta_prior);
+	Bernoulli_Reward coef(1, 1, time, cost, alpha_prior, beta_prior);
 
 	Timer timer;
 	plc_test_ub.run();
@@ -246,6 +271,7 @@ void run_meta_bernoulli_trials(int argc, char const *argv[]){
 
 void print_transition_table(int argc, char const *argv[]){
 	int win_max = 10, fail_max = 10, time_max = 1500;
+	double cost = 0.0;
 	double alpha_prior = 1.0, beta_prior = 1.0;
 
 	for(int i = 1; i < argc; i++){
@@ -261,6 +287,10 @@ void print_transition_table(int argc, char const *argv[]){
 			time_max = atoi(argv[i+1]);
 			i++;
 		}
+		if(strcmp(argv[i], "-cost") == 0){
+			cost = atof(argv[i+1]);
+			i++;
+		}
 		if(strcmp(argv[i], "-alpha") == 0){
 			alpha_prior = atof(argv[i+1]);
 			i++;
@@ -274,7 +304,7 @@ void print_transition_table(int argc, char const *argv[]){
 	int *transition_table = new int[win_max*fail_max];
 
 	Timer timer;
-	Bernoulli_Transition trans(transition_table, win_max, fail_max, time_max, alpha_prior, beta_prior);
+	Bernoulli_Transition trans(transition_table, win_max, fail_max, time_max, cost, alpha_prior, beta_prior);
 	timer.record();
 	std::cout << "The calculation took " << timer.total << std::endl;
 	std::cout << std::fixed;

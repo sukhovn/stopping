@@ -24,15 +24,18 @@ else:
 reward_table_cpp = lib.reward_table
 reward_table_cpp.argtypes = [ctl.ndpointer(np.float64, 
                                          flags='aligned, c_contiguous'), 
-                           ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double]
+                           ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double, ctypes.c_double]
 
 def expected_reward_table(win_max, fail_max, time_max, **kwargs):
 	prior = (1.0, 1.0)
+	cost = 0.0
 	if 'prior' in kwargs:
 		prior = kwargs['prior']
+	if 'cost' in kwargs:
+		cost = kwargs['cost']
 
 	val = np.zeros(win_max*fail_max*time_max, dtype=np.float64)
-	reward_table_cpp(val, win_max, fail_max, time_max, prior[0], prior[1])
+	reward_table_cpp(val, win_max, fail_max, time_max, cost, prior[0], prior[1])
 	val = val.reshape((time_max, win_max, fail_max))
 	return val
 
@@ -40,15 +43,18 @@ def expected_reward_table(win_max, fail_max, time_max, **kwargs):
 transition_table_cpp = lib.transition_table
 transition_table_cpp.argtypes = [ctl.ndpointer(np.intc, 
                                          flags='aligned, c_contiguous'), 
-                           ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double]
+                           ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double, ctypes.c_double]
 
 def optimal_transition_table(win_max, fail_max, time_max, **kwargs):
 	prior = (1.0, 1.0)
+	cost = 0.0
 	if 'prior' in kwargs:
 		prior = kwargs['prior']
+	if 'cost' in kwargs:
+		cost = kwargs['cost']
 
 	val = np.zeros(win_max*fail_max, dtype=np.intc)
-	transition_table_cpp(val, win_max, fail_max, time_max, prior[0], prior[1])
+	transition_table_cpp(val, win_max, fail_max, time_max, cost, prior[0], prior[1])
 	val = val.reshape((win_max, fail_max))
 	return val
 
@@ -57,30 +63,32 @@ def optimal_transition_table(win_max, fail_max, time_max, **kwargs):
 truncated_reward_table_cpp = lib.truncated_reward_table
 truncated_reward_table_cpp.argtypes = [ctl.ndpointer(np.float64, 
                                          flags='aligned, c_contiguous'), 
-                           ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_double]
+                           ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double]
 
 def expected_truncated_reward_table(win_max, fail_max, time_max, **kwargs):
 	truncation = 1.0
+	cost = 0.0
 	if 'truncation' in kwargs:
 		truncation = kwargs['truncation']
 
 	val = np.zeros(win_max*fail_max*time_max, dtype=np.float64)
-	truncated_reward_table_cpp(val, win_max, fail_max, time_max, truncation)
+	truncated_reward_table_cpp(val, win_max, fail_max, time_max, cost, truncation)
 	val = val.reshape((time_max, win_max, fail_max))
 	return val
 
 truncated_transition_table_cpp = lib.truncated_transition_table
 truncated_transition_table_cpp.argtypes = [ctl.ndpointer(np.intc, 
                                          flags='aligned, c_contiguous'), 
-                           ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_double]
+                           ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double]
 
 def optimal_truncated_transition_table(win_max, fail_max, time_max, **kwargs):
 	truncation = 0.9
+	cost = 0.0
 	if 'truncation' in kwargs:
 		truncation = kwargs['truncation']
 
 	val = np.zeros(win_max*fail_max, dtype=np.intc)
-	truncated_transition_table_cpp(val, win_max, fail_max, time_max, truncation)
+	truncated_transition_table_cpp(val, win_max, fail_max, time_max, cost, truncation)
 	val = val.reshape((win_max, fail_max))
 	return val
 
@@ -88,13 +96,13 @@ def optimal_truncated_transition_table(win_max, fail_max, time_max, **kwargs):
 
 run_trials_cpp = lib.run_trials
 run_trials_cpp.argtypes = [ctl.ndpointer(np.float64, flags='aligned, c_contiguous'), 
-							ctypes.c_int, ctypes.c_int, 
+							ctypes.c_int, ctypes.c_double, ctypes.c_int,
 							ctypes.c_char, ctl.ndpointer(np.float64, flags='aligned, c_contiguous'), 
 							ctypes.c_char, ctl.ndpointer(np.float64, flags='aligned, c_contiguous')]
 
 record_full_trials_cpp = lib.record_full_trials
 record_full_trials_cpp.argtypes = [ctl.ndpointer(np.float64, flags='aligned, c_contiguous'), 
-							ctypes.c_int, ctypes.c_int, 
+							ctypes.c_int, ctypes.c_double, ctypes.c_int,
 							ctypes.c_char, ctl.ndpointer(np.float64, flags='aligned, c_contiguous'), 
 							ctypes.c_char, ctl.ndpointer(np.float64, flags='aligned, c_contiguous')]
 
@@ -120,10 +128,13 @@ class Policy(object):
 	def __init__(self, type, **kwargs):
 		if type == 'Bernoulli':
 			self.type = 'b'
+			cost = 0.0
+			prior = [1.0, 1.0]
+			if 'cost' in kwargs:
+				cost = kwargs['cost']
 			if 'prior' in kwargs:
-				self.parameters = np.array(kwargs['prior'], dtype=np.float64)
-			else:
-				self.parameters = np.array([1.0, 1.0], dtype=np.float64)
+				prior = kwargs['prior']
+			self.parameters = np.array([cost, prior[0], prior[1]], dtype=np.float64)
 		elif type == 'Meta':
 			self.type = 'm'
 			if 'prior_k' in kwargs:
@@ -132,10 +143,13 @@ class Policy(object):
 				self.parameters = np.array([1.0], dtype=np.float64)
 		elif type == 'Truncated':
 			self.type = 't'
+			cost = 0.0
+			truncation = 0.9
+			if 'cost' in kwargs:
+				cost = kwargs['cost']
 			if 'truncation' in kwargs:
-				self.parameters = np.array([kwargs['truncation']], dtype=np.float64)
-			else:
-				self.parameters = np.array([0.9], dtype=np.float64)
+				truncation = kwargs['truncation']
+			self.parameters = np.array([cost, truncation], dtype=np.float64)
 		elif type == 'Random':
 			self.type = 'r'
 			if 'switch_probability' in kwargs:
@@ -149,24 +163,32 @@ class Policy(object):
 			else:
 				self.parameters = np.array([4.0], dtype=np.float64)
 
-def run_trials(time, num_tries, button, policy):
+def run_trials(time, num_tries, button, policy, **kwargs):
+	cost = 0.0
+	if 'cost' in kwargs:
+		cost = kwargs['cost']
+
 	if(button.__class__.__name__ != 'Button'):
 		raise ValueError("Wrong button entry")
 	if(policy.__class__.__name__ != 'Policy'):
 		raise ValueError("Wrong policy entry")
 
 	val = np.zeros(num_tries, dtype=np.float64)
-	run_trials_cpp(val, time, num_tries, button.type.encode(), button.parameters, policy.type.encode(), policy.parameters)
+	run_trials_cpp(val, time, cost, num_tries, button.type.encode(), button.parameters, policy.type.encode(), policy.parameters)
 	return val
 
-def record_full_trials(time, num_tries, button, policy):
+def record_full_trials(time, num_tries, button, policy, **kwargs):
+	cost = 0.0
+	if 'cost' in kwargs:
+		cost = kwargs['cost']
+
 	if(button.__class__.__name__ != 'Button'):
 		raise ValueError("Wrong button entry")
 	if(policy.__class__.__name__ != 'Policy'):
 		raise ValueError("Wrong policy entry")
 
 	val = np.zeros(num_tries*time*4, dtype=np.float64)
-	record_full_trials_cpp(val, time, num_tries, button.type.encode(), button.parameters, policy.type.encode(), policy.parameters)
+	record_full_trials_cpp(val, time, cost, num_tries, button.type.encode(), button.parameters, policy.type.encode(), policy.parameters)
 	val = val.reshape((num_tries, time, 4))
 	val[::,0:2] = np.rint(val[::,0:2])
 	return val

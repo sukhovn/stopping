@@ -10,6 +10,11 @@
 
 class Probabilistic_Model{
 public:
+	Probabilistic_Model(): move_cost(0.0) {};
+	Probabilistic_Model(double cost): move_cost(cost) {};
+
+	const double move_cost;
+
 	virtual double mean_step_reward(int win, int fail) = 0;
 	virtual double success_transition_p(int win, int fail) = 0;
 };
@@ -29,7 +34,7 @@ private:
 	double *iter_table;
 
 	void iter_table_prefill(){
-		double next_button_val = mean_step_reward(0, 0);
+		double next_button_val = mean_step_reward(0, 0) - move_cost;
 		double stay_val;
 
 		int row_space = fail_max+time_max;
@@ -45,7 +50,7 @@ private:
 	void iteration(int scope_win, int scope_fail){
 		int row_space = fail_max+time_max;
 		double success_p = success_transition_p(0, 0);
-		double next_button_val = mean_step_reward(0, 0) + success_p*iter_table[row_space] + (1.0 - success_p)*iter_table[1];
+		double next_button_val = mean_step_reward(0, 0) - move_cost + success_p*iter_table[row_space] + (1.0 - success_p)*iter_table[1];
 		double stay_val;
 
 		for(int i = 0; i < scope_win; i++){
@@ -78,15 +83,15 @@ protected:
 	}
 
 public:
-	Reward_Table(int win_init, int fail_init, int time_init): 
-		win_max(win_init), fail_max(fail_init), time_max(time_init), extern_reward_table(false)
+	Reward_Table(int win_init, int fail_init, int time_init, double cost):
+		Probabilistic_Model(cost), win_max(win_init), fail_max(fail_init), time_max(time_init), extern_reward_table(false)
 	{
 		reward_table = new double[time_max*win_max*fail_max];
 		iter_table = new double[(win_max+time_max)*(fail_max+time_max)];
 	}
 
-	Reward_Table(double *reward_table_init, int win_init, int fail_init, int time_init): 
-		win_max(win_init), fail_max(fail_init), time_max(time_init), reward_table(reward_table_init), extern_reward_table(true)
+	Reward_Table(double *reward_table_init, int win_init, int fail_init, int time_init, double cost):
+		Probabilistic_Model(cost), win_max(win_init), fail_max(fail_init), time_max(time_init), reward_table(reward_table_init), extern_reward_table(true)
 	{
 		iter_table = new double[(win_max+time_max)*(fail_max+time_max)];
 	}

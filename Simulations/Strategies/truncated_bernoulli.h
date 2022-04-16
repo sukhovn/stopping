@@ -60,14 +60,14 @@ class Truncated_Bernoulli_Reward: public Reward_Table{
 	}
 
 public:
-	Truncated_Bernoulli_Reward(int win_init, int fail_init, int time_init, double trunc_high_0 = 0.9):
-		Reward_Table(win_init, fail_init, time_init), trunc_high(trunc_high_0)
+	Truncated_Bernoulli_Reward(int win_init, int fail_init, int time_init, double cost = 0.0, double trunc_high_0 = 0.9):
+		Reward_Table(win_init, fail_init, time_init, cost), trunc_high(trunc_high_0)
 		{
 			fill_reward_table();
 		};
 
-	Truncated_Bernoulli_Reward(double *reward_table_init, int win_init, int fail_init, int time_init, double trunc_high_0 = 0.9):
-		Reward_Table(reward_table_init, win_init, fail_init, time_init), trunc_high(trunc_high_0)
+	Truncated_Bernoulli_Reward(double *reward_table_init, int win_init, int fail_init, int time_init, double cost = 0.0, double trunc_high_0 = 0.9):
+		Reward_Table(reward_table_init, win_init, fail_init, time_init, cost), trunc_high(trunc_high_0)
 		{
 			fill_reward_table();
 		};
@@ -89,14 +89,14 @@ class Truncated_Bernoulli_Transition: public Transition_Table{
 	}
 
 public:
-	Truncated_Bernoulli_Transition(int win_init, int fail_init, int time_init, double trunc_high_0 = 0.9):
-	Transition_Table(win_init, fail_init, time_init), trunc_high(trunc_high_0)
+	Truncated_Bernoulli_Transition(int win_init, int fail_init, int time_init, double cost, double trunc_high_0 = 0.9):
+	Transition_Table(win_init, fail_init, time_init, cost), trunc_high(trunc_high_0)
 	{
 		fill_transition_table();
 	};
 
-	Truncated_Bernoulli_Transition(int *transition_table_init, int win_init, int fail_init, int time_init, double trunc_high_0 = 0.9):
-	Transition_Table(transition_table_init, win_init, fail_init, time_init), trunc_high(trunc_high_0)
+	Truncated_Bernoulli_Transition(int *transition_table_init, int win_init, int fail_init, int time_init, double cost, double trunc_high_0 = 0.9):
+	Transition_Table(transition_table_init, win_init, fail_init, time_init, cost), trunc_high(trunc_high_0)
 	{
 		fill_transition_table();
 	};
@@ -116,9 +116,9 @@ private:
 	Truncated_Bernoulli_Transition trans;
 
 public:
-	Truncated_Bernoulli_Policy(int time_init, double trunc_high_0 = 0.9):
+	Truncated_Bernoulli_Policy(int time_init, double cost, double trunc_high_0 = 0.9):
 		wins(0), fails(0), trunc_high(trunc_high_0),
-		time(time_init), time_left(time_init), trans(time, time, time, trunc_high_0) {};
+		time(time_init), time_left(time_init), trans(time, time, time, cost, trunc_high_0) {};
 	
 	void reset(){time_left = time; wins = 0; fails = 0;}
 

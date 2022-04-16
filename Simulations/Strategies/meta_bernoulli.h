@@ -19,7 +19,7 @@ class Bernoulli_Transition_Threshold: public Transition_Value{
 	}
 
 public:
-	Bernoulli_Transition_Threshold(): Transition_Value() {};
+	Bernoulli_Transition_Threshold(): Transition_Value(0.0) {};
 
 	int check(int win, int fail, int time_left, double alpha_0, double beta_0){
 		alpha_prior = alpha_0; beta_prior = beta_0;

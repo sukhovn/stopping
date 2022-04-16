@@ -14,15 +14,15 @@
 #endif
 
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+// #ifdef __cplusplus
+// extern "C"
+// {
+// #endif
 
-void DLL_EXPORT SomeFunction(const LPCSTR sometext);
+// void DLL_EXPORT SomeFunction(const LPCSTR sometext);
 
-#ifdef __cplusplus
-}
-#endif
+// #ifdef __cplusplus
+// }
+// #endif
 
 #endif // __MAIN_H__

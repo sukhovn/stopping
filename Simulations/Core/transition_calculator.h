@@ -31,7 +31,7 @@ private:
 	double *iter_table;
 
 	void iter_table_prefill(){
-		double next_button_val = mean_step_reward(0, 0);
+		double next_button_val = mean_step_reward(0, 0) - move_cost;
 		double stay_val;
 		time_curr++;
 
@@ -55,7 +55,7 @@ private:
 	void iteration(int scope_win, int scope_fail){
 		int row_space = fail_max+time_max;
 		double success_p = success_transition_p(0, 0);
-		double next_button_val = mean_step_reward(0, 0) + success_p*iter_table[row_space] + (1.0 - success_p)*iter_table[1];
+		double next_button_val = mean_step_reward(0, 0) - move_cost + success_p*iter_table[row_space] + (1.0 - success_p)*iter_table[1];
 		double stay_val;
 		time_curr++;
 
@@ -70,6 +70,10 @@ private:
 
 		for(int i = 0; i < win_max; i++){
 			for(int j = 0; j < fail_max; j++){
+				if(transition_table[i*fail_max+j] != 0 && iter_table[i*row_space+j] > next_button_val){
+					std::cout << "Warning! In case of " << i << " wins, " << j << " fails and " << move_cost << " button change cost\n";
+					std::cout << "it becomes again better to stay with the current button rather than move to the next one" << std::endl;
+				}
 				if(iter_table[i*row_space+j] == next_button_val && transition_table[i*fail_max+j] == 0)
 					transition_table[i*fail_max+j] = time_curr;
 			}
@@ -86,8 +90,8 @@ protected:
 	}
 
 public:
-	Transition_Table(int win_init, int fail_init, int time_init): 
-		win_max(win_init), fail_max(fail_init), time_max(time_init), time_curr(0), extern_transition_table(false)
+	Transition_Table(int win_init, int fail_init, int time_init, double cost):
+		Probabilistic_Model(cost), win_max(win_init), fail_max(fail_init), time_max(time_init), time_curr(0), extern_transition_table(false)
 	{
 		iter_table = new double[(win_max+time_max)*(fail_max+time_max)];
 		transition_table = new int[win_max*fail_max];
@@ -97,8 +101,8 @@ public:
 				transition_table[i*fail_max+j] = 0;
 	};
 
-	Transition_Table(int *transition_table_init, int win_init, int fail_init, int time_init): 
-		win_max(win_init), fail_max(fail_init), time_max(time_init), time_curr(0),
+	Transition_Table(int *transition_table_init, int win_init, int fail_init, int time_init, double cost):
+		Probabilistic_Model(cost), win_max(win_init), fail_max(fail_init), time_max(time_init), time_curr(0),
 		transition_table(transition_table_init), extern_transition_table(true)
 	{
 		iter_table = new double[(win_max+time_max)*(fail_max+time_max)];
@@ -130,7 +134,7 @@ private:
 	double *iter_table;
 
 	bool iter_table_prefill(){
-		double next_button_val = mean_step_reward(0, 0);
+		double next_button_val = mean_step_reward(0, 0) - move_cost;
 		double stay_val;
 
 		int row_space = fail_check+time_max;
@@ -149,7 +153,7 @@ private:
 	bool iteration(int scope_win, int scope_fail){
 		int row_space = fail_check+time_max;
 		double success_p = success_transition_p(0, 0);
-		double next_button_val = mean_step_reward(0, 0) + success_p*iter_table[row_space] + (1.0 - success_p)*iter_table[1];
+		double next_button_val = mean_step_reward(0, 0) - move_cost + success_p*iter_table[row_space] + (1.0 - success_p)*iter_table[1];
 		double stay_val;
 
 		for(int i = 0; i < scope_win; i++){
@@ -166,7 +170,7 @@ private:
 	}
 
 public:
-	Transition_Value(): win_check(0), fail_check(0), time_max(0), iter_table_size(0) {};
+	Transition_Value(double cost): Probabilistic_Model(cost), win_check(0), fail_check(0), time_max(0), iter_table_size(0) {};
 
 	~Transition_Value(){
 		if(iter_table_size > 0) delete [] iter_table;
