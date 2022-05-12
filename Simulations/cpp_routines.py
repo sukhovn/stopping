@@ -30,9 +30,11 @@ def expected_reward_table(win_max, fail_max, time_max, **kwargs):
 	prior = (1.0, 1.0)
 	cost = 0.0
 	if 'prior' in kwargs:
-		prior = kwargs['prior']
+		prior = kwargs.pop('prior')
 	if 'cost' in kwargs:
-		cost = kwargs['cost']
+		cost = kwargs.pop('cost')
+	if(len(kwargs) > 0):
+		raise TypeError(list(kwargs.keys())[0] + ' is an invalid keyword argument')
 
 	val = np.zeros(win_max*fail_max*time_max, dtype=np.float64)
 	reward_table_cpp(val, win_max, fail_max, time_max, cost, prior[0], prior[1])
@@ -49,9 +51,11 @@ def optimal_transition_table(win_max, fail_max, time_max, **kwargs):
 	prior = (1.0, 1.0)
 	cost = 0.0
 	if 'prior' in kwargs:
-		prior = kwargs['prior']
+		prior = kwargs.pop('prior')
 	if 'cost' in kwargs:
-		cost = kwargs['cost']
+		cost = kwargs.pop('cost')
+	if(len(kwargs) > 0):
+		raise TypeError(list(kwargs.keys())[0] + ' is an invalid keyword argument')
 
 	val = np.zeros(win_max*fail_max, dtype=np.intc)
 	transition_table_cpp(val, win_max, fail_max, time_max, cost, prior[0], prior[1])
@@ -69,7 +73,9 @@ def expected_truncated_reward_table(win_max, fail_max, time_max, **kwargs):
 	truncation = 1.0
 	cost = 0.0
 	if 'truncation' in kwargs:
-		truncation = kwargs['truncation']
+		truncation = kwargs.pop('truncation')
+	if(len(kwargs) > 0):
+		raise TypeError(list(kwargs.keys())[0] + ' is an invalid keyword argument')
 
 	val = np.zeros(win_max*fail_max*time_max, dtype=np.float64)
 	truncated_reward_table_cpp(val, win_max, fail_max, time_max, cost, truncation)
@@ -85,7 +91,9 @@ def optimal_truncated_transition_table(win_max, fail_max, time_max, **kwargs):
 	truncation = 0.9
 	cost = 0.0
 	if 'truncation' in kwargs:
-		truncation = kwargs['truncation']
+		truncation = kwargs.pop('truncation')
+	if(len(kwargs) > 0):
+		raise TypeError(list(kwargs.keys())[0] + ' is an invalid keyword argument')
 
 	val = np.zeros(win_max*fail_max, dtype=np.intc)
 	truncated_transition_table_cpp(val, win_max, fail_max, time_max, cost, truncation)
@@ -111,17 +119,19 @@ class Button(object):
 		if type == 'Bernoulli':
 			self.type = 'b'
 			if 'prior' in kwargs:
-				self.parameters = np.array(kwargs['prior'], dtype=np.float64)
+				self.parameters = np.array([kwargs.pop('prior')], dtype=np.float64)
 			else:
 				self.parameters = np.array([1.0, 1.0], dtype=np.float64)
 		elif type == 'Truncated':
 			self.type = 't'
 			if 'truncation' in kwargs:
-				self.parameters = np.array([kwargs['truncation']], dtype=np.float64)
+				self.parameters = np.array([kwargs.pop('truncation')], dtype=np.float64)
 			else:
 				self.parameters = np.array([0.9], dtype=np.float64)
 		else:
 			raise ValueError("Wrong button type")
+		if(len(kwargs) > 0):
+			raise TypeError(list(kwargs.keys())[0] + ' is an invalid keyword argument')
 
 
 class Policy(object):
@@ -130,15 +140,15 @@ class Policy(object):
 			self.type = 'b'
 			cost = 0.0
 			prior = [1.0, 1.0]
-			if 'cost' in kwargs:
-				cost = kwargs['cost']
 			if 'prior' in kwargs:
-				prior = kwargs['prior']
+				prior = kwargs.pop('prior')
+			if 'cost' in kwargs:
+				cost = kwargs.pop('cost')
 			self.parameters = np.array([cost, prior[0], prior[1]], dtype=np.float64)
 		elif type == 'Meta':
 			self.type = 'm'
 			if 'prior_k' in kwargs:
-				self.parameters = np.array([kwargs['prior_k']], dtype=np.float64)
+				self.parameters = np.array([kwargs.pop('prior_k')], dtype=np.float64)
 			else:
 				self.parameters = np.array([1.0], dtype=np.float64)
 		elif type == 'Truncated':
@@ -146,27 +156,31 @@ class Policy(object):
 			cost = 0.0
 			truncation = 0.9
 			if 'cost' in kwargs:
-				cost = kwargs['cost']
+				cost = kwargs.pop('cost')
 			if 'truncation' in kwargs:
-				truncation = kwargs['truncation']
+				truncation = kwargs.pop('truncation')
 			self.parameters = np.array([cost, truncation], dtype=np.float64)
 		elif type == 'Random':
 			self.type = 'r'
 			if 'switch_probability' in kwargs:
-				self.parameters = np.array([kwargs['switch_probability']], dtype=np.float64)
+				self.parameters = np.array([kwargs.pop('switch_probability')], dtype=np.float64)
 			else:
 				self.parameters = np.array([0.2], dtype=np.float64)
 		elif type == 'Difference':
 			self.type = 'd'
 			if 'difference' in kwargs:
-				self.parameters = np.array([kwargs['difference']], dtype=np.float64)
+				self.parameters = np.array([kwargs.pop('difference')], dtype=np.float64)
 			else:
 				self.parameters = np.array([4.0], dtype=np.float64)
+		if(len(kwargs) > 0):
+			raise TypeError(list(kwargs.keys())[0] + ' is an invalid keyword argument')
 
 def run_trials(time, num_tries, button, policy, **kwargs):
 	cost = 0.0
 	if 'cost' in kwargs:
-		cost = kwargs['cost']
+		cost = kwargs.pop('cost')
+	if(len(kwargs) > 0):
+		raise TypeError(list(kwargs.keys())[0] + ' is an invalid keyword argument')
 
 	if(button.__class__.__name__ != 'Button'):
 		raise ValueError("Wrong button entry")
@@ -180,7 +194,9 @@ def run_trials(time, num_tries, button, policy, **kwargs):
 def record_full_trials(time, num_tries, button, policy, **kwargs):
 	cost = 0.0
 	if 'cost' in kwargs:
-		cost = kwargs['cost']
+		cost = kwargs.pop('cost')
+	if(len(kwargs) > 0):
+		raise TypeError(list(kwargs.keys())[0] + ' is an invalid keyword argument')
 
 	if(button.__class__.__name__ != 'Button'):
 		raise ValueError("Wrong button entry")
